@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  username      String    @unique
+  passwordHash  String
+  comments      Comment[]
+}
+
+model Comment {
+  id          String    @id @default(uuid())
+  postId      String
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  text        String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Media {
+  id        String    @id @default(uuid())
+  parentId  String
+  path      String
+  createdAt DateTime  @default(now())
+}
+
+model Trip {
+  id          String   @id @default(uuid())
+  image       String
+  name        String
+  short       String
+  description String
+  guide       String
+  date        DateTime
+  price       Float
+  rating      Float
+  city        String
+  address     String
+  duration    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Tour {
+  id          String   @id @default(uuid())
+  image       String
+  name        String
+  short       String
+  description String
+  price       Float
+  rating      Float
+  city        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Quest {
+  id          String   @id @default(uuid())
+  image       String
+  name        String
+  short       String
+  description String
+  price       Float
+  rating      Float
+  city        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  image       String
+  name        String
+  short       String
+  description String
+  price       Float
+  rating      Float
+  city        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
