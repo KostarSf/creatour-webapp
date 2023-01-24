@@ -36,58 +36,83 @@ model Media {
   createdAt DateTime  @default(now())
 }
 
+model Place {
+  id          String    @id @default(uuid())
+  name        String
+  image       String
+  short       String
+  description String
+  city        String
+  address     String
+  coords      String
+  rating      Float     @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
 model Trip {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   image       String
   name        String
   short       String
   description String
   guide       String
-  date        DateTime
+  dateStart   DateTime
+  dateEnd     DateTime
   price       Float
-  rating      Float
+  rating      Float     @default(0)
   city        String
   address     String
   duration    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Tour {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   image       String
   name        String
   short       String
   description String
   price       Float
-  rating      Float
+  rating      Float     @default(0)
   city        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  address     String
+  dateStart   DateTime
+  dateEnd     DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model RoutePoint {
+  id        String    @id @default(uuid())
+  order     Int
+  parentId  String
+  pointId   String
 }
 
 model Quest {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   image       String
   name        String
   short       String
   description String
   price       Float
-  rating      Float
+  rating      Float     @default(0)
   city        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Event {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   image       String
   name        String
   short       String
   description String
   price       Float
-  rating      Float
+  rating      Float     @default(0)
   city        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
