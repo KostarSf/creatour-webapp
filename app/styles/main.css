@@ -1,0 +1,35 @@
+/* Header mobile menu */
+
+[data-mobile-menu-switcher] {
+  display: none;
+}
+
+.mobile-menu-canvas {
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateY(-1rem);
+}
+
+[data-mobile-menu-switcher]:checked ~ .mobile-menu-canvas {
+  pointer-events: all;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Header navigation */
+
+.nav-sub {
+  position: relative;
+}
+
+.nav-sub:hover .nav-sub-menu {
+  display: block;
+}

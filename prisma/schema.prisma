@@ -17,6 +17,15 @@ model User {
   username      String    @unique
   passwordHash  String
   comments      Comment[]
+  products      Product[]
+}
+
+model Product {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId   String
+  progress    Int
 }
 
 model Comment {
