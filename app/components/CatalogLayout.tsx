@@ -8,8 +8,8 @@ export default function CatalogLayout({
   sideBlock?: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-y-4 md:flex-row">
-      <div className="flex flex-col gap-12 p-4 shadow md:flex-1 md:border-none md:shadow-none">
+    <div className="flex flex-col md:flex-row ">
+      <div className="flex flex-col gap-6 p-4 shadow md:flex-1 md:gap-12 md:border-none md:shadow-none">
         {children}
       </div>
       {sideBlock ? (

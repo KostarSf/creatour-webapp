@@ -13,6 +13,13 @@ export type Product = {
   type: ProductType;
 };
 
+export type PlacePoint = {
+  id: string;
+  name: string;
+  address: string;
+  order: number;
+};
+
 export function ProductTypeToLocalizedString(type: ProductType) {
   switch (type) {
     case ProductType.event:

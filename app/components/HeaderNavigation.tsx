@@ -14,6 +14,7 @@ export default function HeaderNavigation({
         <NavigationLink url="/products/quests" title="Квесты" />
         <NavigationLink url="/products/events" title="События" />
       </NavigationSubMenu>
+      <NavigationLink url="/places" title="Места" />
       <NavigationLink url="/user" title="Личный кабинет" />
     </nav>
   );
