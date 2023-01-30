@@ -1,6 +1,8 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
+import SideButtonLink from "~/components/SideButtonLink";
+import { PlacePoint } from "~/utils/dataTypes";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { getUser, requireUserId } from "~/utils/session.server";
@@ -12,16 +14,31 @@ function validateComment(comment: string) {
 }
 
 export async function loader({ params, request }: LoaderArgs) {
-  const place = await db.place.findUnique({
+  const quest = await db.quest.findUnique({
     where: { id: params.id },
   });
-  if (!place) {
-    throw new Response("Place not found", { status: 404 });
+  if (!quest) {
+    throw new Response("Quest not found", { status: 404 });
+  }
+
+  const routePoints = await db.routePoint.findMany({
+    where: { parentId: params.id },
+    orderBy: { order: "asc" },
+  });
+
+  let route: PlacePoint[] = [];
+  for (let i = 0; i < routePoints.length; i++) {
+    const p = routePoints[i];
+    const place = await db.place.findFirstOrThrow({
+      select: { id: true, name: true, address: true },
+      where: { id: p.pointId },
+    });
+    route = [...route, { ...place, order: p.order }];
   }
 
   const comments = await db.comment.findMany({
     where: {
-      postId: place.id,
+      postId: quest.id,
     },
     include: { user: true },
   });
@@ -29,7 +46,8 @@ export async function loader({ params, request }: LoaderArgs) {
   const user = await getUser(request);
 
   return json({
-    place: place,
+    quest: quest,
+    route: route,
     comments: comments,
     user: user,
     url: request.url,
@@ -77,9 +95,10 @@ export async function action({ request }: ActionArgs) {
   });
 }
 
-export default function PlacePage() {
+export default function QuestPage() {
   const data = useLoaderData<typeof loader>();
-  const place = data.place;
+  const quest = data.quest;
+  const route = data.route;
   const comments = data.comments;
   const user = data.user;
 
@@ -89,15 +108,33 @@ export default function PlacePage() {
     <div className="px-4 pt-6 pb-2">
       <img
         className="h-32 w-96 rounded object-cover"
-        src={`/images/${place.image}`}
-        alt={place.image}
+        src={`/images/${quest.image}`}
+        alt={quest.image}
       />
-      <h2 className="my-3 text-2xl font-semibold leading-none">{place.name}</h2>
-      <p className="mb-2">{place.description}</p>
+      <h2 className="my-3 text-2xl font-semibold leading-none">{quest.name}</h2>
+      <p className="mb-2">{quest.description}</p>
       <p className="text-sm font-semibold">
-        {place.city}, {place.address}
+        {quest.city}, {quest.address}
       </p>
-      <p className="text-sm font-semibold">Рейтинг: {place.rating}</p>
+      <p className="text-sm font-semibold">Рейтинг: {quest.rating}</p>
+
+      <div className="my-3">
+        <SideButtonLink text={`Посетить за ${quest.price} ₽`} url="#" />
+      </div>
+
+      <p className="mt-6 text-lg font-semibold">Маршрут:</p>
+      <div className="flex flex-col gap-4">
+        {route.map((r) => (
+          <Link
+            to={`/place/${r.id}`}
+            key={r.id}
+            className="border-l-4 border-blue-500 pl-2"
+          >
+            <p className="font-semibold hover:text-blue-600">{r.name}</p>
+            <p className="text-sm">{r.address}</p>
+          </Link>
+        ))}
+      </div>
 
       <p className="mt-6 text-lg font-semibold">Комментарии:</p>
       <div>
@@ -131,7 +168,7 @@ export default function PlacePage() {
       </div>
       {user ? (
         <Form className="mt-8 flex items-start gap-4" method="post">
-          <input type="hidden" name="postId" value={place.id} />
+          <input type="hidden" name="postId" value={quest.id} />
           <div>
             <textarea
               placeholder="Ваш комментарий"

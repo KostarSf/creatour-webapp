@@ -12,16 +12,16 @@ function validateComment(comment: string) {
 }
 
 export async function loader({ params, request }: LoaderArgs) {
-  const place = await db.place.findUnique({
+  const event = await db.event.findUnique({
     where: { id: params.id },
   });
-  if (!place) {
-    throw new Response("Place not found", { status: 404 });
+  if (!event) {
+    throw new Response("Quest not found", { status: 404 });
   }
 
   const comments = await db.comment.findMany({
     where: {
-      postId: place.id,
+      postId: event.id,
     },
     include: { user: true },
   });
@@ -29,7 +29,7 @@ export async function loader({ params, request }: LoaderArgs) {
   const user = await getUser(request);
 
   return json({
-    place: place,
+    event: event,
     comments: comments,
     user: user,
     url: request.url,
@@ -77,9 +77,9 @@ export async function action({ request }: ActionArgs) {
   });
 }
 
-export default function PlacePage() {
+export default function QuestPage() {
   const data = useLoaderData<typeof loader>();
-  const place = data.place;
+  const event = data.event;
   const comments = data.comments;
   const user = data.user;
 
@@ -89,15 +89,15 @@ export default function PlacePage() {
     <div className="px-4 pt-6 pb-2">
       <img
         className="h-32 w-96 rounded object-cover"
-        src={`/images/${place.image}`}
-        alt={place.image}
+        src={`/images/${event.image}`}
+        alt={event.image}
       />
-      <h2 className="my-3 text-2xl font-semibold leading-none">{place.name}</h2>
-      <p className="mb-2">{place.description}</p>
+      <h2 className="my-3 text-2xl font-semibold leading-none">{event.name}</h2>
+      <p className="mb-2">{event.description}</p>
       <p className="text-sm font-semibold">
-        {place.city}, {place.address}
+        {event.city}, {event.address}
       </p>
-      <p className="text-sm font-semibold">Рейтинг: {place.rating}</p>
+      <p className="text-sm font-semibold">Рейтинг: {event.rating}</p>
 
       <p className="mt-6 text-lg font-semibold">Комментарии:</p>
       <div>
@@ -131,7 +131,7 @@ export default function PlacePage() {
       </div>
       {user ? (
         <Form className="mt-8 flex items-start gap-4" method="post">
-          <input type="hidden" name="postId" value={place.id} />
+          <input type="hidden" name="postId" value={event.id} />
           <div>
             <textarea
               placeholder="Ваш комментарий"

@@ -112,7 +112,7 @@ export default function LandingPage() {
           </div>
           <div className="mt-40 mb-20 flex w-full flex-col gap-x-16 lg:flex-row-reverse">
             <Link
-              to="/place/faa52d4e-f9af-4ad1-9c41-f1ee3acb33d5"
+              to="/tour/8d7161d7-b78d-4b61-8f2e-8104f10acbce"
               className="relative flex h-56 shrink-0 flex-col justify-between overflow-hidden rounded-2xl px-14 py-6 lg:h-auto lg:w-3/6 xl:w-3/5"
               style={{
                 backgroundImage: "url('/images/landing/review.jpg')",
