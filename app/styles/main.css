@@ -33,3 +33,13 @@
 .nav-sub:hover .nav-sub-menu {
   display: block;
 }
+
+/* Landing */
+
+#creatour {
+  background: url('/images/landing/landing_bg.jpg');
+  background-size: cover;
+  background-position: center center;
+
+  min-height: 660px;
+}
