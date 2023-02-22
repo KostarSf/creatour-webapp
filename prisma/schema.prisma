@@ -14,126 +14,158 @@ model User {
   id            String    @id @default(uuid())
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  username      String    @unique
-  passwordHash  String
-  comments      Comment[]
-  products      Product[]
 
-  activeProducts  ActiveProduct[]
+  username      String    @unique
+  email         String    @unique
+  passwordHash  String
+  role          String    @default("user")    // user, creator, placeowner, admin
+
+  city          String?
+  phone         String?
+  legalName     String?
+  inn           String?
+
+  ratings       Rating[]
+
+  comments        Comment[]
+  activeProducts  Product[] @relation(name: "UserActiveProducts")
+
+  createdProducts Product[]
+  createdPlaces   Place[]
 }
 
-model ActiveProduct {
-  id            String    @id @default(uuid())
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  userId        String
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  productId     String
-  type          String
+model Rating {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+
+  value     Int
+
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+
+  placeId   String?
+  place     Place?    @relation(fields: [placeId], references: [id])
+
+  productId String?
+  product   Product?  @relation(fields: [productId], references: [id])
 }
 
 model Product {
   id          String    @id @default(uuid())
-  userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  productId   String
-  progress    Int
-}
-
-model Comment {
-  id          String    @id @default(uuid())
-  postId      String
-  userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  text        String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  type        String    // excursion, tour, quest, event
+  active      Boolean   @default(false)
+  price       Float     @default(0)
+
+  crmId       String?
+  creatorId   String
+  creator     User      @relation(fields: [creatorId], references: [id])
+  buyers      User[]    @relation(name: "UserActiveProducts")
+
+  name        String
+  short       String?
+  description String?
+  image       String?
+
+  comments    Comment[]
+  route       RoutePoint[]
+  rating      Rating[]
+  media       Media[]
+  tags        Tag[]
+
+  city        String?
+  address     String?
+  coordinates String?
+  beginDate   DateTime?
+  endDate     DateTime?
+  assistant   String?
 }
 
-model Media {
-  id        String    @id @default(uuid())
-  parentId  String
-  path      String
-  createdAt DateTime  @default(now())
+model RoutePoint {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  productId   String
+  product     Product @relation(fields: [productId], references: [id])
+
+  placeId     String
+  place       Place   @relation(fields: [placeId], references: [id])
+
+  order       Int
+  date        DateTime
 }
 
 model Place {
   id          String    @id @default(uuid())
-  name        String
-  image       String
-  short       String
-  description String
-  city        String
-  address     String
-  coords      String
-  rating      Float     @default(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  crmId       String?
+  creatorId   String
+  creator     User      @relation(fields: [creatorId], references: [id])
+
+  name        String
+  short       String?
+  description String?
+  image       String?
+
+  comments    Comment[]
+  routes      RoutePoint[]
+  rating      Rating[]
+  media       Media[]
+  tags        Tag[]
+
+  city        String?
+  address     String?
+  coordinates String?
 }
 
-model Trip {
+model Tag {
   id          String    @id @default(uuid())
-  image       String
-  name        String
-  short       String
-  description String
-  guide       String
-  dateStart   DateTime
-  dateEnd     DateTime
-  price       Float
-  rating      Float     @default(0)
-  city        String
-  address     String
-  duration    String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  name        String    @unique
+
+  places      Place[]
+  products    Product[]
 }
 
-model Tour {
+model Comment {
   id          String    @id @default(uuid())
-  image       String
-  name        String
-  short       String
-  description String
-  price       Float
-  rating      Float     @default(0)
-  city        String
-  address     String
-  dateStart   DateTime
-  dateEnd     DateTime
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  text        String
+  media       Media[]
+
+  placeId       String?
+  parentPlace   Place?    @relation(fields: [placeId], references: [id])
+  productId     String?
+  parentProduct Product?  @relation(fields: [productId], references: [id])
 }
 
-model RoutePoint {
-  id        String    @id @default(uuid())
-  order     Int
-  parentId  String
-  pointId   String
-}
-
-model Quest {
+model Media {
   id          String    @id @default(uuid())
-  image       String
-  name        String
-  short       String
-  description String
-  price       Float
-  rating      Float     @default(0)
-  city        String
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
 
-model Event {
-  id          String    @id @default(uuid())
-  image       String
-  name        String
-  short       String
-  description String
-  price       Float
-  rating      Float     @default(0)
-  city        String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  type    String    // image, video
+  url     String
+
+  name        String?
+  description String?
+
+  commentId   String?
+  comment     Comment?  @relation(fields: [commentId], references: [id])
+
+  placeId     String?
+  place       Place?    @relation(fields: [placeId], references: [id])
+
+  productId   String?
+  product     Product?  @relation(fields: [productId], references: [id])
 }
