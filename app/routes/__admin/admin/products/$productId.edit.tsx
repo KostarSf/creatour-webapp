@@ -8,7 +8,7 @@ import { Response } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { createFileUploadHandler } from "@remix-run/node/dist/upload/fileUploadHandler";
-import { Link, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 
@@ -174,7 +174,7 @@ export default function ProductEditRoute() {
   return (
     <div>
       <h2 className="mb-2 font-medium">Редактирование турпродукта</h2>
-      <form method="post" encType="multipart/form-data" className="mt-2">
+      <Form method="post" encType="multipart/form-data" className="mt-2">
         <label>
           <p>Название</p>
           <input
@@ -369,7 +369,7 @@ export default function ProductEditRoute() {
         <div>
           {actionData?.formError ? <p>{actionData.formError}</p> : null}
         </div>
-      </form>
+      </Form>
     </div>
   );
 }

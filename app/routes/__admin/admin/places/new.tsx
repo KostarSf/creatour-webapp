@@ -32,17 +32,19 @@ export const action = async ({ request }: ActionArgs) => {
     });
   }
 
-  const user = await db.user.findUnique({ where: { id: creatorId } });
-  if (!user) {
-    return badRequest({
-      fieldErrors: null,
-      fields,
-      formError: `Пользователя с Id ${creatorId} не существует`,
-    });
+  if (creatorId !== "none") {
+    const user = await db.user.findUnique({ where: { id: creatorId } });
+    if (!user) {
+      return badRequest({
+        fieldErrors: null,
+        fields,
+        formError: `Пользователя с Id ${creatorId} не существует`,
+      });
+    }
   }
 
   const place = await db.place.create({
-    data: { name, creatorId },
+    data: { name, creatorId: creatorId !== "none" ? creatorId : null },
   });
   if (place) {
     return redirect(`/admin/places/${place.id}`);
@@ -94,6 +96,9 @@ export default function NewPlace() {
             defaultValue={actionData?.fields?.creatorId}
             required
           >
+            <option value="none" selected>
+              -- Отсутсвует --
+            </option>
             {data.placeowners.map((po) => (
               <option value={po.id} key={po.id}>
                 {po.username}

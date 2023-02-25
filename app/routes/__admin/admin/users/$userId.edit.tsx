@@ -2,7 +2,7 @@ import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { Response } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import bcrypt from "bcryptjs";
@@ -107,7 +107,7 @@ export default function UserEditRoute() {
   return (
     <div>
       <h2 className="mb-2 font-medium">Редактирование пользователя</h2>
-      <form method="post" className="mt-2">
+      <Form method="post" className="mt-2">
         <input
           type="hidden"
           name="id"
@@ -209,7 +209,7 @@ export default function UserEditRoute() {
         <div>
           {actionData?.formError ? <p>{actionData.formError}</p> : null}
         </div>
-      </form>
+      </Form>
     </div>
   );
 }

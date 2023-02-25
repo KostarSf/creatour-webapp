@@ -104,8 +104,8 @@ model Place {
   updatedAt   DateTime  @updatedAt
 
   crmId       String?
-  creatorId   String
-  creator     User      @relation(fields: [creatorId], references: [id])
+  creatorId   String?
+  creator     User?     @relation(fields: [creatorId], references: [id])
 
   name        String
   short       String?
@@ -154,18 +154,14 @@ model Media {
   id          String    @id @default(uuid())
   createdAt   DateTime  @default(now())
 
-  type    String    // image, video
-  url     String
+  type        String    // image, video
+  url         String
 
   name        String?
   description String?
+  community   Boolean   @default(false)
 
-  commentId   String?
-  comment     Comment?  @relation(fields: [commentId], references: [id])
-
-  placeId     String?
-  place       Place?    @relation(fields: [placeId], references: [id])
-
-  productId   String?
-  product     Product?  @relation(fields: [productId], references: [id])
+  comments    Comment[]
+  places      Place[]
+  products    Product[]
 }

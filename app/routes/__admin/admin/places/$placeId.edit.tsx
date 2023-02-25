@@ -8,7 +8,7 @@ import { Response } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { createFileUploadHandler } from "@remix-run/node/dist/upload/fileUploadHandler";
-import { Link, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 
@@ -76,34 +76,37 @@ export const action = async ({ params, request }: ActionArgs) => {
     });
   }
 
-  const creator = await db.user.findUnique({ where: { id: creatorId } });
-  if (!creator) {
-    return badRequest({
-      fieldErrors: null,
-      fields: { ...fields, tags },
-      formError: `Пользователя с Id ${creatorId} не существует`,
-    });
-  } else {
-    const splittedTags = tags.split(",").map((t) => ({
-      where: {
-        name: t.trim(),
-      },
-      create: {
-        name: t.trim(),
-      },
-    }));
-    await db.place.update({
-      where: { id: params.placeId },
-      data: {
-        ...fields,
-        ...(imageName !== "" && { image: imageName }),
-        tags: {
-          set: [],
-          ...(tags.trim() !== "" && { connectOrCreate: splittedTags }),
-        },
-      },
-    });
+  if (creatorId !== "none") {
+    const creator = await db.user.findUnique({ where: { id: creatorId } });
+    if (!creator) {
+      return badRequest({
+        fieldErrors: null,
+        fields: { ...fields, tags },
+        formError: `Пользователя с Id ${creatorId} не существует`,
+      });
+    }
   }
+
+  const splittedTags = tags.split(",").map((t) => ({
+    where: {
+      name: t.trim(),
+    },
+    create: {
+      name: t.trim(),
+    },
+  }));
+  await db.place.update({
+    where: { id: params.placeId },
+    data: {
+      ...fields,
+      ...(imageName !== "" && { image: imageName }),
+      creatorId: creatorId !== "none" ? creatorId : null,
+      tags: {
+        set: [],
+        ...(tags.trim() !== "" && { connectOrCreate: splittedTags }),
+      },
+    },
+  });
 
   return redirect(`/admin/places/${params.placeId}`);
 };
@@ -128,7 +131,7 @@ export default function PlaceEditRoute() {
   return (
     <div>
       <h2 className="mb-2 font-medium">Редактирование места</h2>
-      <form method="post" encType="multipart/form-data" className="mt-2">
+      <Form method="post" encType="multipart/form-data" className="mt-2">
         <label>
           <p>Название</p>
           <input
@@ -144,9 +147,14 @@ export default function PlaceEditRoute() {
           <select
             name="creatorId"
             className="border"
-            defaultValue={actionData?.fields?.creatorId || data.place.creatorId}
+            defaultValue={
+              actionData?.fields?.creatorId || data.place.creatorId || "none"
+            }
             required
           >
+            <option value="none" selected>
+              -- Отсутсвует --
+            </option>
             {data.placeowners.map((po) => (
               <option value={po.id} key={po.id}>
                 {po.username}
@@ -248,7 +256,7 @@ export default function PlaceEditRoute() {
         <div>
           {actionData?.formError ? <p>{actionData.formError}</p> : null}
         </div>
-      </form>
+      </Form>
     </div>
   );
 }

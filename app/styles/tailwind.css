@@ -726,6 +726,10 @@ video {
   display: inline-block;
 }
 
+.inline {
+  display: inline;
+}
+
 .flex {
   display: flex;
 }
@@ -816,6 +820,10 @@ video {
 
 .w-64 {
   width: 16rem;
+}
+
+.w-32 {
+  width: 8rem;
 }
 
 .max-w-7xl {
