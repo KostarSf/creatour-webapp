@@ -11,7 +11,8 @@ export async function loader({ params }: LoaderArgs) {
     return redirect("/projects");
   }
   const products = await db.product.findMany({
-    where: { type: category.substring(0, category.length - 1) },
+    where: { type: category.substring(0, category.length - 1), active: true },
+    include: { rating: true },
   });
   return json({ products });
 }
@@ -22,7 +23,16 @@ export default function CategotyProjects() {
   return (
     <>
       {params.products.length ? (
-        params.products.map((p) => <ProductItem key={p.id} {...p} />)
+        params.products.map((p) => {
+          const ratingsCount = p.rating.length;
+          const ratingsSum = p.rating
+            .map((r) => r.value)
+            .reduce((prev, cur) => prev + cur, 0);
+          const totalRatimg =
+            Math.round((ratingsSum / ratingsCount) * 100) / 100;
+
+          return <ProductItem key={p.id} {...p} rating={totalRatimg} />;
+        })
       ) : (
         <p>Здесь пока пусто</p>
       )}

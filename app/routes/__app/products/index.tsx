@@ -5,7 +5,10 @@ import ProductItem from "~/components/ProductItem";
 import { db } from "~/utils/db.server";
 
 export async function loader({ params }: LoaderArgs) {
-  let products = await db.product.findMany({ include: { rating: true } });
+  let products = await db.product.findMany({
+    include: { rating: true },
+    where: { active: true },
+  });
   return json({ products });
 }
 
