@@ -82,6 +82,7 @@ export default function UserPage() {
                 rating.placeId ?? rating.productId
               }`}
               key={rating.id}
+              className="block"
             >
               <span className="text-blue-600 hover:underline">
                 {rating.placeId ? rating.place?.name : rating.product?.name}
