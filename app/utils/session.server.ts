@@ -11,7 +11,7 @@ type LoginForm = {
 export async function register({ username, password }: LoginForm) {
   const passwordHash = await bcrypt.hash(password, 10);
   const user = await db.user.create({
-    data: { username, passwordHash },
+    data: { username, passwordHash, email: "" },
   });
   return { id: user.id, username };
 }
@@ -23,7 +23,7 @@ export async function login({ username, password }: LoginForm) {
   if (!user) return null;
   const isCorrectPassword = await bcrypt.compare(password, user.passwordHash);
   if (!isCorrectPassword) return null;
-  return { id: user.id, username };
+  return { id: user.id, username: user.username };
 }
 
 const sessionSecret = process.env.SESSION_SECRET;

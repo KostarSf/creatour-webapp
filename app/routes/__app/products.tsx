@@ -11,7 +11,7 @@ export default function ProductsPage() {
           <p className="mr-2">Категории: </p>
           <nav className="flex flex-wrap gap-x-2 ">
             <CategoryLink>Все вместе</CategoryLink>
-            <CategoryLink category="trips">Экскурсии</CategoryLink>
+            <CategoryLink category="excursions">Экскурсии</CategoryLink>
             <CategoryLink category="tours">Туры</CategoryLink>
             <CategoryLink category="quests">Квесты</CategoryLink>
             <CategoryLink category="events">События</CategoryLink>

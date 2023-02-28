@@ -3,14 +3,17 @@ import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import ProductItem from "~/components/ProductItem";
-import { GetProductsByCategory } from "~/utils/storage";
+import { db } from "~/utils/db.server";
 
 export async function loader({ params }: LoaderArgs) {
   const category = params.category;
   if (!category) {
     return redirect("/projects");
   }
-  return json({ projects: await GetProductsByCategory(category) });
+  const products = await db.product.findMany({
+    where: { type: category.substring(0, category.length - 1) },
+  });
+  return json({ products });
 }
 
 export default function CategotyProjects() {
@@ -18,8 +21,8 @@ export default function CategotyProjects() {
 
   return (
     <>
-      {params.projects.length ? (
-        params.projects.map((p) => <ProductItem key={p.id} {...p} />)
+      {params.products.length ? (
+        params.products.map((p) => <ProductItem key={p.id} {...p} />)
       ) : (
         <p>Здесь пока пусто</p>
       )}

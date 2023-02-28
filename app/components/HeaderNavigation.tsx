@@ -9,7 +9,7 @@ export default function HeaderNavigation({
   return (
     <nav onClick={onClick} className="md:flex">
       <NavigationSubMenu subtitle="Турпродукты" linkTo="/products">
-        <NavigationLink url="/products/trips" title="Экскурсии" />
+        <NavigationLink url="/products/excursions" title="Экскурсии" />
         <NavigationLink url="/products/tours" title="Туры" />
         <NavigationLink url="/products/quests" title="Квесты" />
         <NavigationLink url="/products/events" title="События" />

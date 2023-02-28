@@ -17,7 +17,7 @@ export default function ProductsList() {
     productsList = <p className="my-2">Турпродуктов пока нет</p>;
   } else {
     productsList = (
-      <div className="mt-2 flex flex-col gap-1">
+      <div className="mt-2 flex w-[25vw] flex-col gap-1">
         {data.products.map((product) => (
           <NavLink
             to={product.id}

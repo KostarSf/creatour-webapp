@@ -1,9 +1,11 @@
-import type { ActionArgs, MetaFunction } from "@remix-run/node";
+import type { ActionArgs, LinksFunction, MetaFunction } from "@remix-run/node";
 import { Link, useActionData, useSearchParams } from "@remix-run/react";
 
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { createUserSession, login, register } from "~/utils/session.server";
+
+import { useState } from "react";
 
 export const meta: MetaFunction = () => ({
   description:
@@ -26,9 +28,11 @@ function validatePassword(password: unknown) {
 export const action = async ({ request }: ActionArgs) => {
   const form = await request.formData();
   const loginType = form.get("loginType");
+  const role = form.get("role");
   const username = form.get("username");
   const password = form.get("password");
   const redirectTo = form.get("redirectTo")?.toString() || "/user";
+  console.log(role);
   if (
     typeof loginType !== "string" ||
     typeof username !== "string" ||
@@ -42,7 +46,12 @@ export const action = async ({ request }: ActionArgs) => {
     });
   }
 
-  const fields = { loginType, username, password };
+  const fields = {
+    loginType,
+    username,
+    password,
+    role: typeof role == "string" ? role : "user",
+  };
   const fieldErrors = {
     username: validateUsername(username),
     password: validatePassword(password),
@@ -53,7 +62,7 @@ export const action = async ({ request }: ActionArgs) => {
 
   switch (loginType) {
     case "login": {
-      const user = await login({ username, password });
+      const user = await login({ password, username });
       if (!user) {
         return badRequest({
           fieldErrors: null,
@@ -80,6 +89,10 @@ export const action = async ({ request }: ActionArgs) => {
           formError: `Что-то пошло не так при создании пользователя.`,
         });
       }
+      await db.user.update({
+        where: { id: user.id },
+        data: { role: fields.role },
+      });
       return createUserSession(user.id, redirectTo);
     }
     default: {
@@ -95,6 +108,11 @@ export const action = async ({ request }: ActionArgs) => {
 export default function Login() {
   const actionData = useActionData<typeof action>();
   const [searchParams] = useSearchParams();
+
+  const [hideRole, setHideRole] = useState(
+    !actionData?.fields?.loginType || actionData?.fields?.loginType === "login"
+  );
+
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center py-4">
       <div className="flex flex-col items-center" data-light="">
@@ -116,6 +134,7 @@ export default function Login() {
                   !actionData?.fields?.loginType ||
                   actionData?.fields?.loginType === "login"
                 }
+                onChange={(e) => setHideRole(true)}
               />{" "}
               Вход
             </label>
@@ -125,10 +144,32 @@ export default function Login() {
                 name="loginType"
                 value="register"
                 defaultChecked={actionData?.fields?.loginType === "register"}
+                onChange={(e) => setHideRole(false)}
               />{" "}
               Регистрация
             </label>
           </fieldset>
+          {!hideRole ? (
+            <div className="mb-4 w-60">
+              <label
+                htmlFor="role-input"
+                className="block text-sm font-semibold text-slate-700"
+              >
+                Тип аккаунта
+              </label>
+              <select
+                className="block w-full border border-slate-500 px-3 py-1"
+                name="role"
+                id="role-input"
+                defaultValue={actionData?.fields?.role}
+              >
+                <option value="user">Пользователь</option>
+                <option value="placeowner">Владелец ресурсов</option>
+                <option value="creator">Создатель турпродуктов</option>
+                <option value="admin">Администратор</option>
+              </select>
+            </div>
+          ) : null}
           <div className="w-60">
             <label
               htmlFor="username-input"

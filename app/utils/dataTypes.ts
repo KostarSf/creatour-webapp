@@ -1,47 +1,14 @@
-export enum ProductType {
-  trip,
-  tour,
-  quest,
-  event,
-}
-
-export type Product = {
-  id: string;
-  name: string;
-  short: string;
-  image: string;
-  type: ProductType;
-};
-
-export type PlacePoint = {
-  id: string;
-  name: string;
-  address: string;
-  order: number;
-};
-
-export function ProductTypeToLocalizedString(type: ProductType) {
+export function ProductTypeToLocalizedString(type: string) {
   switch (type) {
-    case ProductType.event:
+    case "event":
       return "Событие";
-    case ProductType.quest:
+    case "quest":
       return "Квест";
-    case ProductType.tour:
+    case "tour":
       return "Тур";
-    case ProductType.trip:
+    case "excursion":
       return "Экскурсия";
-  }
-}
-
-export function ProductTypeToString(type: ProductType) {
-  switch (type) {
-    case ProductType.event:
-      return "event";
-    case ProductType.quest:
-      return "quest";
-    case ProductType.tour:
-      return "tour";
-    case ProductType.trip:
-      return "trip";
+    default:
+      return type;
   }
 }

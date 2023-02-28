@@ -1,6 +1,8 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { Response } from "@remix-run/node";
+import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
+import SideButtonLink from "~/components/SideButtonLink";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { getUser, requireUserId } from "~/utils/session.server";
@@ -12,28 +14,41 @@ function validateComment(comment: string) {
 }
 
 export async function loader({ params, request }: LoaderArgs) {
-  const place = await db.place.findUnique({
+  const product = await db.product.findUnique({
     where: { id: params.id },
     include: {
-      comments: { include: { user: { select: { id: true, username: true } } } },
       rating: true,
+      route: {
+        include: {
+          place: {
+            select: { id: true, image: true, name: true, address: true },
+          },
+        },
+      },
+      comments: { include: { user: { select: { id: true, username: true } } } },
     },
   });
-  if (!place) {
-    throw new Response("Place not found", { status: 404 });
+  if (!product) {
+    throw new Response("Product not found", { status: 404 });
   }
 
   const user = await getUser(request);
-  const ratingsCount = place.rating.length;
-  const ratingsSum = place.rating
+  const ratingsCount = product.rating.length;
+  const ratingsSum = product.rating
     .map((r) => r.value)
     .reduce((prev, cur) => prev + cur, 0);
   const totalRatimg = Math.round((ratingsSum / ratingsCount) * 100) / 100;
 
+  const subscribed =
+    (await db.product.findFirst({
+      where: { id: product.id, buyers: { some: { id: user?.id } } },
+    })) !== null;
+
   return json({
-    place: place,
-    user: user,
+    product,
     rating: totalRatimg,
+    user: user,
+    subscribed,
     url: request.url,
   });
 }
@@ -43,8 +58,42 @@ export async function action({ params, request }: ActionArgs) {
 
   const form = await request.formData();
   const intent = form.get("intent");
+  if (intent === "subscribe") {
+    const product = await db.product.findUnique({ where: { id: params.id } });
+    if (product) {
+      const activeProduct = await db.product.findFirst({
+        where: {
+          id: product.id,
+          buyers: { some: { id: userId } },
+        },
+      });
+      if (activeProduct) {
+        await db.user.update({
+          where: { id: userId },
+          data: {
+            activeProducts: {
+              disconnect: {
+                id: product.id,
+              },
+            },
+          },
+        });
+      } else {
+        await db.user.update({
+          where: { id: userId },
+          data: {
+            activeProducts: {
+              connect: {
+                id: product.id,
+              },
+            },
+          },
+        });
+      }
+    }
 
-  if (intent === "rating") {
+    return new Response("ok", { status: 200 });
+  } else if (intent === "rating") {
     const userId = form.get("userId");
     const value = form.get("value");
 
@@ -63,7 +112,7 @@ export async function action({ params, request }: ActionArgs) {
     const alreadyRated = await db.rating.findFirst({
       where: {
         userId,
-        placeId: params.id,
+        productId: params.id,
       },
     });
 
@@ -79,7 +128,7 @@ export async function action({ params, request }: ActionArgs) {
         data: {
           userId,
           value: Number(value),
-          placeId: params.id,
+          productId: params.id,
         },
       });
     }
@@ -108,7 +157,7 @@ export async function action({ params, request }: ActionArgs) {
     data: {
       text: text,
       userId: userId,
-      placeId: postId,
+      productId: postId,
     },
   });
 
@@ -123,11 +172,11 @@ export async function action({ params, request }: ActionArgs) {
   });
 }
 
-export default function PlacePage() {
+export default function TripPage() {
   const data = useLoaderData<typeof loader>();
-  const place = data.place;
-  const comments = data.place.comments;
-  const rating = data.rating;
+  const product = data.product;
+  const route = data.product.route;
+  const comments = data.product.comments;
   const user = data.user;
 
   const actionData = useActionData<typeof action>();
@@ -136,17 +185,71 @@ export default function PlacePage() {
     <div className="px-4 pt-6 pb-2">
       <img
         className="h-32 w-96 rounded object-cover"
-        src={`/images/places/${place.image}`}
-        alt={place.image || "image"}
+        src={`/images/products/${product.image}`}
+        alt={product.image || "image"}
       />
-      <h2 className="my-3 text-2xl font-semibold leading-none">{place.name}</h2>
-      <p className="mb-2">{place.description}</p>
+      <h2 className="my-3 text-2xl font-semibold leading-none">
+        {product.name}
+      </h2>
+      <p className="mb-2">{product.description}</p>
       <p className="text-sm font-semibold">
-        {place.city}, {place.address}
+        {product.city}, {product.address}
       </p>
-      <p className="text-sm font-semibold">
-        Рейтинг: {isNaN(rating) ? "Оценок пока нет" : String(rating)}
+      <p>
+        Дата проведения:{" "}
+        {product.beginDate
+          ? new Date(product.beginDate).toLocaleString()
+          : "не задана"}
       </p>
+      <p>
+        Длительность:{" "}
+        {product.beginDate && product.endDate
+          ? new Date(
+              new Date(product.endDate).valueOf() -
+                new Date(product.beginDate).valueOf()
+            ).toLocaleTimeString()
+          : "не задана"}
+      </p>
+      <p className="text-sm font-semibold">Гид: {product.assistant}</p>
+      <p className="text-sm font-semibold">Рейтинг: {data.rating}</p>
+      <div className="my-3">
+        <Form method="post">
+          <button
+            type="submit"
+            name="intent"
+            value="subscribe"
+            className={`block rounded bg-blue-500 px-4 py-2 text-center font-semibold text-white transition hover:bg-blue-400 hover:shadow-md hover:shadow-blue-100 sm:inline-block`}
+          >
+            {data.subscribed
+              ? "Отменить посещение"
+              : "Посетить" +
+                (product.price !== 0 ? " за " + product.price + " ₽" : "")}
+          </button>
+        </Form>
+      </div>
+
+      <p className="mt-6 text-lg font-semibold">Маршрут:</p>
+      <div className="flex flex-col gap-4">
+        {route.map((r) => (
+          <Link
+            to={`/place/${r.placeId}`}
+            key={r.id}
+            className="flex gap-2 border-l-4 border-blue-500 pl-2"
+          >
+            <img
+              src={`/images/places/${r.place.image}`}
+              alt=""
+              className="w-12"
+            />
+            <div>
+              <p className="font-semibold hover:text-blue-600">
+                {r.place.name}
+              </p>
+              <p className="text-sm">{r.place.address}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
 
       {user ? (
         <>
@@ -176,7 +279,7 @@ export default function PlacePage() {
           </Form>
           <p>
             Ваша оценка:{" "}
-            {data.place.rating
+            {data.product.rating
               .filter((r) => r.userId === user.id)
               .map((r) => (
                 <span className="font-semibold" key={r.id}>
@@ -218,28 +321,30 @@ export default function PlacePage() {
         )}
       </div>
       {user ? (
-        <Form className="mt-8 flex items-start gap-4" method="post">
-          <input type="hidden" name="postId" value={place.id} />
-          <div>
-            <textarea
-              placeholder="Ваш комментарий"
-              name="text"
-              className="w-64 border px-1"
-              defaultValue={actionData?.fields?.text}
-            ></textarea>
-            {actionData?.fieldErrors?.text ? (
-              <p className="text-sm font-semibold text-red-600">
-                {actionData?.fieldErrors?.text}
-              </p>
-            ) : null}
-          </div>
-          <button
-            type="submit"
-            className="block rounded bg-blue-600 px-4 py-1 text-lg font-semibold text-white"
-          >
-            Отправить
-          </button>
-        </Form>
+        <>
+          <Form className="mt-8 flex items-start gap-4" method="post">
+            <input type="hidden" name="postId" value={product.id} />
+            <div>
+              <textarea
+                placeholder="Ваш комментарий"
+                name="text"
+                className="w-64 border px-1"
+                defaultValue={actionData?.fields?.text}
+              ></textarea>
+              {actionData?.fieldErrors?.text ? (
+                <p className="text-sm font-semibold text-red-600">
+                  {actionData?.fieldErrors?.text}
+                </p>
+              ) : null}
+            </div>
+            <button
+              type="submit"
+              className="block rounded bg-blue-600 px-4 py-1 text-lg font-semibold text-white"
+            >
+              Отправить
+            </button>
+          </Form>
+        </>
       ) : null}
     </div>
   );

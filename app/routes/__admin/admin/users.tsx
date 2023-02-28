@@ -17,7 +17,7 @@ export default function UsersList() {
     usersList = <p className="my-2">Пользователей пока нет</p>;
   } else {
     usersList = (
-      <div>
+      <div className="w-[30vw] ">
         {data.users.map((user) => (
           <NavLink
             to={user.id}

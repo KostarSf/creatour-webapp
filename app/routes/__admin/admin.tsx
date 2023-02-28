@@ -1,5 +1,18 @@
+import type { LoaderArgs } from "@remix-run/node";
+import { redirect, Response } from "@remix-run/node";
 import { Link, NavLink, Outlet } from "@remix-run/react";
 import type { CSSProperties } from "react";
+import { db } from "~/utils/db.server";
+import { requireUserId } from "~/utils/session.server";
+
+export const loader = async ({ request }: LoaderArgs) => {
+  const userId = await requireUserId(request);
+  const user = await db.user.findUnique({ where: { id: userId } });
+  if (!user || user.role === "user") {
+    return redirect("/products");
+  }
+  return new Response("Ok", { status: 200 });
+};
 
 export default function AdminPage() {
   const activeStyle: CSSProperties = {

@@ -16,7 +16,7 @@ model User {
   updatedAt     DateTime  @updatedAt
 
   username      String    @unique
-  email         String    @unique
+  email         String
   passwordHash  String
   role          String    @default("user")    // user, creator, placeowner, admin
 

@@ -16,7 +16,7 @@ export default function AppLayout({ children }: React.PropsWithChildren) {
 
 function Header() {
   return (
-    <header className="sticky top-0 bg-white shadow-sm">
+    <header className="sticky top-0 z-10 bg-white shadow-sm">
       <div className="mx-auto max-w-7xl px-4">
         <div className="items-center gap-4 md:flex md:justify-between">
           <div className="flex h-14 items-center justify-between lg:h-16">
@@ -34,9 +34,9 @@ function Header() {
           </div>
           <div className="hidden md:flex md:flex-row md:items-baseline md:gap-2">
             <HeaderNavigation />
-            <div className="flex-1 lg:flex-initial">
+            {/* <div className="flex-1 lg:flex-initial">
               <SearchBlock />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

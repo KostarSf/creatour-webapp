@@ -17,7 +17,7 @@ export default function PlacesList() {
     placesList = <p className="my-2">Мест пока нет</p>;
   } else {
     placesList = (
-      <div>
+      <div className="w-[25vw]">
         {data.places.map((place) => (
           <NavLink
             to={place.id}

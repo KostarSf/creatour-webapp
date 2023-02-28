@@ -9,15 +9,15 @@ export default function PlaceItem({
 }: {
   id: string;
   name: string;
-  short: string;
-  rating: number;
-  image?: string;
+  short: string | null;
+  rating: string;
+  image?: string | null;
 }) {
   return (
     <Link to={`/place/${id}`} className="flex gap-2">
       <img
-        src={`/images/${image}`}
-        alt={image}
+        src={`/images/places/${image}`}
+        alt={image || "place"}
         className="block h-14 w-24 shrink-0 rounded object-cover md:h-28 md:w-48"
       />
       <div>
