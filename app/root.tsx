@@ -1,4 +1,4 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -7,31 +7,22 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import tailwindcss from '~/tailwind.css';
 
-import tailwindStylesheetUrl from "./styles/tailwind.css";
-import mainStylesheetUrl from "./styles/main.css";
-
-export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: tailwindStylesheetUrl },
-    { rel: "stylesheet", href: mainStylesheetUrl },
-  ];
-};
-
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  title: "Креатур - Экскурсии, Туры и Квесты",
-  viewport: "width=device-width,initial-scale=1",
-});
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: tailwindcss },
+];
 
 export default function App() {
   return (
-    <html lang="ru" className="h-full scroll-smooth">
+    <html lang="en">
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body className="h-full bg-white">
+      <body>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
