@@ -29,9 +29,10 @@ model User {
 
   comments        Comment[]
   activeProducts  Product[] @relation(name: "UserActiveProducts")
+  checks          Check[]
 
-  createdProducts Product[]
-  createdPlaces   Place[]
+  createdProducts Product[] // Разработчик турпродуктов
+  createdPlaces   Place[]   // Владелец ресурса
 }
 
 model Rating {
@@ -48,6 +49,18 @@ model Rating {
 
   productId String?
   product   Product?  @relation(fields: [productId], references: [id])
+}
+
+model Check {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+
+  buyerId   String
+  buyer     User    @relation(fields: [buyerId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  price Float
 }
 
 model Product {
@@ -74,6 +87,7 @@ model Product {
   rating      Rating[]
   media       Media[]
   tags        Tag[]
+  checks      Check[]
 
   city        String?
   address     String?
