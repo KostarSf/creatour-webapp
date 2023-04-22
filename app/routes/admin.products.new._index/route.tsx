@@ -50,7 +50,7 @@ export const action = async ({ request }: ActionArgs) => {
     data: { ...fields },
   });
   if (product) {
-    return redirect(`/admin/places/${product.id}`);
+    return redirect(`/admin/products/${product.id}`);
   } else {
     return badRequest({
       fieldErrors: null,
