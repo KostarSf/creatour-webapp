@@ -1,4 +1,4 @@
-import type { ActionArgs, LinksFunction, MetaFunction, V2_MetaFunction } from "@remix-run/node";
+import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
 import { Link, useActionData, useSearchParams } from "@remix-run/react";
 
 import { db } from "~/utils/db.server";
