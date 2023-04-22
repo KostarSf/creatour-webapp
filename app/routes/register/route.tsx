@@ -1,262 +1,113 @@
-import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
-import { Link, useActionData, useSearchParams } from "@remix-run/react";
+import { Form, Link, NavLink } from "@remix-run/react";
 
-import { db } from "~/utils/db.server";
-import { badRequest } from "~/utils/request.server";
-import { createUserSession, login, register } from "~/utils/session.server";
-
-import { useState } from "react";
-
-export const meta: V2_MetaFunction = () => [
-  { title: "Креатур | Вход" },
-  {
-    name: "description",
-    content:
-      "Войдите в систему, чтобы иметь возможность приобретать турпродукты!",
-  },
-];
-
-function validateUsername(username: unknown) {
-  if (typeof username !== "string" || username.length < 3) {
-    return `Имя пользователя должно содержать как минимум 3 символа`;
-  }
-}
-
-function validatePassword(password: unknown) {
-  if (typeof password !== "string" || password.length < 4) {
-    return `Пароль должен содержать как минимум 4 символа`;
-  }
-}
-
-export const action = async ({ request }: ActionArgs) => {
-  const form = await request.formData();
-  const loginType = form.get("loginType");
-  const role = form.get("role");
-  const username = form.get("username");
-  const password = form.get("password");
-  const redirectTo = form.get("redirectTo")?.toString() || "/user";
-  console.log(role);
-  if (
-    typeof loginType !== "string" ||
-    typeof username !== "string" ||
-    typeof password !== "string" ||
-    typeof redirectTo !== "string"
-  ) {
-    return badRequest({
-      fieldErrors: null,
-      fields: null,
-      formError: `Форма неверно отправлена.`,
-    });
-  }
-
-  const fields = {
-    loginType,
-    username,
-    password,
-    role: typeof role == "string" ? role : "user",
-  };
-  const fieldErrors = {
-    username: validateUsername(username),
-    password: validatePassword(password),
-  };
-  if (Object.values(fieldErrors).some(Boolean)) {
-    return badRequest({ fieldErrors, fields, formError: null });
-  }
-
-  switch (loginType) {
-    case "login": {
-      const user = await login({ password, username });
-      if (!user) {
-        return badRequest({
-          fieldErrors: null,
-          fields,
-          formError: `Логин или пароль неверны.`,
-        });
-      }
-      return createUserSession(user.id, redirectTo);
-    }
-    case "register": {
-      const userExists = await db.user.findFirst({ where: { username } });
-      if (userExists) {
-        return badRequest({
-          fieldErrors: null,
-          fields,
-          formError: `Пользователь с именем ${username} уже существует`,
-        });
-      }
-      const user = await register({ username, password });
-      if (!user) {
-        return badRequest({
-          fieldErrors: null,
-          fields,
-          formError: `Что-то пошло не так при создании пользователя.`,
-        });
-      }
-      await db.user.update({
-        where: { id: user.id },
-        data: { role: fields.role },
-      });
-      return createUserSession(user.id, redirectTo);
-    }
-    default: {
-      return badRequest({
-        fieldErrors: null,
-        fields,
-        formError: `Неверный тип логина.`,
-      });
-    }
-  }
-};
-
-export default function Login() {
-  const actionData = useActionData<typeof action>();
-  const [searchParams] = useSearchParams();
-
-  const [hideRole, setHideRole] = useState(
-    !actionData?.fields?.loginType || actionData?.fields?.loginType === "login"
-  );
-
+export default function LoginRoute() {
   return (
-    <div className='flex h-screen w-screen flex-col items-center justify-center py-4'>
-      <div className='flex flex-col items-center' data-light=''>
-        <h1 className='mb-10 font-serif text-4xl'>Вход в Креатур</h1>
-        <form method='post' className=' flex flex-col items-center'>
-          <input
-            type='hidden'
-            name='redirectTo'
-            value={searchParams.get("redirectTo") ?? undefined}
-          />
-          <fieldset className='mb-4 flex gap-6'>
-            <legend className='sr-only'>Вход или Регистрация?</legend>
-            <label className='text-lg'>
-              <input
-                type='radio'
-                name='loginType'
-                value='login'
-                defaultChecked={
-                  !actionData?.fields?.loginType ||
-                  actionData?.fields?.loginType === "login"
-                }
-                onChange={(e) => setHideRole(true)}
-              />{" "}
-              Вход
-            </label>
-            <label className='text-lg'>
-              <input
-                type='radio'
-                name='loginType'
-                value='register'
-                defaultChecked={actionData?.fields?.loginType === "register"}
-                onChange={(e) => setHideRole(false)}
-              />{" "}
-              Регистрация
-            </label>
-          </fieldset>
-          {!hideRole ? (
-            <div className='mb-4 w-60'>
-              <label
-                htmlFor='role-input'
-                className='block text-sm font-semibold text-slate-700'
-              >
-                Тип аккаунта
-              </label>
-              <select
-                className='block w-full border border-slate-500 px-3 py-1'
-                name='role'
-                id='role-input'
-                defaultValue={actionData?.fields?.role}
-              >
-                <option value='user'>Пользователь</option>
-                <option value='placeowner'>Владелец ресурсов</option>
-                <option value='creator'>Создатель турпродуктов</option>
-                <option value='admin'>Администратор</option>
-              </select>
-            </div>
-          ) : null}
-          <div className='w-60'>
-            <label
-              htmlFor='username-input'
-              className='block text-sm font-semibold text-slate-700'
-            >
-              Имя пользователя
-            </label>
-            <input
-              className='block w-full border border-slate-500 px-3 py-1'
-              type='text'
-              id='username-input'
-              name='username'
-              defaultValue={actionData?.fields?.username}
-              aria-invalid={Boolean(actionData?.fieldErrors?.username)}
-              aria-errormessage={
-                actionData?.fieldErrors?.username ? "username-error" : undefined
-              }
-            />
-            {actionData?.fieldErrors?.username ? (
-              <p
-                className='text-sm font-semibold text-red-700'
-                role='alert'
-                id='username-error'
-              >
-                {actionData.fieldErrors.username}
-              </p>
-            ) : null}
-          </div>
-          <div className='mt-4 w-60'>
-            <label
-              htmlFor='password-input'
-              className='block text-sm font-semibold text-slate-700'
-            >
-              Пароль
-            </label>
-            <input
-              className='block w-full border border-slate-500 px-3 py-1'
-              id='password-input'
-              name='password'
-              defaultValue={actionData?.fields?.password}
-              type='password'
-              aria-invalid={Boolean(actionData?.fieldErrors?.password)}
-              aria-errormessage={
-                actionData?.fieldErrors?.password ? "password-error" : undefined
-              }
-            />
-            {actionData?.fieldErrors?.password ? (
-              <p
-                className='text-sm font-semibold text-red-700'
-                role='alert'
-                id='password-error'
-              >
-                {actionData.fieldErrors.password}
-              </p>
-            ) : null}
-          </div>
-          <div id='form-error-message'>
-            {actionData?.formError ? (
-              <p className='text-sm font-semibold text-red-700' role='alert'>
-                {actionData.formError}
-              </p>
-            ) : null}
-          </div>
-          <button
-            type='submit'
-            className='mt-8 inline-block rounded bg-blue-600 px-4 py-1 text-center text-lg font-semibold text-white'
+    <div className='flex h-screen w-screen items-stretch'>
+      <div className='flex-grow md:flex-shrink-0 md:flex-grow-0'>
+        <div className='bg-white px-6 py-8 md:px-12 md:py-12 lg:px-24 lg:py-16 flex flex-col items-stretch sm:items-center md:items-start'>
+          <Link
+            to={`/`}
+            className='md:hidden text-4xl font-serif font-semibold mb-4 text-center sm:text-left'
           >
-            Отправить
-          </button>
-        </form>
+            Креатур
+          </Link>
+          <div className='space-x-10 text-center sm:text-left'>
+            <NavLink
+              to={`/login`}
+              className={({ isActive, isPending }) =>
+                `${
+                  isActive || isPending
+                    ? "border-b-2 border-blue-500"
+                    : "border-gray-500"
+                } px-1 py-0.5 transition-colors hover:text-black`
+              }
+            >
+              Вход
+            </NavLink>
+            <NavLink
+              to={`/register`}
+              className={({ isActive }) =>
+                `${
+                  isActive ? "border-b-2 border-blue-500" : "text-gray-500"
+                } px-1 py-0.5 transition-colors hover:text-black`
+              }
+            >
+              Регистрация
+            </NavLink>
+          </div>
+          <div className='my-12 md:my-16 text-center md:text-left'>
+            <p className='text-3xl/relaxed md:text-4xl/relaxed font-medium tracking-widest'>
+              Мы скучали!
+            </p>
+            <p className='md:text-lg leading-relaxed text-gray-800'>
+              Войдите, чтобы продолжить
+            </p>
+          </div>
+          <Form method='POST'>
+            <div className='group relative w-full rounded-md px-4 py-3 ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96'>
+              <input
+                type='text'
+                name='login'
+                className='w-full outline-none'
+                placeholder='Логин'
+              />
+            </div>
+            <div className='group relative mt-2 w-full rounded-md px-4 py-3 ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96'>
+              <input
+                type='text'
+                name='password'
+                className='w-full outline-none'
+                placeholder='Пароль'
+              />
+            </div>
+            <div className='mt-12 md:mt-8 flex flex-wrap justify-between gap-2'>
+              <div className='flex gap-2 align-middle'>
+                <input
+                  type='checkbox'
+                  name='remember'
+                  id='remember'
+                  className='cursor-pointer'
+                />
+                <label
+                  htmlFor='remember'
+                  className='select-none cursor-pointer'
+                >
+                  Запомнить меня
+                </label>
+              </div>
+              <Link
+                to={`/forgot-password`}
+                className='text-gray-500 hover:underline'
+              >
+                Забыли пароль?
+              </Link>
+            </div>
+            <div className='mt-4 md:mt-20 text-center md:text-left'>
+              <button
+                type='submit'
+                className='w-full rounded-md bg-blue-500 px-14 py-3 font-medium text-white transition-colors hover:bg-blue-600 md:w-auto'
+              >
+                Войти
+              </button>
+            </div>
+          </Form>
+        </div>
       </div>
-      <div className='mt-12'>
-        <ul className='flex gap-4'>
-          <li>
-            <Link to='/' className='text-blue-600 hover:underline'>
-              Креатур
-            </Link>
-          </li>
-          <li>
-            <Link to='/products' className='text-blue-600 hover:underline'>
-              Турпродукты
-            </Link>
-          </li>
-        </ul>
+      <div className='hidden flex-1 bg-[url("/images/auth-bg.webp")] bg-cover bg-center md:block'>
+        <div className='lg:px-24 lg:py-16 text-right md:px-12 md:py-12'>
+          <Link
+            to={`/`}
+            className='font-serif text-5xl lg:text-6xl font-bold text-white hover:text-blue-500 transition-colors'
+          >
+            Креатур
+          </Link>
+          <p className='mt-16 text-3xl lg:text-4xl leading-normal tracking-widest text-white'>
+            Отдыхай <br />
+            креативно <br />
+            вместе с <br />
+            нами
+          </p>
+        </div>
       </div>
     </div>
   );
