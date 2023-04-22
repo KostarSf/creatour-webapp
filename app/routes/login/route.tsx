@@ -18,7 +18,7 @@ export default function LoginRoute() {
                 `${
                   isActive || isPending
                     ? "border-b-2 border-blue-500"
-                    : "border-gray-500"
+                    : "text-gray-500"
                 } px-1 py-0.5 transition-colors hover:text-black`
               }
             >
@@ -26,9 +26,11 @@ export default function LoginRoute() {
             </NavLink>
             <NavLink
               to={`/register`}
-              className={({ isActive }) =>
+              className={({ isActive, isPending }) =>
                 `${
-                  isActive ? "border-b-2 border-blue-500" : "text-gray-500"
+                  isActive || isPending
+                    ? "border-b-2 border-blue-500"
+                    : "text-gray-500"
                 } px-1 py-0.5 transition-colors hover:text-black`
               }
             >
