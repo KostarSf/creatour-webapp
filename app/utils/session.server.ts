@@ -18,7 +18,7 @@ export async function register({ email, password, username, role }: RegisterForm
   const user = await db.user.create({
     data: { username, passwordHash, email, role },
   });
-  return { id: user.id, username, email };
+  return { id: user.id, username, email, role };
 }
 
 export async function login({ email, password }: LoginForm) {
@@ -28,7 +28,7 @@ export async function login({ email, password }: LoginForm) {
   if (!user) return null;
   const isCorrectPassword = await bcrypt.compare(password, user.passwordHash);
   if (!isCorrectPassword) return null;
-  return { id: user.id, username: user.username, email: user.email };
+  return { id: user.id, username: user.username, email: user.email, role: user.role };
 }
 
 const sessionSecret = process.env.SESSION_SECRET;
@@ -82,7 +82,7 @@ export async function getUser(request: Request) {
   try {
     const user = await db.user.findUnique({
       where: { id: userId },
-      select: { id: true, username: true, email: true },
+      select: { id: true, username: true, email: true, role: true },
     });
     return user;
   } catch {

@@ -1,8 +1,8 @@
-import type { ActionArgs } from "@remix-run/node";
+import { redirect, type ActionArgs, type LoaderArgs } from "@remix-run/node";
 import type { V2_MetaFunction } from "@remix-run/react";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { badRequest } from "~/utils/request.server";
-import { createUserSession, login } from "~/utils/session.server";
+import { createUserSession, getUser, login } from "~/utils/session.server";
 
 export const meta: V2_MetaFunction = () => [
   { title: "Вход | Креатур" },
@@ -12,6 +12,18 @@ export const meta: V2_MetaFunction = () => [
       "Войдите в систему, чтобы иметь возможность приобретать турпродукты!",
   },
 ];
+
+export const loader = async ({ request }: LoaderArgs) => {
+  const url = new URL(request.url);
+  const redirectTo = url.searchParams.get("redirectTo") ?? '/user';
+
+  const userData = await getUser(request);
+  if (userData) {
+    throw redirect(redirectTo);
+  }
+
+  return {};
+}
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();
