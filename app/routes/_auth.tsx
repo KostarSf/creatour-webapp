@@ -1,6 +1,8 @@
-import { Link, NavLink, Outlet } from "@remix-run/react";
+import { Link, NavLink, Outlet, useSearchParams } from "@remix-run/react";
 
 export default function AuthLayout() {
+  const [searchParams] = useSearchParams();
+
   return (
     <div className='flex min-h-screen w-screen items-stretch'>
       <div className='flex-grow md:flex-shrink-0 md:flex-grow-0'>
@@ -13,7 +15,10 @@ export default function AuthLayout() {
           </Link>
           <div className='space-x-10 text-center sm:text-left'>
             <NavLink
-              to={`/login`}
+              to={{
+                pathname: `/login`,
+                search: searchParams.toString(),
+              }}
               className={({ isActive, isPending }) =>
                 `${
                   isActive || isPending
@@ -25,7 +30,10 @@ export default function AuthLayout() {
               Вход
             </NavLink>
             <NavLink
-              to={`/register`}
+              to={{
+                pathname: `/register`,
+                search: searchParams.toString(),
+              }}
               className={({ isActive, isPending }) =>
                 `${
                   isActive || isPending

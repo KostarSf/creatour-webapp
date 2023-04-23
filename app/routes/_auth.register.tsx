@@ -1,9 +1,10 @@
-import type { ActionArgs } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
+import { redirect, type ActionArgs } from "@remix-run/node";
 import type { V2_MetaFunction } from "@remix-run/react";
 import { Form, useActionData, useSearchParams } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { createUserSession, register } from "~/utils/session.server";
+import { createUserSession, getUser, register } from "~/utils/session.server";
 
 export const meta: V2_MetaFunction = () => [
   { title: "Регистрация | Креатур" },
@@ -12,6 +13,18 @@ export const meta: V2_MetaFunction = () => [
     content: "Зарегистрируйтесь, и начните открывать новые направления!",
   },
 ];
+
+export const loader = async ({ request }: LoaderArgs) => {
+  const url = new URL(request.url);
+  const redirectTo = url.searchParams.get("redirectTo") ?? "/user";
+
+  const userData = await getUser(request);
+  if (userData) {
+    throw redirect(redirectTo);
+  }
+
+  return {};
+};
 
 function validateRole(role: unknown) {
   if (
