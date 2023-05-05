@@ -6,7 +6,7 @@ export default function landingPage() {
       <div className="flex items-stretch justify-center bg-white md:bg-[url('/images/landing/landing_bg.webp')] min-h-screen bg-cover bg-center">
         <div className='flex-grow px-6 sm:px-12 py-6 max-w-[100rem] flex flex-col justify-between'>
           <div></div>
-          <div className="mt-32 md:mt-0 flex flex-col items-center md:items-start">
+          <div className='mt-32 md:mt-0 flex flex-col items-center md:items-start'>
             <h1 className='text-blue-500 md:text-white text-center md:text-left text-4xl sm:text-5xl md:text-6xl font-serif font-bold md:drop-shadow'>
               Открой для себя <br />
               Креативный туризм
@@ -22,7 +22,7 @@ export default function landingPage() {
             </Link>
           </div>
           <div className='mt-32 md:mt-16 flex justify-between flex-col-reverse xl:items-end xl:flex-row gap-4'>
-            <div className="flex flex-col items-center md:items-start my-12 md:my-0">
+            <div className='flex flex-col items-center md:items-start my-12 md:my-0'>
               <p className='md:text-white md:drop-shadow text-lg'>
                 Креатур в соцсетях
               </p>
@@ -113,6 +113,99 @@ export default function landingPage() {
                 </p>
               </Link>
             </div>
+          </div>
+        </div>
+      </div>
+      <div className='bg-white max-w-6xl mx-auto px-12'>
+        <div className='my-48'>
+          <p className='text-center mb-10 text-4xl'>***</p>
+          <p className='text-center text-xl md:text-3xl xl:text-4xl tracking-widest leading-normal font-light'>
+            <span className='text-2xl md:text-3xl xl:text-5xl font-serif font-bold'>
+              Креатур
+            </span>{" "}
+            - это творческое объединение разнообразных компаний туристической
+            сферы, разработчиков креативных туристических программ, владельцев
+            инфраструктуры и любитей пробовать что-то новое.
+          </p>
+        </div>
+        <div className='flex gap-2 lg:gap-12 flex-col lg:flex-row'>
+          <div className='flex-[3] bg-slate-200 rounded-xl bg-[url(/images/landing/place_mmm.jpg)] bg-cover bg-center overflow-hidden'>
+            <Link
+              to='#'
+              className='w-full h-full py-8 px-10 text-white bg-black/30 flex flex-col justify-between gap-8'
+            >
+              <div>
+                <p className='text-2xl/none font-bold font-serif'>10-24</p>
+                <p className='font-light tracking-wide'>апреля</p>
+              </div>
+              <div className='flex justify-between items-center'>
+                <p className='sm:text-lg/snug font-medium'>
+                  Мало-Коннюшенный мост{" "}
+                  <br className='hidden sm:inline-block' /> в Санкт-Петербурге
+                </p>
+                <img
+                  src='/images/landing/arrow_right.svg'
+                  alt='arrow_right.svg'
+                  className='inline px-2'
+                />
+              </div>
+            </Link>
+          </div>
+          <div className='flex-[2] space-y-8 py-8'>
+            <h2 className='font-serif text-3xl sm:text-4xl xl:text-5xl font-bold'>
+              Посмотрите все направления туров
+            </h2>
+            <p className='text-xl'>
+              Бескрайние просторы тайги, огромные реки, золотые степи и венцы
+              человеческого творения - архитектурные памятники - это и делает
+              нашу страну такой уникальной.
+            </p>
+            <Link
+              to='#'
+              className='text-blue-500 inline-block px-12 py-2 text-lg font-bold border-2 border-blue-500 rounded-full hover:bg-blue-500 hover:text-white transition-colors'
+            >
+              Смотреть все
+            </Link>
+          </div>
+        </div>
+        <div className='flex gap-2 lg:gap-12 my-36  flex-col lg:flex-row'>
+          <div className='flex-[3] bg-slate-200 bg-[url(/images/landing/review.jpg)] bg-cover bg-center rounded-xl lg:order-1 overflow-hidden'>
+            <Link
+              to='#'
+              className='w-full h-full py-8 px-10 text-white bg-black/30 flex flex-col justify-between gap-8'
+            >
+              <div>
+                <p className='text-2xl/none font-bold font-serif'>Отзыв</p>
+                <p className='font-light tracking-wide'>Елена Иванова</p>
+              </div>
+              <div className='flex justify-between items-center'>
+                <p className='sm:text-lg/snug font-medium'>
+                  Пожалуй, это был лучший{" "}
+                  <br className='hidden sm:inline-block' /> гастрономический тур
+                  на Юге
+                </p>
+                <img
+                  src='/images/landing/arrow_right.svg'
+                  alt='arrow_right.svg'
+                  className='inline px-2'
+                />
+              </div>
+            </Link>
+          </div>
+          <div className='flex-[2] space-y-8 py-8'>
+            <h2 className='font-serif text-3xl sm:text-4xl  xl:text-5xl font-bold'>
+              Что пишут участники наших турпрограмм
+            </h2>
+            <p className='text-xl'>
+              87% участников приходят по личной рекомендации от друзей. Каждый
+              4-ый проводит досуг с нами больше 2-ух раз!
+            </p>
+            <Link
+              to='#'
+              className='text-blue-500 inline-block px-12 py-2 text-lg font-bold border-2 border-blue-500 rounded-full hover:bg-blue-500 hover:text-white transition-colors'
+            >
+              Читать отзывы
+            </Link>
           </div>
         </div>
       </div>
