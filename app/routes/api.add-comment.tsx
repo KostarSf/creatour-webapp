@@ -1,12 +1,13 @@
+import type {
+  ActionArgs} from "@remix-run/node";
 import {
-  ActionArgs,
   unstable_composeUploadHandlers,
   unstable_createMemoryUploadHandler,
   unstable_parseMultipartFormData,
 } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { createFileUploadHandler } from "@remix-run/node/dist/upload/fileUploadHandler";
-import { randomUUID } from "crypto";
+import cuid2 from "@paralleldrive/cuid2";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 
@@ -25,7 +26,7 @@ export const action = async ({ request }: ActionArgs) => {
       file: ({ filename }) => {
         const ext = filename.split(".").pop();
         const type = ext === "mp4" || ext === "webm" ? "video" : "image";
-        const newName = `${randomUUID()}.${ext}`;
+        const newName = `${cuid2.createId()}.${ext}`;
         mediafiles.push({ name: newName, type });
         return newName;
       },
