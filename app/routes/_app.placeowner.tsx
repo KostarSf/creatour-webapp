@@ -1,10 +1,11 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Link, useFetcher, useLoaderData } from "@remix-run/react";
+import { Form, Link, useFetcher, useLoaderData } from "@remix-run/react";
 import clsx from "clsx";
-import type { ComponentPropsWithRef } from "react";
+import type { ComponentPropsWithRef, ComponentPropsWithoutRef } from "react";
 import { forwardRef, useEffect, useState } from "react";
 import { db } from "~/utils/db.server";
+import { badRequest } from "~/utils/request.server";
 import { logout, requireUserId } from "~/utils/session.server";
 
 export const action = async ({ request }: ActionArgs) => {
@@ -20,31 +21,62 @@ export const action = async ({ request }: ActionArgs) => {
   }
 
   const formData = await request.formData();
-  const { city, phone, legalName, inn, address } = Object.fromEntries(formData);
+  const intent = formData.get("intent");
 
-  if (
-    typeof city !== "string" ||
-    typeof phone !== "string" ||
-    typeof legalName !== "string" ||
-    typeof inn !== "string" ||
-    typeof address !== "string"
-  ) {
-    throw json({ error: "Указаны неверные значения" }, { status: 400 });
+  if (intent === "change-info") {
+    const { city, phone, legalName, inn, address } =
+      Object.fromEntries(formData);
+
+    if (
+      typeof city !== "string" ||
+      typeof phone !== "string" ||
+      typeof legalName !== "string" ||
+      typeof inn !== "string" ||
+      typeof address !== "string"
+    ) {
+      throw json({ error: "Указаны неверные значения" }, { status: 400 });
+    }
+
+    await db.user.update({
+      where: { id: userId },
+      data: {
+        city: city || user.city,
+        phone: phone || user.phone,
+        legalName: legalName || user.legalName,
+        inn: inn || user.inn,
+        address: address || user.address,
+      },
+    });
+
+    return json({
+      error: null,
+    });
+  } else if (intent === "place-active-toggle") {
+    const placeId = formData.get("placeId");
+
+    if (typeof placeId !== "string") {
+      return badRequest({
+        error: "Неверный ID места",
+      });
+    }
+
+    const place = await db.place.findUnique({ where: { id: placeId } });
+    if (!place) {
+      return badRequest({
+        error: "Такого места не существует",
+      });
+    }
+
+    await db.place.update({
+      where: { id: placeId },
+      data: { active: !place.active },
+    });
+
+    return json({ error: null });
   }
 
-  await db.user.update({
-    where: { id: userId },
-    data: {
-      city: city || user.city,
-      phone: phone || user.phone,
-      legalName: legalName || user.legalName,
-      inn: inn || user.inn,
-      address: address || user.address,
-    },
-  });
-
-  return json({
-    error: null,
+  return badRequest({
+    error: "Неподдерживаемое действие",
   });
 };
 
@@ -57,9 +89,10 @@ export const loader = async ({ request }: LoaderArgs) => {
 
   const places = await db.place.findMany({
     where: {
-      creatorId: user.id
-    }
-  })
+      creatorId: user.id,
+    },
+    orderBy: {createdAt: 'desc'}
+  });
 
   return json({ user, places });
 };
@@ -101,7 +134,7 @@ export default function PlaceownerPage() {
       </div>
       <fetcher.Form
         method='POST'
-        className='my-6 md:my-12 border shadow-lg shadow-blue-900/10 p-6 -mx-6 md:mx-auto md:rounded-lg max-w-7xl'
+        className='my-6 md:my-12 border shadow-lg shadow-blue-900/5 p-6 -mx-6 md:mx-auto md:rounded-lg max-w-7xl'
       >
         <div className='flex justify-between items-start'>
           <div className='flex items-center gap-4'>
@@ -126,20 +159,7 @@ export default function PlaceownerPage() {
                     className='w-full h-full object-cover'
                   />
                 ) : (
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    strokeWidth='1.5'
-                    stroke='currentColor'
-                    className='w-8 h-8 text-slate-100'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z'
-                    />
-                  </svg>
+                  <ImageIcon className='w-8 h-8 text-slate-100' />
                 )}
               </div>
             </div>
@@ -162,6 +182,8 @@ export default function PlaceownerPage() {
           </button>
           <button
             type='submit'
+            name='intent'
+            value='change-info'
             className={clsx(
               "uppercase text-blue-500 bg-blue-50 px-4 py-1 rounded hover:bg-blue-100 transition-colors font-medium",
               !changingInfo && "hidden"
@@ -236,12 +258,111 @@ export default function PlaceownerPage() {
             У вас пока нет объектов
           </p>
         ) : (
-          <></>
+          <div className='space-y-6 mt-6 -mx-6 md:mx-auto max-w-7xl'>
+            {places.map((place) => (
+              <div key={place.id} className='shadow rounded px-6 md:px-0 overflow-hidden flex flex-col lg:flex-row lg:items-stretch'>
+                <Link
+                  to={`/places/${place.id}`}
+                  className='bg-slate-300 h-48 lg:h-auto lg:w-[40%] -mx-6 md:mx-0 relative block text-white flex-shrink-0'
+                >
+                  {place.image ? (
+                    <></>
+                  ) : (
+                    <div className='w-full h-full grid place-items-center'>
+                      <ImageIcon className='w-32 h-32 text-slate-100' />
+                    </div>
+                  )}
+                  <div className='absolute inset-0 flex flex-col justify-between bg-black/10 p-6'>
+                    <div className='text-right'>
+                      {place.date
+                        ? (() => {
+                            const date = new Date(place.date);
+                            return (
+                              <>
+                                <p className='font-serif text-xl/none font-bold tracking-wide'>
+                                  {date.toLocaleTimeString("ru-ru", {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
+                                </p>
+                                <p className='text-base/none'>
+                                  {date.toLocaleDateString("ru-ru", {
+                                    day: "numeric",
+                                    month: "long",
+                                  })}
+                                </p>
+                              </>
+                            );
+                          })()
+                        : null}
+                    </div>
+                    <div className='flex items-center justify-between'>
+                      <p className='text-base/none'>{place.address}</p>
+                      <img
+                        src='/images/landing/arrow_right.svg'
+                        alt='arrow_right.svg'
+                        className='inline px-2'
+                      />
+                    </div>
+                  </div>
+                </Link>
+                <div className='flex flex-col gap-6 md:px-6 pt-3 pb-6 flex-1'>
+                  <div className='flex-1'>
+                    <p className='font-serif text-3xl font-bold'>
+                      {place.name}
+                    </p>
+                    <p className='text-lg text-slate-700'>{place.short}</p>
+                  </div>
+                  <div className='flex items-baseline justify-between flex-wrap gap-2'>
+                    <Form method='POST'>
+                      <input type='hidden' name='placeId' value={place.id} />
+                      <button
+                        type='submit'
+                        name='intent'
+                        value='place-active-toggle'
+                        className={clsx(
+                          "uppercase px-6 py-2 rounded  font-medium transition-colors",
+                          place.active
+                            ? "text-green-600 hover:bg-green-200 bg-green-100"
+                            : "text-gray-600 hover:bg-gray-200 bg-gray-100"
+                        )}
+                      >
+                        {place.active ? "Активно" : "Неактивно"}
+                      </button>
+                    </Form>
+                    <Link
+                      to={`/places/${place.id}/edit`}
+                      className='uppercase px-6 py-2 rounded text-blue-600 font-medium hover:bg-blue-100 transition-colors'
+                    >
+                      Изменить
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </>
   );
 }
+
+const ImageIcon = (props: ComponentPropsWithoutRef<"svg">) => (
+  <svg
+    xmlns='http://www.w3.org/2000/svg'
+    fill='none'
+    viewBox='0 0 24 24'
+    strokeWidth='1.5'
+    stroke='currentColor'
+    {...props}
+  >
+    <path
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      d='M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z'
+    />
+  </svg>
+);
 
 interface InfoFieldProps extends ComponentPropsWithRef<"input"> {
   label: string;

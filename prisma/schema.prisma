@@ -122,6 +122,7 @@ model Place {
   crmId       String?
   creatorId   String?
   creator     User?     @relation(fields: [creatorId], references: [id])
+  active      Boolean   @default(false)
 
   name        String
   short       String?
@@ -137,6 +138,7 @@ model Place {
   city        String?
   address     String?
   coordinates String?
+  date        DateTime?
 }
 
 model Tag {
