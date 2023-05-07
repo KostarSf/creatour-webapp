@@ -1,4 +1,5 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderArgs} from "@remix-run/node";
+import { json } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -8,10 +9,15 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import tailwindcss from '~/tailwind.css';
+import { getUser } from "./utils/session.server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindcss },
 ];
+
+export const loader = async ({request}: LoaderArgs) => {
+  return json({ user: await getUser(request) })
+}
 
 export default function App() {
   return (

@@ -13,6 +13,7 @@ export const meta: V2_MetaFunction = () => [
   },
 ];
 
+
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url);
   const redirectTo = url.searchParams.get("redirectTo") ?? '/user';
@@ -24,6 +25,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
   return {};
 }
+
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();
@@ -58,6 +60,7 @@ export const action = async ({ request }: ActionArgs) => {
   return createUserSession(user.id, remember, redirectTo);
 };
 
+
 export default function LoginRoute() {
   const actionData = useActionData<typeof action>();
   const [searchParams] = useSearchParams();
@@ -78,21 +81,21 @@ export default function LoginRoute() {
           name='redirectTo'
           value={searchParams.get("redirectTo") ?? undefined}
         />
-        <div className='group relative w-full rounded-md px-4 py-3 ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96'>
+        <div className='group relative w-full rounded-md overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96'>
           <input
             type='text'
             name='email'
-            className='w-full outline-none'
+            className='w-full px-4 py-3 outline-none'
             placeholder='Email'
             defaultValue={actionData?.fields?.email}
             required
           />
         </div>
-        <div className='group relative mt-2 w-full rounded-md px-4 py-3 ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96'>
+        <div className='group relative mt-2 w-full rounded-md overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96'>
           <input
             type='password'
             name='password'
-            className='w-full outline-none'
+            className='w-full px-4 py-3 outline-none'
             placeholder='Пароль'
             defaultValue={actionData?.fields?.password}
             required
@@ -111,12 +114,12 @@ export default function LoginRoute() {
               Запомнить меня
             </label>
           </div>
-          <Link
+          {/* <Link
             to={`/forgot-password`}
             className='text-gray-500 hover:underline'
           >
             Забыли пароль?
-          </Link>
+          </Link> */}
         </div>
         <div className='mt-4 md:mt-12 text-center md:text-left'>
           <button

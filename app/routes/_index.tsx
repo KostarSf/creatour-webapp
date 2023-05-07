@@ -1,6 +1,9 @@
 import { Link } from "@remix-run/react";
+import { useOptionalUser } from "~/utils/user";
 
-export default function landingPage() {
+export default function LandingPage() {
+  const user = useOptionalUser();
+
   return (
     <>
       <div className="flex items-stretch justify-center bg-white md:bg-[url('/images/landing/landing_bg.webp')] min-h-screen bg-cover bg-center">
@@ -14,11 +17,13 @@ export default function landingPage() {
             <p className='text-gray-600 md:text-white font-medium text-center md:text-left text-xl md:text-2xl mt-4 mb-12 md:drop-shadow'>
               Отдыхай по новому с командой Креатура
             </p>
+            {/** Если вход выполнен и это обычный пользователь, посылаем его в каталог */}
+            {/** Если это редактор, посылаем его в /users, где его перенаправит на нужный кабинет */}
             <Link
-              to={`/register`}
+              to={user ? (user.role !== 'user' ? '/user' : '/products') : `/register`}
               className='text-white w-full text-center md:text-left sm:w-auto font-medium bg-blue-500 hover:bg-blue-600 text-lg transition-colors px-12 py-3 rounded-md inline-block'
             >
-              Регистрация
+              {user ? (user.role !== 'user' ? 'Личный кабинет' : 'К турпродуктам') : 'Регистрация'}
             </Link>
           </div>
           <div className='mt-32 md:mt-16 flex justify-between flex-col-reverse xl:items-end xl:flex-row gap-4'>
@@ -116,7 +121,7 @@ export default function landingPage() {
           </div>
         </div>
       </div>
-      <div className='bg-white max-w-6xl mx-auto px-12'>
+      <div className='bg-white max-w-6xl mx-auto px-6 md:px-12'>
         <div className='my-48'>
           <p className='text-center mb-10 text-4xl'>***</p>
           <p className='text-center text-xl md:text-3xl xl:text-4xl tracking-widest leading-normal font-light'>
