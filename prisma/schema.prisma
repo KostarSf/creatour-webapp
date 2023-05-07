@@ -19,11 +19,13 @@ model User {
   email         String    @unique
   passwordHash  String
   role          String    @default("user")    // user, creator, placeowner, admin
+  avatar        String?
 
   city          String?
   phone         String?
   legalName     String?
   inn           String?
+  address       String?
 
   ratings       Rating[]
 

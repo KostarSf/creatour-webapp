@@ -14,6 +14,7 @@ export const meta: V2_MetaFunction = () => [
   },
 ];
 
+
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url);
   const redirectTo = url.searchParams.get("redirectTo") ?? "/user";
@@ -25,6 +26,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
   return {};
 };
+
 
 function validateRole(role: unknown) {
   if (
@@ -54,6 +56,7 @@ function validatePassword(password: unknown) {
     return `Пароль должен содержать как минимум 4 символа`;
   }
 }
+
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();
@@ -112,6 +115,7 @@ export const action = async ({ request }: ActionArgs) => {
   return createUserSession(user.id, true, redirectTo);
 };
 
+
 export default function LoginRoute() {
   const actionData = useActionData<typeof action>();
   const [searchParams] = useSearchParams();
@@ -132,9 +136,9 @@ export default function LoginRoute() {
           name='redirectTo'
           value={searchParams.get("redirectTo") ?? undefined}
         />
-        <div className='group relative w-full rounded-md px-4 py-3 ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96'>
+        <div className='group relative w-full overflow-hidden rounded-md border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96'>
           <select
-            className='w-full outline-none bg-white'
+            className='w-full px-4 py-3 outline-none bg-white'
             name='role'
             required
             defaultValue={actionData?.fields?.role}
@@ -156,11 +160,11 @@ export default function LoginRoute() {
             {actionData.fieldErrors.role}
           </p>
         ) : null}
-        <div className='group relative mt-2 w-full rounded-md px-4 py-3 ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96'>
+        <div className='group relative mt-2 w-full overflow-hidden rounded-md border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96'>
           <input
             type='text'
             name='username'
-            className='w-full outline-none'
+            className='w-full px-4 py-3 outline-none'
             placeholder='Имя'
             required
             defaultValue={actionData?.fields?.username}
@@ -178,11 +182,11 @@ export default function LoginRoute() {
             {actionData.fieldErrors.username}
           </p>
         ) : null}
-        <div className='group relative mt-2 w-full rounded-md px-4 py-3 ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96'>
+        <div className='group relative mt-2 w-full rounded-md overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96'>
           <input
             type='email'
             name='email'
-            className='w-full outline-none'
+            className='w-full px-4 py-3 outline-none'
             placeholder='Email'
             required
             defaultValue={actionData?.fields?.email}
@@ -200,11 +204,11 @@ export default function LoginRoute() {
             {actionData.fieldErrors.email}
           </p>
         ) : null}
-        <div className='group relative mt-2 w-full rounded-md px-4 py-3 ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96'>
+        <div className='group relative mt-2 w-full rounded-md overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96'>
           <input
             type='password'
             name='password'
-            className='w-full outline-none'
+            className='w-full px-4 py-3 outline-none'
             placeholder='Пароль'
             required
             defaultValue={actionData?.fields?.password}
