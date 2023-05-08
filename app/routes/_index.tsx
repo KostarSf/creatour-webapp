@@ -176,7 +176,7 @@ export default function LandingPage() {
               нашу страну такой уникальной.
             </p>
             <Link
-              to='#'
+              to='/products'
               className='text-blue-500 inline-block px-12 py-2 text-lg font-bold border-2 border-blue-500 rounded-full hover:bg-blue-500 hover:text-white transition-colors'
             >
               Смотреть все
