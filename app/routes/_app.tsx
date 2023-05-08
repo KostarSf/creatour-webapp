@@ -11,9 +11,9 @@ export default function AppLayout() {
           Креатур
         </Link>
         {user ? (
-          <p className='hidden md:block'>
+          <Link to='/user' className='block hover:underline'>
             ID {user.id.split("-")[0].toUpperCase()}
-          </p>
+          </Link>
         ) : null}
         <Form method='post' action='/logout'>
           <button type='submit' className="hover:underline">Выход</button>

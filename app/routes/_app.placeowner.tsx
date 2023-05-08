@@ -258,15 +258,24 @@ export default function PlaceownerPage() {
             У вас пока нет объектов
           </p>
         ) : (
-          <div className='space-y-6 mt-6 -mx-6 md:mx-auto max-w-7xl'>
+          <div className='space-y-6 mt-6 md:mt-12 -mx-6 md:mx-auto max-w-7xl'>
             {places.map((place) => (
-              <div key={place.id} className='shadow rounded px-6 md:px-0 overflow-hidden flex flex-col lg:flex-row lg:items-stretch'>
+              <div
+                key={place.id}
+                className='shadow md:rounded px-6 md:px-0 overflow-hidden flex flex-col lg:flex-row lg:items-stretch'
+              >
                 <Link
                   to={`/places/${place.id}`}
-                  className='bg-slate-300 h-48 lg:h-auto lg:w-[40%] -mx-6 md:mx-0 relative block text-white flex-shrink-0'
+                  className='bg-slate-300 h-48 lg:h-auto lg:w-[40%] -mx-6 md:mx-0 relative block text-white flex-shrink-0 md:rounded overflow-hidden'
                 >
                   {place.image ? (
-                    <></>
+                    <div className="absolute inset-0">
+                      <img
+                        src={"/images/places/" + place.image}
+                        alt={place.name}
+                        className='w-full h-full object-cover object-center'
+                      />
+                    </div>
                   ) : (
                     <div className='w-full h-full grid place-items-center'>
                       <ImageIcon className='w-32 h-32 text-slate-100' />
@@ -306,7 +315,7 @@ export default function PlaceownerPage() {
                     </div>
                   </div>
                 </Link>
-                <div className='flex flex-col gap-6 md:px-6 pt-3 pb-6 flex-1'>
+                <div className='flex flex-col gap-6 md:px-6 pt-3 pb-6 flex-1 lg:min-h-[12rem]'>
                   <div className='flex-1'>
                     <p className='font-serif text-3xl font-bold'>
                       {place.name}
@@ -331,7 +340,7 @@ export default function PlaceownerPage() {
                       </button>
                     </Form>
                     <Link
-                      to={`/places/${place.id}/edit`}
+                      to={`/admin/places/${place.id}/edit`}
                       className='uppercase px-6 py-2 rounded text-blue-600 font-medium hover:bg-blue-100 transition-colors'
                     >
                       Изменить
