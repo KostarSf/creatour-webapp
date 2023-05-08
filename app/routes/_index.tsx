@@ -20,10 +20,20 @@ export default function LandingPage() {
             {/** Если вход выполнен и это обычный пользователь, посылаем его в каталог */}
             {/** Если это редактор, посылаем его в /users, где его перенаправит на нужный кабинет */}
             <Link
-              to={user ? (user.role !== 'user' ? '/user' : '/products') : `/register`}
+              to={
+                user
+                  ? user.role !== "user"
+                    ? "/user"
+                    : "/products"
+                  : `/register`
+              }
               className='text-white w-full text-center md:text-left sm:w-auto font-medium bg-blue-500 hover:bg-blue-600 text-lg transition-colors px-12 py-3 rounded-md inline-block'
             >
-              {user ? (user.role !== 'user' ? 'Личный кабинет' : 'К турпродуктам') : 'Регистрация'}
+              {user
+                ? user.role !== "user"
+                  ? "Личный кабинет"
+                  : "К турпродуктам"
+                : "Регистрация"}
             </Link>
           </div>
           <div className='mt-32 md:mt-16 flex justify-between flex-col-reverse xl:items-end xl:flex-row gap-4'>
@@ -176,7 +186,7 @@ export default function LandingPage() {
         <div className='flex gap-2 lg:gap-12 my-36  flex-col lg:flex-row'>
           <div className='flex-[3] bg-slate-200 bg-[url(/images/landing/review.jpg)] bg-cover bg-center rounded-xl lg:order-1 overflow-hidden'>
             <Link
-              to='#'
+              to='/reviews'
               className='w-full h-full py-8 px-10 text-white bg-black/30 flex flex-col justify-between gap-8'
             >
               <div>
@@ -206,7 +216,7 @@ export default function LandingPage() {
               4-ый проводит досуг с нами больше 2-ух раз!
             </p>
             <Link
-              to='#'
+              to='/reviews'
               className='text-blue-500 inline-block px-12 py-2 text-lg font-bold border-2 border-blue-500 rounded-full hover:bg-blue-500 hover:text-white transition-colors'
             >
               Читать отзывы
