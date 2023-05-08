@@ -15,7 +15,7 @@ export default function AppLayout() {
             ID {user.id.split("-")[0].toUpperCase()}
           </Link>
         ) : null}
-        <Form method='post' action='/logout'>
+        <Form method='POST' action='/logout'>
           <button type='submit' className="hover:underline">Выход</button>
         </Form>
       </div>
