@@ -38,6 +38,7 @@ export function ProductCard({
                 }}
               >
                 <input type='hidden' name='userId' value={userId} />
+                <input type='hidden' name='productId' value={object.id} />
                 <button
                   name='intent'
                   value='activate-product'
@@ -46,7 +47,7 @@ export function ProductCard({
                     "uppercase px-6 py-2 rounded  font-medium transition-colors",
                     !buyed
                       ? "text-blue-600 hover:bg-blue-200 bg-blue-100"
-                      : "text-gray-600 hover:bg-gray-200 bg-gray-100"
+                      : "text-green-600 bg-green-100"
                   )}
                 >
                   {buyed
