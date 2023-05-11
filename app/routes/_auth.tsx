@@ -56,7 +56,7 @@ export default function AuthLayout() {
           >
             Креатур
           </Link>
-          <p className='mt-16 text-3xl lg:text-4xl leading-normal tracking-widest text-white'>
+          <p className='mt-16 text-3xl/normal lg:text-4xl/normal tracking-widest text-white'>
             Отдыхай <br />
             креативно <br />
             вместе с <br />

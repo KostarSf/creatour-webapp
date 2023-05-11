@@ -1,4 +1,5 @@
 import { Link } from "@remix-run/react";
+import clsx from "clsx";
 import { useOptionalUser } from "~/utils/user";
 
 export default function LandingPage() {
@@ -17,6 +18,7 @@ export default function LandingPage() {
             <p className='text-gray-600 md:text-white font-medium text-center md:text-left text-xl md:text-2xl mt-4 mb-12 md:drop-shadow'>
               Отдыхай по новому с командой Креатура
             </p>
+
             {/** Если вход выполнен и это обычный пользователь, посылаем его в каталог */}
             {/** Если это редактор, посылаем его в /users, где его перенаправит на нужный кабинет */}
             <Link
@@ -27,7 +29,7 @@ export default function LandingPage() {
                     : "/products"
                   : `/register`
               }
-              className='text-white w-full text-center md:text-left sm:w-auto font-medium bg-blue-500 hover:bg-blue-600 text-lg transition-colors px-12 py-3 rounded-md inline-block'
+              className='text-white w-full text-center md:text-left sm:w-auto font-medium bg-blue-500 hover:bg-blue-600 text-lg transition-colors px-12 py-3 rounded-full inline-block'
             >
               {user
                 ? user.role !== "user"
@@ -36,6 +38,7 @@ export default function LandingPage() {
                 : "Регистрация"}
             </Link>
           </div>
+
           <div className='mt-32 md:mt-16 flex justify-between flex-col-reverse xl:items-end xl:flex-row gap-4'>
             <div className='flex flex-col items-center md:items-start my-12 md:my-0'>
               <p className='md:text-white md:drop-shadow text-lg'>
@@ -84,53 +87,33 @@ export default function LandingPage() {
                 </a>
               </div>
             </div>
+
             <div className='flex gap-2 flex-col items-start md:flex-row flex-wrap'>
-              <Link
-                to={`/products/123`}
-                className="bg-[url('/images/tour_food.png')] bg-cover bg-center aspect-[14/9] rounded-md w-full md:w-auto md:h-44 flex flex-col justify-between p-3"
-              >
-                <p className='text-white text-2xl font-serif font-bold '>02</p>
-                <p className='text-white text-lg/tight'>
-                  Гастрономический тур по Новороссийску
-                  <img
-                    src='/images/landing/arrow_right.svg'
-                    alt='arrow_right.svg'
-                    className='inline px-2'
-                  />
-                </p>
-              </Link>
-              <Link
-                to={`/products/123`}
-                className="bg-[url('/images/trip_memorial.jpg')] bg-cover bg-center aspect-[14/9] rounded-md w-full md:w-auto md:h-44 flex flex-col justify-between p-3"
-              >
-                <p className='text-white text-2xl font-serif font-bold '>03</p>
-                <p className='text-white text-lg/tight'>
-                  Достопримечательности Новороссийска
-                  <img
-                    src='/images/landing/arrow_right.svg'
-                    alt='arrow_right.svg'
-                    className='inline px-2'
-                  />
-                </p>
-              </Link>
-              <Link
-                to={`/products/123`}
-                className="bg-[url('/images/sea.jpg')] bg-cover bg-center aspect-[14/9] rounded-md w-full md:w-auto md:h-44 flex flex-col justify-between p-3"
-              >
-                <p className='text-white text-2xl font-serif font-bold '>04</p>
-                <p className='text-white text-lg/tight'>
-                  Интерактивный квест "Темное сердце"
-                  <img
-                    src='/images/landing/arrow_right.svg'
-                    alt='arrow_right.svg'
-                    className='inline px-2'
-                  />
-                </p>
-              </Link>
+              <PreviewCard
+                name='Гастрономический тур по Новороссийску'
+                image='/images/tour_food.png'
+                link='/products/123'
+                displayId='02'
+              />
+
+              <PreviewCard
+                name='Достопримечательности Новороссийска'
+                image='/images/trip_memorial.jpg'
+                link='/products/123'
+                displayId='03'
+              />
+
+              <PreviewCard
+                name='Интерактивный квест "Темное сердце"'
+                image='/images/sea.jpg'
+                link='/products/123'
+                displayId='04'
+              />
             </div>
           </div>
         </div>
       </div>
+
       <div className='bg-white max-w-6xl mx-auto px-6 md:px-12'>
         <div className='my-48'>
           <p className='text-center mb-10 text-4xl'>***</p>
@@ -143,6 +126,7 @@ export default function LandingPage() {
             инфраструктуры и любитей пробовать что-то новое.
           </p>
         </div>
+
         <div className='flex gap-2 lg:gap-12 flex-col lg:flex-row'>
           <div className='flex-[3] bg-slate-200 rounded-xl bg-[url(/images/landing/place_mmm.jpg)] bg-cover bg-center overflow-hidden'>
             <Link
@@ -166,6 +150,7 @@ export default function LandingPage() {
               </div>
             </Link>
           </div>
+
           <div className='flex-[2] space-y-8 py-8'>
             <h2 className='font-serif text-3xl sm:text-4xl xl:text-5xl font-bold'>
               Посмотрите все направления туров
@@ -183,6 +168,7 @@ export default function LandingPage() {
             </Link>
           </div>
         </div>
+
         <div className='flex gap-2 lg:gap-12 my-36  flex-col lg:flex-row'>
           <div className='flex-[3] bg-slate-200 bg-[url(/images/landing/review.jpg)] bg-cover bg-center rounded-xl lg:order-1 overflow-hidden'>
             <Link
@@ -207,6 +193,7 @@ export default function LandingPage() {
               </div>
             </Link>
           </div>
+
           <div className='flex-[2] space-y-8 py-8'>
             <h2 className='font-serif text-3xl sm:text-4xl  xl:text-5xl font-bold'>
               Что пишут участники наших турпрограмм
@@ -225,5 +212,34 @@ export default function LandingPage() {
         </div>
       </div>
     </>
+  );
+}
+
+type PreviewCardProps = {
+  link: string;
+  image: string;
+  displayId: string;
+  name: string;
+};
+
+function PreviewCard({ link, image, displayId, name }: PreviewCardProps) {
+  return (
+    <Link
+      to={link}
+      className={`relative aspect-[14/9] overflow-hidden rounded-md w-full md:w-auto md:h-44`}
+    >
+      <img src={image} alt='' className='w-full h-full' />
+      <div className='absolute inset-0 flex flex-col justify-between p-3'>
+        <p className='text-white text-2xl font-serif font-bold '>{displayId}</p>
+        <p className='text-white text-lg/tight'>
+          <span>{name}</span>
+          <img
+            src='/images/landing/arrow_right.svg'
+            alt='arrow_right.svg'
+            className='inline px-2'
+          />
+        </p>
+      </div>
+    </Link>
   );
 }
