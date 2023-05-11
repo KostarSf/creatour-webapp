@@ -64,12 +64,15 @@ export const loader = async ({ request }: LoaderArgs) => {
     where: {
       active: true,
       beginDate: { gte: new Date() },
-      // buyers: {
-      //   some: {
-      //     id: user.id,
-      //   },
-      // },
+      buyers: {
+        some: {
+          id: user.id,
+        },
+      },
     },
+    orderBy: {
+      beginDate: 'asc'
+    }
   });
 
   const [checksCount, nextEvent] = await db.$transaction([

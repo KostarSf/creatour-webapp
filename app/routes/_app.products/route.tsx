@@ -22,7 +22,56 @@ export const action = async ({ request }: ActionArgs) => {
   const intent = formData.get("intent");
 
   if (intent === 'activate-product') {
+    const productId = await formData.get('productId');
+    const userId = await formData.get("userId");
 
+    if (typeof productId !== 'string' || typeof userId !== 'string') {
+      return badRequest({
+        error: 'Ошибка запроса'
+      });
+    }
+
+    const product = await db.product.findUnique({ where: { id: productId }})
+    const user = await db.user.findUnique({ where: {id: userId} })
+
+    if (!product || !user) {
+      return badRequest({
+        error: 'Ошибка запроса'
+      })
+    }
+
+    const buyed = await db.product.findFirst({
+      where: {
+        buyers: {
+          some: {
+            id: product.id
+          }
+        }
+      }
+    })
+
+    if (buyed) {
+      return json({});
+    }
+
+    await db.product.update({
+      where: { id: product.id },
+      data: {
+        buyers: {
+          connect: {
+            id: user.id
+          }
+        }
+      }
+    })
+
+    await db.check.create({
+      data: {
+        productId: product.id,
+        buyerId: user.id,
+        price: product.price
+      }
+    })
   } else {
     return badRequest({
       error: "Неподдерживаемое действие",
@@ -58,6 +107,9 @@ export const loader = async ({ request }: LoaderArgs) => {
         gte: new Date(),
       },
     },
+    orderBy: {
+      beginDate: 'asc'
+    }
   });
 
   return json({ products, user });
@@ -83,7 +135,7 @@ export default function ProductsCatalog() {
                 type='product'
                 object={product}
                 key={product.id}
-                canBuy={user.role === 'user'}
+                canBuy={user?.role === 'user' || false}
                 buyed={
                   user?.activeProducts.findIndex((p) => p.id === product.id) !==
                   -1

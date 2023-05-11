@@ -1,14 +1,13 @@
-import { useFetcher } from "@remix-run/react";
-import type { ComponentPropsWithRef } from "react";
-import { forwardRef, useEffect, useState } from "react";
-import { NoImageIcon } from "./NoImageIcon";
-import clsx from "clsx";
 import type { User } from "@prisma/client";
+import { useFetcher } from "@remix-run/react";
+import clsx from "clsx";
+import { useEffect, useState } from "react";
 import { InfoField } from "./InfoField";
+import { NoImageIcon } from "./NoImageIcon";
 
 type Props = {
-  user: User
-}
+  user: User;
+};
 
 export default function ServiceUserCard({ user }: Props) {
   const [changingInfo, setChangingInfo] = useState(false);
