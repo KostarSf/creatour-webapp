@@ -5,7 +5,8 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const places = await db.place.findMany({
+  const placesPromise = db.place.findMany({
+    where: { active: true },
     include: {
       comments: {
         include: {
@@ -17,7 +18,8 @@ export const loader = async ({ request }: LoaderArgs) => {
     },
   });
 
-  const products = await db.product.findMany({
+  const productsPromise = db.product.findMany({
+    where: { active: true },
     include: {
       comments: {
         include: {
@@ -28,6 +30,8 @@ export const loader = async ({ request }: LoaderArgs) => {
       rating: true,
     },
   });
+
+  const [places, products] = await db.$transaction([placesPromise, productsPromise]);
 
   return json({
     places: places.filter((place) => place.comments.length > 0),
