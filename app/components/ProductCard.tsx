@@ -1,4 +1,4 @@
-import type { Place, Product } from "@prisma/client";
+import type { Place, Product, RoutePoint } from "@prisma/client";
 import { Form, Link } from "@remix-run/react";
 import clsx from "clsx";
 import { NoImageIcon } from "./NoImageIcon";
@@ -45,9 +45,11 @@ export function ProductCard({
                   disabled={buyed || !canBuy}
                   className={clsx(
                     "uppercase px-6 py-2 rounded  font-medium transition-colors",
-                    !buyed
-                      ? "text-blue-600 hover:bg-blue-200 bg-blue-100"
-                      : "text-green-600 bg-green-100"
+                    canBuy
+                      ? !buyed
+                        ? "text-blue-600 hover:bg-blue-200 bg-blue-100"
+                        : "text-green-600 bg-green-100"
+                      : "text-blue-600"
                   )}
                 >
                   {buyed
@@ -67,27 +69,40 @@ export function ProductCard({
   );
 }
 
-export function ServiceProductCard({ type, object }: CardProps) {
+export function ServiceProductCard({
+  type,
+  object,
+  usedIn,
+}: CardProps & {
+  usedIn?: RoutePoint &
+    {
+      product: Product;
+    }[];
+}) {
   return (
     <ProductCardBase
       footer={
         <>
-          <Form method='POST'>
-            <input type='hidden' name={`${type}Id`} value={object.id} />
-            <button
-              type='submit'
-              name='intent'
-              value={`${type}-active-toggle`}
-              className={clsx(
-                "uppercase px-6 py-2 rounded  font-medium transition-colors",
-                object.active
-                  ? "text-green-600 hover:bg-green-200 bg-green-100"
-                  : "text-gray-600 hover:bg-gray-200 bg-gray-100"
-              )}
-            >
-              {object.active ? "Активно" : "Неактивно"}
-            </button>
-          </Form>
+          {type === "product" ? (
+            <Form method='POST'>
+              <input type='hidden' name={`${type}Id`} value={object.id} />
+              <button
+                type='submit'
+                name='intent'
+                value={`${type}-active-toggle`}
+                className={clsx(
+                  "uppercase px-6 py-2 rounded  font-medium transition-colors",
+                  object.active
+                    ? "text-green-600 hover:bg-green-200 bg-green-100"
+                    : "text-gray-600 hover:bg-gray-200 bg-gray-100"
+                )}
+              >
+                {object.active ? "Активно" : "Неактивно"}
+              </button>
+            </Form>
+          ) : (
+            <div></div>
+          )}
           <Link
             to={`/admin/${type}s/${object.id}/edit`}
             className='uppercase px-6 py-2 rounded text-blue-600 font-medium hover:bg-blue-100 transition-colors'
@@ -105,7 +120,24 @@ export function ServiceProductCard({ type, object }: CardProps) {
       }
       type={type}
       object={object}
-    />
+    >
+      {usedIn && usedIn.length > 0 ? (
+        <>
+          <p className='mt-6 font-medium text-lg'>
+            Используется в турпродуктах
+          </p>
+          {usedIn.map((point) => (
+            <Link
+              to={`/products/${point.product.id}`}
+              key={point.product.id}
+              className='text-blue-500 hover:underline'
+            >
+              {point.product.name}
+            </Link>
+          ))}
+        </>
+      ) : null}
+    </ProductCardBase>
   );
 }
 
@@ -122,9 +154,16 @@ type CardProps =
 type CardBaseProps = CardProps & {
   topLeftText?: string;
   footer?: ReactNode;
+  children?: ReactNode;
 };
 
-function ProductCardBase({ type, object, topLeftText, footer }: CardBaseProps) {
+function ProductCardBase({
+  type,
+  object,
+  topLeftText,
+  footer,
+  children,
+}: CardBaseProps) {
   return (
     <div className='shadow md:rounded px-6 md:px-0 overflow-hidden flex flex-col lg:flex-row lg:items-stretch'>
       <Link
@@ -171,10 +210,14 @@ function ProductCardBase({ type, object, topLeftText, footer }: CardBaseProps) {
       </Link>
       <div className='flex flex-col pb-6 gap-12 md:px-6 pt-3 flex-1 lg:min-h-[12rem]'>
         <div className='flex-1'>
-          <p className='font-serif text-2xl md:text-3xl font-bold'>
+          <Link
+            to={`/${type}s/${object.id}`}
+            className='font-serif text-2xl md:text-3xl font-bold'
+          >
             {object.name}
-          </p>
+          </Link>
           <p className='text-lg text-slate-700'>{object.short}</p>
+          <div>{children}</div>
         </div>
         {footer && (
           <div className='flex items-center justify-between flex-wrap gap-2'>

@@ -1,10 +1,14 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import { ActionArgs, LoaderArgs, V2_MetaFunction, redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { ProductCard } from "~/components/ProductCard";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { getUserId, requireUserId } from "~/utils/session.server";
+
+export const meta: V2_MetaFunction = () => [
+  { title: `Календарь мероприятий | Креатур` },
+];
 
 export const action = async ({ request }: ActionArgs) => {
   const userId = await requireUserId(request);
@@ -20,10 +24,11 @@ export const action = async ({ request }: ActionArgs) => {
 
   const formData = await request.formData();
   const intent = formData.get("intent");
+  const redirectTo = formData.get("redirectTo");
 
   if (intent === 'activate-product') {
-    const productId = await formData.get('productId');
-    const userId = await formData.get("userId");
+    const productId = formData.get('productId');
+    const userId = formData.get("userId");
 
     if (typeof productId !== 'string' || typeof userId !== 'string') {
       return badRequest({
@@ -78,9 +83,14 @@ export const action = async ({ request }: ActionArgs) => {
     });
   }
 
-  return json({
-    error: null,
-  });
+  if (!redirectTo || typeof redirectTo !== 'string') {
+    return json({
+      error: null,
+    });
+  } else {
+    return redirect(redirectTo)
+  }
+
 };
 
 export const loader = async ({ request }: LoaderArgs) => {

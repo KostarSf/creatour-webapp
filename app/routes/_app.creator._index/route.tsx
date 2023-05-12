@@ -1,6 +1,6 @@
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import ActionLinkButton from "~/components/ActionLinkButton";
 import { ServiceProductCard } from "~/components/ProductCard";
 import ServiceUserCard from "~/components/ServiceUserCard";
@@ -98,11 +98,21 @@ export const loader = async ({ request }: LoaderArgs) => {
     orderBy: { createdAt: "desc" },
   });
 
-  return json({ user, product });
+  const checks = await db.check.findMany({
+    where: {
+      product: {
+        creator: {
+          id: user.id,
+        },
+      },
+    },
+  });
+
+  return json({ user, product, checks });
 };
 
 export default function CreatorPage() {
-  const { user, product } = useLoaderData<typeof loader>();
+  const { user, product, checks } = useLoaderData<typeof loader>();
 
   return (
     <>
@@ -112,6 +122,21 @@ export default function CreatorPage() {
         </h1>
       </div>
       <ServiceUserCard user={user} />
+      <div className='my-6 md:my-12 border shadow-lg shadow-blue-900/5 p-6 -mx-6 md:mx-auto md:rounded-lg max-w-7xl'>
+        <p className='font-serif font-bold text-xl/none mb-2 flex flex-col gap-2 md:flex-row'>
+          <span>Продажи ваших турпродуктов</span>
+          <span className='font-sans font-normal text-gray-500 text-base'>
+            ({checks.length} чека на сумму{" "}
+            {checks.reduce((prev, check) => prev + check.price, 0)} ₽)
+          </span>
+        </p>
+        <Link
+          to={"checks"}
+          className='text-blue-500 uppercase font-medium text-lg hover:underline'
+        >
+          Смотреть
+        </Link>
+      </div>
       <div className='my-6 md:my-12'>
         <div className='flex items-baseline justify-between flex-wrap gap-3'>
           <p className='text-xl'>
