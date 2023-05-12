@@ -1,22 +1,28 @@
 import type { Comment, Media, Place, Product, Rating, User } from "@prisma/client";
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import CommentItem from "~/components/CommentItem";
+import RatingBar from "~/components/RatingBar";
 import { db } from "~/utils/db.server";
 
+export const meta: V2_MetaFunction = () => [
+  { title: `Отзывы | Креатур` },
+];
+
 export const loader = async ({ request }: LoaderArgs) => {
-  const placesPromise = db.place.findMany({
-    where: { active: true },
-    include: {
-      comments: {
-        include: {
-          user: true,
-          media: true,
-        },
-      },
-      rating: true,
-    },
-  });
+  // const placesPromise = db.place.findMany({
+  //   where: { active: true },
+  //   include: {
+  //     comments: {
+  //       include: {
+  //         user: true,
+  //         media: true,
+  //       },
+  //     },
+  //     rating: true,
+  //   },
+  // });
 
   const productsPromise = db.product.findMany({
     where: { active: true },
@@ -31,16 +37,25 @@ export const loader = async ({ request }: LoaderArgs) => {
     },
   });
 
-  const [places, products] = await db.$transaction([placesPromise, productsPromise]);
+  // const [places, products] = await db.$transaction([placesPromise, productsPromise]);
+  const [products] = await db.$transaction([productsPromise]);
+
+  // return json({
+  //   places: places.filter((place) => place.comments.length > 0),
+  //   products: products.filter((product) => product.comments.length > 0),
+  // });
 
   return json({
-    places: places.filter((place) => place.comments.length > 0),
+    // places: places.filter((place) => place.comments.length > 0),
     products: products.filter((product) => product.comments.length > 0),
   });
 };
 
 export default function ReviewsPage() {
-  const { places, products } = useLoaderData<typeof loader>();
+  const {
+    // places,
+    products
+  } = useLoaderData<typeof loader>();
 
   return (
     <div>
@@ -48,11 +63,11 @@ export default function ReviewsPage() {
         <h1 className='my-6 md:my-12 text-2xl font-bold font-serif'>Отзывы</h1>
       </div>
       <div className="max-w-7xl mx-auto">
-        <div className='space-y-6 mb-12'>
+        {/* <div className='space-y-6 mb-12'>
           {places.map((place) => (
             <CommentSection key={place.id} name='place' parent={place} />
           ))}
-        </div>
+        </div> */}
         <div className='space-y-6 mb-12'>
           {products.map((product) => (
             <CommentSection key={product.id} name='product' parent={product} />
@@ -62,30 +77,6 @@ export default function ReviewsPage() {
     </div>
   );
 }
-
-const createRatingComponent = (rating: number) => {
-  const totalRating = Math.ceil(rating / 2);
-
-  return (
-    <div className='flex gap-2 text-yellow-500'>
-      {Array.from(Array(totalRating)).map((a, i) => (
-        <svg
-          key={i}
-          xmlns='http://www.w3.org/2000/svg'
-          viewBox='0 0 20 20'
-          fill='currentColor'
-          className='w-5 h-5'
-        >
-          <path
-            fillRule='evenodd'
-            d='M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z'
-            clipRule='evenodd'
-          />
-        </svg>
-      ))}
-    </div>
-  );
-};
 
 
 const CommentSection = ({name, parent}: {
@@ -130,14 +121,7 @@ const CommentSection = ({name, parent}: {
             <p className='text-slate-500 text-sm md:order-1'>
               {parent.comments.length} отзывов
             </p>
-            {parent.rating.length > 0
-              ? createRatingComponent(
-                  parent.rating.reduce(
-                    (prev, rating) => prev + rating.value,
-                    0
-                  ) / parent.rating.length
-                )
-              : null}
+            <RatingBar ratings={parent.rating}/>
           </div>
         </div>
       </Link>
@@ -153,56 +137,3 @@ const CommentSection = ({name, parent}: {
     </div>
   );
 }
-
-
-const CommentItem = ({
-  comment,
-  rating,
-}: {
-  comment: Comment & {
-    user: User;
-    media: Media[];
-  };
-  rating: Rating[];
-}) => {
-  return (
-    <div key={comment.id}>
-      <div className='flex items-center gap-4'>
-        <div className='w-10 h-10 rounded-full overflow-hidden bg-slate-300 shrink-0'>
-          {comment.user.avatar && (
-            <img
-              src={comment.user.avatar}
-              alt=''
-              className='w-full h-full object-cover object-center'
-            />
-          )}
-        </div>
-        <div className='flex-1'>
-          <div className='flex items-baseline gap-2 justify-between md:justify-start md:gap-12'>
-            <p className='text-lg/none font-medium'>{comment.user.username}</p>
-            <p className='text-slate-500'>
-              {new Date(comment.createdAt).toLocaleString("ru-ru", {
-                day: "numeric",
-                month: "long",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </p>
-          </div>
-          <div>
-            {(() => {
-              const userRating = rating.filter(
-                (rating) => rating.userId === comment.userId
-              );
-              if (userRating.length === 0) return null;
-              return createRatingComponent(userRating[0].value);
-            })()}
-          </div>
-        </div>
-      </div>
-      <div className='mt-3 ml-14'>
-        <p>{comment.text}</p>
-      </div>
-    </div>
-  );
-};

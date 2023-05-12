@@ -1,8 +1,41 @@
+import { json } from "@remix-run/node";
+import type { V2_MetaFunction} from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { Link } from "@remix-run/react";
-import clsx from "clsx";
+import { db } from "~/utils/db.server";
 import { useOptionalUser } from "~/utils/user";
 
+export const meta: V2_MetaFunction = () => [
+  { title: `Добро пожаловать | Креатур` },
+];
+
+export const loader = async () => {
+  const products = await db.product.findMany({
+    where: {
+      active: true,
+      beginDate: {
+        gte: new Date()
+      }
+    },
+    orderBy: {
+      beginDate: 'asc'
+    },
+    take: 3
+  })
+
+  return json({
+    cards: products.map(product => ({
+      id: product.id,
+      name: product.name,
+      image: 'images/products/' + product.image,
+      link: '/products/' + product.id,
+    }))
+  })
+}
+
 export default function LandingPage() {
+  const { cards } = useLoaderData<typeof loader>()
+
   const user = useOptionalUser();
 
   return (
@@ -89,7 +122,17 @@ export default function LandingPage() {
             </div>
 
             <div className='flex gap-2 flex-col items-start md:flex-row flex-wrap'>
-              <PreviewCard
+              {cards.map((card, i) => (
+                <PreviewCard
+                  key={card.id}
+                  name={card.name}
+                  image={card.image}
+                  link={card.link}
+                  displayId={`0${i + 1}`}
+                />
+              ))}
+
+              {/* <PreviewCard
                 name='Гастрономический тур по Новороссийску'
                 image='/images/tour_food.png'
                 link='/products/123'
@@ -108,7 +151,7 @@ export default function LandingPage() {
                 image='/images/sea.jpg'
                 link='/products/123'
                 displayId='04'
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -130,7 +173,7 @@ export default function LandingPage() {
         <div className='flex gap-2 lg:gap-12 flex-col lg:flex-row'>
           <div className='flex-[3] bg-slate-200 rounded-xl bg-[url(/images/landing/place_mmm.jpg)] bg-cover bg-center overflow-hidden'>
             <Link
-              to='#'
+              to='/products'
               className='w-full h-full py-8 px-10 text-white bg-black/30 flex flex-col justify-between gap-8'
             >
               <div>

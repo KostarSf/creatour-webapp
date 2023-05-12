@@ -95,6 +95,13 @@ export const loader = async ({ request }: LoaderArgs) => {
     where: {
       creatorId: user.id,
     },
+    include: {
+      routes: {
+        include: {
+          product: true
+        }
+      }
+    },
     orderBy: { createdAt: "desc" },
   });
 
@@ -124,7 +131,7 @@ export default function PlaceownerPage() {
         ) : (
           <div className='space-y-6 mt-6 md:mt-12 -mx-6 md:mx-auto max-w-7xl'>
             {places.map((place) => (
-              <ServiceProductCard type='place' object={place} key={place.id} />
+              <ServiceProductCard type='place' object={place} key={place.id} usedIn={place.routes} />
             ))}
           </div>
         )}
