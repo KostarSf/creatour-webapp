@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
@@ -8,6 +8,10 @@ import { forwardRef } from "react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { requireUserId } from "~/utils/session.server";
+
+export const meta: V2_MetaFunction = () => [
+  { title: `Добавление нового турпродукта | Креатур` },
+];
 
 export const action = async ({ request }: ActionArgs) => {
   const userId = await requireUserId(request);

@@ -7,7 +7,7 @@ import RatingBar from "~/components/RatingBar";
 import { db } from "~/utils/db.server";
 
 export const meta: V2_MetaFunction = () => [
-  { title: `Отзывы | Креатур` },
+  { title: `Наши отзывы | Креатур` },
 ];
 
 export const loader = async ({ request }: LoaderArgs) => {

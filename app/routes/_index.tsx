@@ -7,6 +7,10 @@ import { useOptionalUser } from "~/utils/user";
 
 export const meta: V2_MetaFunction = () => [
   { title: `Добро пожаловать | Креатур` },
+  {
+    name: "description",
+    content: "Открой для себя Креативный туризм!",
+  },
 ];
 
 export const loader = async () => {

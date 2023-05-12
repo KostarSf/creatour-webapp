@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
@@ -8,6 +8,10 @@ import { forwardRef } from "react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { requireUserId } from "~/utils/session.server";
+
+export const meta: V2_MetaFunction = () => [
+  { title: `Добавление нового места | Креатур` },
+];
 
 export const action = async ({ request }: ActionArgs) => {
   const userId = await requireUserId(request);
@@ -31,7 +35,7 @@ export const action = async ({ request }: ActionArgs) => {
     typeof description !== "string" ||
     typeof city !== "string" ||
     typeof address !== "string" ||
-    typeof date !== 'string'
+    typeof date !== "string"
   ) {
     return badRequest({
       error: "Форма неверно отправлена",
@@ -40,8 +44,8 @@ export const action = async ({ request }: ActionArgs) => {
 
   if (name.trim().length < 3) {
     return badRequest({
-      error: 'Имя слишком короткое'
-    })
+      error: "Имя слишком короткое",
+    });
   }
 
   await db.place.create({
@@ -53,8 +57,8 @@ export const action = async ({ request }: ActionArgs) => {
       city: city.trim(),
       address: address.trim(),
       date: date.length !== 0 ? new Date(date).toISOString() : undefined,
-    }
-  })
+    },
+  });
 
   throw redirect("/placeowner");
 };
@@ -112,7 +116,12 @@ export default function NewPlacePage() {
             required
           />
           <InputField type='text' name='address' id='address' label='Адрес' />
-          <InputField type='datetime-local' name='date' id='date' label='Дата проведения' />
+          <InputField
+            type='datetime-local'
+            name='date'
+            id='date'
+            label='Дата проведения'
+          />
         </div>
         <div className='mt-12'>
           <button
