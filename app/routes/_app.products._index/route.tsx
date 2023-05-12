@@ -1,4 +1,5 @@
-import { ActionArgs, LoaderArgs, V2_MetaFunction, redirect } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction} from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { ProductCard } from "~/components/ProductCard";

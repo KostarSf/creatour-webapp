@@ -1,10 +1,14 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import type { CheckData } from "~/components/CheckTable";
 import CheckTable from "~/components/CheckTable";
 import { db } from "~/utils/db.server";
 import { getUserId } from "~/utils/session.server";
+
+export const meta: V2_MetaFunction = () => [
+  { title: `Ваши чеки | Креатур` },
+];
 
 export const loader = async ({ request }: LoaderArgs) => {
   const userId = await getUserId(request);

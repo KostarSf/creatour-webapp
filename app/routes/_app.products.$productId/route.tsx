@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import clsx from "clsx";
@@ -8,6 +8,10 @@ import CommentItem from "~/components/CommentItem";
 import RatingBar from "~/components/RatingBar";
 import { db } from "~/utils/db.server";
 import { getUserId } from "~/utils/session.server";
+
+export const meta: V2_MetaFunction<typeof loader> = ({ data }) => [
+  { title: `${data.product.name} | Креатур` },
+];
 
 export const loader = async ({ request, params }: LoaderArgs) => {
   invariant(params.productId, "productId must be set");
