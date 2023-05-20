@@ -111,7 +111,7 @@ export default function NewProductPage() {
           <InputSelect label='Тип продукта' name='type' id='type' required>
             <option value='excursion'>Экскурсия</option>
             <option value='tour'>Тур</option>
-            <option value='quest'>Квест</option>
+            <option value='quest'>Мероприятие</option>
             <option value='event'>Событие</option>
           </InputSelect>
           <InputField

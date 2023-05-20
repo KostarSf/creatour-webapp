@@ -11,7 +11,7 @@ export default function HeaderNavigation({
       <NavigationSubMenu subtitle="Турпродукты" linkTo="/products">
         <NavigationLink url="/products/excursions" title="Экскурсии" />
         <NavigationLink url="/products/tours" title="Туры" />
-        <NavigationLink url="/products/quests" title="Квесты" />
+        <NavigationLink url="/products/quests" title="Мероприятия" />
         <NavigationLink url="/products/events" title="События" />
       </NavigationSubMenu>
       <NavigationLink url="/places" title="Места" />

@@ -13,7 +13,7 @@ export default function ProductsPage() {
             <CategoryLink>Все вместе</CategoryLink>
             <CategoryLink category="excursions">Экскурсии</CategoryLink>
             <CategoryLink category="tours">Туры</CategoryLink>
-            <CategoryLink category="quests">Квесты</CategoryLink>
+            <CategoryLink category="quests">Мероприятия</CategoryLink>
             <CategoryLink category="events">События</CategoryLink>
           </nav>
         </div>

@@ -101,7 +101,7 @@ export default function NewProduct() {
           >
             <option value='excursion'>Экскурсия</option>
             <option value='tour'>Тур</option>
-            <option value='quest'>Квест</option>
+            <option value='quest'>Мероприятие</option>
             <option value='event'>Событие</option>
           </select>
         </label>

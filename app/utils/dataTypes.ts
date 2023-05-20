@@ -3,7 +3,7 @@ export function ProductTypeToLocalizedString(type: string) {
     case "event":
       return "Событие";
     case "quest":
-      return "Квест";
+      return "Мероприятие";
     case "tour":
       return "Тур";
     case "excursion":
