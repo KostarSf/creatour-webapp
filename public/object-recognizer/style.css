@@ -1,0 +1,192 @@
+/* Сброс стилей */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+ul[class],
+ol[class] {
+  padding: 0;
+}
+
+body, h1, h2, h3, h4, p,
+ul[class], ol[class], li,
+figure, figcaption, blockquote,
+dl, dd {
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+}
+
+ul[class],
+ol[class] {
+  list-style: none;
+}
+
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+article > * + * {
+  margin-top: 1em;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Стили страницы */
+.header {
+  padding: 40px 100px;
+}
+
+.main {
+  padding: 40px 220px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 50px;
+}
+
+.image {
+  width: 100%;
+  margin-bottom: 45px;
+  position: relative;
+}
+
+.image img {
+  border-radius: 15px;
+  margin: auto;
+}
+
+.image p {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  display: none;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.button {
+  padding: 20px 90px;
+  border-radius: 20px;
+  border: 2px solid #3481F5;
+  background-color: #3481F5;
+  color: #fff;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.button input {
+  display: none;
+}
+
+.button--secondary {
+  background-color: transparent;
+  color: #3481F5;
+}
+
+.button[disabled] {
+  opacity: 70%;
+  cursor: default;
+}
+
+.info {
+  text-align: right;
+  letter-spacing: 0.4em;
+}
+
+.info h2 {
+  font-weight: 600;
+  font-size: 25px;
+  letter-spacing: 0.2em;
+  margin-bottom: 25px;
+}
+
+.info p {
+  font-size: 20px;
+  line-height: 120%;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 1440px) {
+  .main {
+    padding: 40px 80px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .main {
+    padding: 40px 80px;
+  }
+
+  .buttons {
+    justify-content: center;
+  }
+
+  .info h2 {
+    font-size: 20px;
+  }
+  
+  .info p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 900px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace {
+    order: 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .header, .main {
+    padding: 20px;
+  }
+
+  .button {
+    width: 100%;
+    text-align: center;
+    padding: 12px 60px;
+  }
+}
