@@ -61,7 +61,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 		return badRequest({
 			fieldErrors: null,
 			fields: null,
-			formError: `Форма неверно отправлена.`,
+			formError: "Форма неверно отправлена.",
 		});
 	}
 
@@ -81,11 +81,11 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 		assistant,
 	};
 
-	if (isNaN(Number(price))) {
+	if (Number.isNaN(Number(price))) {
 		return badRequest({
 			fieldErrors: null,
 			fields: { ...fields, tags },
-			formError: `Неверная цена`,
+			formError: "Неверная цена",
 		});
 	}
 
@@ -107,34 +107,33 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 			fields: { ...fields, tags },
 			formError: `Пользователя с Id ${creatorId} не существует`,
 		});
-	} else {
-		const splittedTags = tags.split(",").map((t) => ({
-			where: {
-				name: t.trim(),
-			},
-			create: {
-				name: t.trim(),
-			},
-		}));
-		await db.product.update({
-			where: { id: params.productId },
-			data: {
-				...fields,
-				price: Number(price) || 0,
-				beginDate: !isNaN(new Date(beginDate).getTime())
-					? new Date(beginDate).toISOString()
-					: null,
-				endDate: !isNaN(new Date(endDate).getTime())
-					? new Date(endDate).toISOString()
-					: null,
-				...(imageName !== "" && { image: imageName }),
-				tags: {
-					set: [],
-					...(tags.trim() !== "" && { connectOrCreate: splittedTags }),
-				},
-			},
-		});
 	}
+	const splittedTags = tags.split(",").map((t) => ({
+		where: {
+			name: t.trim(),
+		},
+		create: {
+			name: t.trim(),
+		},
+	}));
+	await db.product.update({
+		where: { id: params.productId },
+		data: {
+			...fields,
+			price: Number(price) || 0,
+			beginDate: !Number.isNaN(new Date(beginDate).getTime())
+				? new Date(beginDate).toISOString()
+				: null,
+			endDate: !Number.isNaN(new Date(endDate).getTime())
+				? new Date(endDate).toISOString()
+				: null,
+			...(imageName !== "" && { image: imageName }),
+			tags: {
+				set: [],
+				...(tags.trim() !== "" && { connectOrCreate: splittedTags }),
+			},
+		},
+	});
 
 	return redirect(`/admin/products/${params.productId}`);
 };
@@ -218,7 +217,7 @@ export default function ProductEditRoute() {
 						defaultValue={
 							actionData?.fields?.description || data.product.description || ""
 						}
-					></textarea>
+					/>
 				</label>
 
 				<hr className="my-4" />

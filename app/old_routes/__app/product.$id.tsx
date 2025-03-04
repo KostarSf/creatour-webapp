@@ -8,7 +8,7 @@ import { getUser, requireUserId } from "~/utils/session.server";
 
 function validateComment(comment: string) {
 	if (comment.length < 4) {
-		return `Комментарий слишком короткий`;
+		return "Комментарий слишком короткий";
 	}
 }
 
@@ -92,19 +92,20 @@ export async function action({ params, request }: ActionFunctionArgs) {
 		}
 
 		return new Response("ok", { status: 200 });
-	} else if (intent === "rating") {
+	}
+	if (intent === "rating") {
 		const userId = form.get("userId");
 		const value = form.get("value");
 
 		if (
 			typeof userId !== "string" ||
 			typeof value !== "string" ||
-			isNaN(Number(value))
+			Number.isNaN(Number(value))
 		) {
 			return badRequest({
 				fieldErrors: null,
 				fields: null,
-				formError: `Форма неверно отправлена.`,
+				formError: "Форма неверно отправлена.",
 			});
 		}
 
@@ -140,7 +141,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 		return badRequest({
 			fieldErrors: null,
 			fields: null,
-			formError: `Форма неверно отправлена.`,
+			formError: "Форма неверно отправлена.",
 		});
 	}
 
@@ -187,11 +188,11 @@ export default function TripPage() {
 				src={`/images/products/${product.image}`}
 				alt={product.image || "image"}
 			/>
-			<h2 className="my-3 text-2xl font-semibold leading-none">
+			<h2 className="my-3 font-semibold text-2xl leading-none">
 				{product.name}
 			</h2>
 			<p className="mb-2">{product.description}</p>
-			<p className="text-sm font-semibold">
+			<p className="font-semibold text-sm">
 				{product.city}, {product.address}
 			</p>
 			<p>
@@ -209,31 +210,32 @@ export default function TripPage() {
 						).toLocaleTimeString()
 					: "не задана"}
 			</p>
-			<p className="text-sm font-semibold">Гид: {product.assistant}</p>
-			<p className="text-sm font-semibold">Рейтинг: {data.rating}</p>
+			<p className="font-semibold text-sm">Гид: {product.assistant}</p>
+			<p className="font-semibold text-sm">Рейтинг: {data.rating}</p>
 			<div className="my-3">
 				<Form method="post">
 					<button
 						type="submit"
 						name="intent"
 						value="subscribe"
-						className={`block rounded bg-blue-500 px-4 py-2 text-center font-semibold text-white transition hover:bg-blue-400 hover:shadow-md hover:shadow-blue-100 sm:inline-block`}
+						className={
+							"block rounded bg-blue-500 px-4 py-2 text-center font-semibold text-white transition hover:bg-blue-400 hover:shadow-blue-100 hover:shadow-md sm:inline-block"
+						}
 					>
 						{data.subscribed
 							? "Отменить посещение"
-							: "Посетить" +
-								(product.price !== 0 ? " за " + product.price + " ₽" : "")}
+							: `Посетить${product.price !== 0 ? ` за ${product.price} ₽` : ""}`}
 					</button>
 				</Form>
 			</div>
 
-			<p className="mt-6 text-lg font-semibold">Маршрут:</p>
+			<p className="mt-6 font-semibold text-lg">Маршрут:</p>
 			<div className="flex flex-col gap-4">
 				{route.map((r) => (
 					<Link
 						to={`/place/${r.placeId}`}
 						key={r.id}
-						className="flex gap-2 border-l-4 border-blue-500 pl-2"
+						className="flex gap-2 border-blue-500 border-l-4 pl-2"
 					>
 						<img
 							src={`/images/places/${r.place.image}`}
@@ -289,17 +291,17 @@ export default function TripPage() {
 				</>
 			) : null}
 
-			<p className="mt-6 text-lg font-semibold">Комментарии:</p>
+			<p className="mt-6 font-semibold text-lg">Комментарии:</p>
 			<div>
 				{comments.length === 0 ? (
 					<p>Здесь пока пусто</p>
 				) : (
 					comments.map((c) => (
 						<div key={c.id} className="mb-4">
-							<p className="text-lg font-semibold">{c.user.username}</p>
+							<p className="font-semibold text-lg">{c.user.username}</p>
 							<p>{c.text}</p>
 							<div className="flex items-baseline gap-4">
-								<p className="text-sm text-slate-500">
+								<p className="text-slate-500 text-sm">
 									{new Date(c.createdAt).toLocaleString()}
 								</p>
 								{user && c.userId === user.id ? (
@@ -329,16 +331,16 @@ export default function TripPage() {
 								name="text"
 								className="w-64 border px-1"
 								defaultValue={actionData?.fields?.text}
-							></textarea>
+							/>
 							{actionData?.fieldErrors?.text ? (
-								<p className="text-sm font-semibold text-red-600">
+								<p className="font-semibold text-red-600 text-sm">
 									{actionData?.fieldErrors?.text}
 								</p>
 							) : null}
 						</div>
 						<button
 							type="submit"
-							className="block rounded bg-blue-600 px-4 py-1 text-lg font-semibold text-white"
+							className="block rounded bg-blue-600 px-4 py-1 font-semibold text-lg text-white"
 						>
 							Отправить
 						</button>

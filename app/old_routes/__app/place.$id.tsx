@@ -7,7 +7,7 @@ import { getUser, requireUserId } from "~/utils/session.server";
 
 function validateComment(comment: string) {
 	if (comment.length < 4) {
-		return `Комментарий слишком короткий`;
+		return "Комментарий слишком короткий";
 	}
 }
 
@@ -51,12 +51,12 @@ export async function action({ params, request }: ActionFunctionArgs) {
 		if (
 			typeof userId !== "string" ||
 			typeof value !== "string" ||
-			isNaN(Number(value))
+			Number.isNaN(Number(value))
 		) {
 			return badRequest({
 				fieldErrors: null,
 				fields: null,
-				formError: `Форма неверно отправлена.`,
+				formError: "Форма неверно отправлена.",
 			});
 		}
 
@@ -92,7 +92,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 		return badRequest({
 			fieldErrors: null,
 			fields: null,
-			formError: `Форма неверно отправлена.`,
+			formError: "Форма неверно отправлена.",
 		});
 	}
 
@@ -139,13 +139,13 @@ export default function PlacePage() {
 				src={`/images/places/${place.image}`}
 				alt={place.image || "image"}
 			/>
-			<h2 className="my-3 text-2xl font-semibold leading-none">{place.name}</h2>
+			<h2 className="my-3 font-semibold text-2xl leading-none">{place.name}</h2>
 			<p className="mb-2">{place.description}</p>
-			<p className="text-sm font-semibold">
+			<p className="font-semibold text-sm">
 				{place.city}, {place.address}
 			</p>
-			<p className="text-sm font-semibold">
-				Рейтинг: {isNaN(rating) ? "Оценок пока нет" : String(rating)}
+			<p className="font-semibold text-sm">
+				Рейтинг: {Number.isNaN(rating) ? "Оценок пока нет" : String(rating)}
 			</p>
 
 			{user ? (
@@ -187,17 +187,17 @@ export default function PlacePage() {
 				</>
 			) : null}
 
-			<p className="mt-6 text-lg font-semibold">Комментарии:</p>
+			<p className="mt-6 font-semibold text-lg">Комментарии:</p>
 			<div>
 				{comments.length === 0 ? (
 					<p>Здесь пока пусто</p>
 				) : (
 					comments.map((c) => (
 						<div key={c.id} className="mb-4">
-							<p className="text-lg font-semibold">{c.user.username}</p>
+							<p className="font-semibold text-lg">{c.user.username}</p>
 							<p>{c.text}</p>
 							<div className="flex items-baseline gap-4">
-								<p className="text-sm text-slate-500">
+								<p className="text-slate-500 text-sm">
 									{new Date(c.createdAt).toLocaleString()}
 								</p>
 								{user && c.userId === user.id ? (
@@ -226,16 +226,16 @@ export default function PlacePage() {
 							name="text"
 							className="w-64 border px-1"
 							defaultValue={actionData?.fields?.text}
-						></textarea>
+						/>
 						{actionData?.fieldErrors?.text ? (
-							<p className="text-sm font-semibold text-red-600">
+							<p className="font-semibold text-red-600 text-sm">
 								{actionData?.fieldErrors?.text}
 							</p>
 						) : null}
 					</div>
 					<button
 						type="submit"
-						className="block rounded bg-blue-600 px-4 py-1 text-lg font-semibold text-white"
+						className="block rounded bg-blue-600 px-4 py-1 font-semibold text-lg text-white"
 					>
 						Отправить
 					</button>

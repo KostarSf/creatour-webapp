@@ -6,7 +6,7 @@ import CheckTable from "~/components/CheckTable";
 import { db } from "~/utils/db.server";
 import { getUserId } from "~/utils/session.server";
 
-export const meta: MetaFunction = () => [{ title: `Ваши чеки | Креатур` }];
+export const meta: MetaFunction = () => [{ title: "Ваши чеки | Креатур" }];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const userId = await getUserId(request);
@@ -50,7 +50,7 @@ export default function UserChecksPage() {
 			<div className="my-6 md:my-12">
 				<h1 className="font-medium text-xl">Ваши чеки</h1>
 			</div>
-			<div className="my-6 md:my-12 overflow-x-auto">
+			<div className="my-6 overflow-x-auto md:my-12">
 				<CheckTable checks={checks} />
 			</div>
 		</>

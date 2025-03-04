@@ -5,12 +5,12 @@ export default function AppLayout() {
 	const user = useOptionalUser();
 
 	return (
-		<div className="m-auto px-6 pb-24 pt-3 md:px-16 md:pt-6 lg:px-32">
+		<div className="m-auto px-6 pt-3 pb-24 md:px-16 md:pt-6 lg:px-32">
 			<div className="mb-6 md:mb-12">
 				<div className="flex items-baseline justify-between">
 					<Link
 						to="/"
-						className="font-serif text-xl font-bold tracking-wider transition-colors hover:text-blue-500"
+						className="font-bold font-serif text-xl tracking-wider transition-colors hover:text-blue-500"
 					>
 						Креатур
 					</Link>
@@ -23,7 +23,7 @@ export default function AppLayout() {
 						<Link
 							to="/object-recognizer/index.html"
 							reloadDocument
-							className="text-blue-500 hover:underline hidden sm:block"
+							className="hidden text-blue-500 hover:underline sm:block"
 						>
 							Распознать объект
 						</Link>
@@ -46,7 +46,7 @@ export default function AppLayout() {
 					<Link
 						to="/object-recognizer/index.html"
 						reloadDocument
-						className="text-blue-500 hover:underline inline sm:hidden"
+						className="inline text-blue-500 hover:underline sm:hidden"
 					>
 						Распознать объект
 					</Link>

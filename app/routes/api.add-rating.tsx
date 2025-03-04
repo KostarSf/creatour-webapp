@@ -22,7 +22,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return badRequest({
 			fieldErrors: null,
 			fields: null,
-			formError: `Форма неверно отправлена.`,
+			formError: "Форма неверно отправлена.",
 		});
 	}
 
@@ -34,11 +34,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		value: Number(value.trim()),
 	};
 
-	if (isNaN(fields.value) || fields.value < 1 || fields.value > 10) {
+	if (Number.isNaN(fields.value) || fields.value < 1 || fields.value > 10) {
 		return badRequest({
 			fieldErrors: null,
 			fields: fields,
-			formError: `Укажите число больше 0 и меньше 10 в качестве оценки.`,
+			formError: "Укажите число больше 0 и меньше 10 в качестве оценки.",
 		});
 	}
 

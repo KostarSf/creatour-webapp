@@ -59,7 +59,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return json({
 			error: null,
 		});
-	} else if (intent === "product-active-toggle") {
+	}
+	if (intent === "product-active-toggle") {
 		const productId = formData.get("productId");
 
 		if (typeof productId !== "string") {
@@ -126,23 +127,23 @@ export default function CreatorPage() {
 				</h1>
 			</div>
 			<ServiceUserCard user={user} />
-			<div className="my-6 md:my-12 border shadow-lg shadow-blue-900/5 p-6 -mx-6 md:mx-auto md:rounded-lg max-w-7xl">
-				<p className="font-serif font-bold text-xl/none mb-2 flex flex-col gap-2 md:flex-row">
+			<div className="-mx-6 my-6 max-w-7xl border p-6 shadow-blue-900/5 shadow-lg md:mx-auto md:my-12 md:rounded-lg">
+				<p className="mb-2 flex flex-col gap-2 font-bold font-serif text-xl/none md:flex-row">
 					<span>Продажи ваших турпродуктов</span>
-					<span className="font-sans font-normal text-gray-500 text-base">
+					<span className="font-normal font-sans text-base text-gray-500">
 						({checks.length} чека на сумму{" "}
 						{checks.reduce((prev, check) => prev + check.price, 0)} ₽)
 					</span>
 				</p>
 				<Link
 					to={"checks"}
-					className="text-blue-500 uppercase font-medium text-lg hover:underline"
+					className="font-medium text-blue-500 text-lg uppercase hover:underline"
 				>
 					Смотреть
 				</Link>
 			</div>
 			<div className="my-6 md:my-12">
-				<div className="flex items-baseline justify-between flex-wrap gap-3">
+				<div className="flex flex-wrap items-baseline justify-between gap-3">
 					<p className="text-xl">
 						<span className="text-blue-500">{user.username}</span> турпродукты
 					</p>
@@ -151,11 +152,11 @@ export default function CreatorPage() {
 					</ActionLinkButton>
 				</div>
 				{product.length === 0 ? (
-					<p className="text-center mt-24 text-xl text-slate-400">
+					<p className="mt-24 text-center text-slate-400 text-xl">
 						У вас пока нет объектов
 					</p>
 				) : (
-					<div className="space-y-6 mt-6 md:mt-12 -mx-6 md:mx-auto max-w-7xl">
+					<div className="-mx-6 mt-6 max-w-7xl space-y-6 md:mx-auto md:mt-12">
 						{product.map((product) => (
 							<ServiceProductCard
 								type="product"

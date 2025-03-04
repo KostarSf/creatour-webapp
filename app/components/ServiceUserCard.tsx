@@ -2,6 +2,7 @@ import type { User } from "@prisma/client";
 import { useFetcher } from "@remix-run/react";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import type { UploadAvatarAction } from "~/routes/api.upload-avatar";
 import { InfoField } from "./InfoField";
 import { NoImageIcon } from "./NoImageIcon";
 
@@ -12,7 +13,7 @@ type Props = {
 export default function ServiceUserCard({ user }: Props) {
 	const [changingInfo, setChangingInfo] = useState(false);
 
-	const fetcher = useFetcher();
+	const fetcher = useFetcher<UploadAvatarAction>();
 
 	useEffect(() => {
 		if (fetcher.data?.error) {
@@ -41,37 +42,38 @@ export default function ServiceUserCard({ user }: Props) {
 	return (
 		<fetcher.Form
 			method="POST"
-			className="my-6 md:my-12 border shadow-lg shadow-blue-900/5 p-6 -mx-6 md:mx-auto md:rounded-lg max-w-7xl"
+			className="-mx-6 my-6 max-w-7xl border p-6 shadow-blue-900/5 shadow-lg md:mx-auto md:my-12 md:rounded-lg"
 		>
-			<div className="flex justify-between items-start">
+			<div className="flex items-start justify-between">
 				<div className="flex items-center gap-4">
-					<div className="w-12 h-12 rounded-full overflow-hidden bg-slate-400 hover:bg-slate-300 transition-colors flex-shrink-0 relative">
-						<input
-							type="file"
-							name="avatar"
-							accept="image/*"
-							className="sr-only"
-							id="avatar-input"
-							onChange={(e) => submitAvatar(e.target.files)}
-						/>
+					<div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full bg-slate-400 transition-colors hover:bg-slate-300">
 						<label
 							htmlFor="avatar-input"
-							className="w-full h-full block cursor-pointer"
-						></label>
-						<div className="absolute inset-0 grid place-items-center pointer-events-none">
+							className="block h-full w-full cursor-pointer"
+						>
+							<input
+								type="file"
+								name="avatar"
+								accept="image/*"
+								className="sr-only"
+								id="avatar-input"
+								onChange={(e) => submitAvatar(e.target.files)}
+							/>
+						</label>
+						<div className="pointer-events-none absolute inset-0 grid place-items-center">
 							{user.avatar ? (
 								<img
 									src={user.avatar}
 									alt="avatar"
-									className="w-full h-full object-cover"
+									className="h-full w-full object-cover"
 								/>
 							) : (
-								<NoImageIcon className="w-8 h-8 text-slate-100" />
+								<NoImageIcon className="h-8 w-8 text-slate-100" />
 							)}
 						</div>
 					</div>
 					<div>
-						<p className="font-serif font-bold text-xl/none">{user.username}</p>
+						<p className="font-bold font-serif text-xl/none">{user.username}</p>
 						<p>ID {user.id.split("-")[0].toUpperCase()}</p>
 					</div>
 				</div>
@@ -79,7 +81,7 @@ export default function ServiceUserCard({ user }: Props) {
 					onClick={() => setChangingInfo(true)}
 					type="button"
 					className={clsx(
-						"uppercase text-blue-500 font-medium px-4 py-1 hover:underline",
+						"px-4 py-1 font-medium text-blue-500 uppercase hover:underline",
 						changingInfo && "hidden",
 					)}
 				>
@@ -90,14 +92,14 @@ export default function ServiceUserCard({ user }: Props) {
 					name="intent"
 					value="change-info"
 					className={clsx(
-						"uppercase text-blue-500 bg-blue-50 px-4 py-1 rounded hover:bg-blue-100 transition-colors font-medium",
+						"rounded bg-blue-50 px-4 py-1 font-medium text-blue-500 uppercase transition-colors hover:bg-blue-100",
 						!changingInfo && "hidden",
 					)}
 				>
 					Сохранить
 				</button>
 			</div>
-			<div className="flex flex-col gap-3 mt-6 md:pl-16 lg:flex-row">
+			<div className="mt-6 flex flex-col gap-3 md:pl-16 lg:flex-row">
 				<div className="space-y-3">
 					<InfoField
 						type="text"
@@ -121,7 +123,7 @@ export default function ServiceUserCard({ user }: Props) {
 						defaultValue={user.phone || ""}
 					/>
 				</div>
-				<div className="space-y-3 flex-1">
+				<div className="flex-1 space-y-3">
 					<InfoField
 						type="text"
 						disabled={!changingInfo}

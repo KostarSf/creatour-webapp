@@ -33,7 +33,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return badRequest({
 			fieldErrors: null,
 			fields: null,
-			formError: `Форма неверно отправлена.`,
+			formError: "Форма неверно отправлена.",
 		});
 	}
 
@@ -61,7 +61,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			fields,
 			formError: sameUsername
 				? `Имя пользователя ${username} занято. `
-				: "" + sameEmail
+				: `${sameEmail}`
 					? `Электронная почта ${email} занята. `
 					: "",
 		});
@@ -70,23 +70,22 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	const user = await db.user.findUnique({ where: { id } });
 	if (!user) {
 		throw new Response("Пользователь не найден", { status: 404 });
-	} else {
-		const passwordHash =
-			password !== "" ? await bcrypt.hash(password, 10) : user.passwordHash;
-		await db.user.update({
-			where: { id },
-			data: {
-				username,
-				email,
-				passwordHash,
-				role,
-				city,
-				phone,
-				legalName,
-				inn,
-			},
-		});
 	}
+	const passwordHash =
+		password !== "" ? await bcrypt.hash(password, 10) : user.passwordHash;
+	await db.user.update({
+		where: { id },
+		data: {
+			username,
+			email,
+			passwordHash,
+			role,
+			city,
+			phone,
+			legalName,
+			inn,
+		},
+	});
 
 	return redirect(`/admin/users/${id}`);
 };

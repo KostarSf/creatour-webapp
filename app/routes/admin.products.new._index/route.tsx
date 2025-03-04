@@ -20,7 +20,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return badRequest({
 			fieldErrors: null,
 			fields: null,
-			formError: `Форма неверно отправлена.`,
+			formError: "Форма неверно отправлена.",
 		});
 	}
 
@@ -51,13 +51,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	});
 	if (product) {
 		return redirect(`/admin/products/${product.id}`);
-	} else {
-		return badRequest({
-			fieldErrors: null,
-			fields,
-			formError: `Что-то пошло не так`,
-		});
 	}
+	return badRequest({
+		fieldErrors: null,
+		fields,
+		formError: "Что-то пошло не так",
+	});
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

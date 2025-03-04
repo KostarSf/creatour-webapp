@@ -59,7 +59,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return json({
 			error: null,
 		});
-	} else if (intent === "place-active-toggle") {
+	}
+	if (intent === "place-active-toggle") {
 		const placeId = formData.get("placeId");
 
 		if (typeof placeId !== "string") {
@@ -122,18 +123,18 @@ export default function PlaceownerPage() {
 			</div>
 			<ServiceUserCard user={user} />
 			<div className="my-6 md:my-12">
-				<div className="flex items-baseline justify-between flex-wrap gap-3">
+				<div className="flex flex-wrap items-baseline justify-between gap-3">
 					<p className="text-xl">
 						<span className="text-blue-500">{user.username}</span> объекты
 					</p>
 					<ActionLinkButton to="/new-place">Новый объект</ActionLinkButton>
 				</div>
 				{places.length === 0 ? (
-					<p className="text-center mt-24 text-xl text-slate-400">
+					<p className="mt-24 text-center text-slate-400 text-xl">
 						У вас пока нет объектов
 					</p>
 				) : (
-					<div className="space-y-6 mt-6 md:mt-12 -mx-6 md:mx-auto max-w-7xl">
+					<div className="-mx-6 mt-6 max-w-7xl space-y-6 md:mx-auto md:mt-12">
 						{places.map((place) => (
 							<ServiceProductCard
 								type="place"

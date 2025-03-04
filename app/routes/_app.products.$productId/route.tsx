@@ -10,7 +10,7 @@ import { db } from "~/utils/db.server";
 import { getUserId } from "~/utils/session.server";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => [
-	{ title: `${data.product.name} | Креатур` },
+	{ title: `${data?.product.name ?? ""} | Креатур` },
 ];
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -74,10 +74,10 @@ export default function ProductPage() {
 	return (
 		<>
 			<div className="my-6 md:my-12">
-				<h1 className="font-bold text-2xl font-serif">{product.name}</h1>
+				<h1 className="font-bold font-serif text-2xl">{product.name}</h1>
 				<p className="mt-2">{product.short}</p>
-				<div className="flex items-center mt-6">
-					<div className="flex-1 md:flex-grow-0 md:mr-12">
+				<div className="mt-6 flex items-center">
+					<div className="flex-1 md:mr-12 md:flex-grow-0">
 						<RatingBar ratings={product.rating} />
 						<p className="text-slate-500">{product.rating.length} оценок</p>
 					</div>
@@ -112,31 +112,32 @@ export default function ProductPage() {
 					value={`/products/${product.id}`}
 				/>
 				<button
+					type="submit"
 					name="intent"
 					value="activate-product"
 					disabled={buyed || !canBuy}
 					className={clsx(
-						"uppercase px-6 py-2 rounded  font-medium transition-colors",
+						"rounded px-6 py-2 font-medium uppercase transition-colors",
 						canBuy
 							? !buyed
-								? "text-blue-600 hover:bg-blue-200 bg-blue-100"
-								: "text-green-600 bg-green-100"
-							: "text-blue-600 border border-blue-100",
+								? "bg-blue-100 text-blue-600 hover:bg-blue-200"
+								: "bg-green-100 text-green-600"
+							: "border border-blue-100 text-blue-600",
 					)}
 				>
 					{buyed
 						? "Приобретено"
 						: product.price === 0
 							? "Бесплатно"
-							: product.price + " ₽"}
+							: `${product.price} ₽`}
 				</button>
 			</Form>
 
-			<p className="font-serif text-xl font-semibold">Галерея изображений</p>
-			<div className="my-6 md:my-12 -mx-6 md:-mx-12">
-				<div className="flex gap-6 overflow-x-auto snap-x px-6 scroll-p-6">
+			<p className="font-semibold font-serif text-xl">Галерея изображений</p>
+			<div className="-mx-6 md:-mx-12 my-6 md:my-12">
+				<div className="flex snap-x scroll-p-6 gap-6 overflow-x-auto px-6">
 					{product.image && (
-						<AlbumImage link={"/images/products/" + product.image} />
+						<AlbumImage link={`/images/products/${product.image}`} />
 					)}
 					{product.media.map((image) => (
 						<AlbumImage
@@ -150,24 +151,24 @@ export default function ProductPage() {
 
 			{product.route.length > 0 && (
 				<>
-					<p className="font-serif text-xl font-semibold mt-24">
+					<p className="mt-24 font-semibold font-serif text-xl">
 						Места мероприятия
 					</p>
 					<div className="my-3">
 						{product.route.map((point) => (
-							<div key={point.id} className="flex gap-3 items-center">
-								<div className="w-16 rounded-lg overflow-hidden h-12 bg-slate-300">
+							<div key={point.id} className="flex items-center gap-3">
+								<div className="h-12 w-16 overflow-hidden rounded-lg bg-slate-300">
 									{point.place.image && (
 										<img
-											src={"/images/places/" + point.place.image}
-											className="w-24 aspect-square object-cover rounded-md"
+											src={`/images/places/${point.place.image}`}
+											className="aspect-square w-24 rounded-md object-cover"
 											alt={point.place.image}
 										/>
 									)}
 								</div>
 
 								<div>
-									<p className="font-medium text-lg/normal text-blue-500">
+									<p className="font-medium text-blue-500 text-lg/normal">
 										{point.place.name}
 									</p>
 									<p className="text-slate-600">{point.place.short}</p>
@@ -180,12 +181,12 @@ export default function ProductPage() {
 
 			{product.description && (
 				<>
-					<p className="font-serif text-xl font-semibold mt-24">Описание</p>
+					<p className="mt-24 font-semibold font-serif text-xl">Описание</p>
 					<p>{product.description}</p>
 				</>
 			)}
 
-			<p className="font-serif text-xl font-semibold mt-24 mb-6">Комментарии</p>
+			<p className="mt-24 mb-6 font-semibold font-serif text-xl">Комментарии</p>
 			<div className="space-y-6">
 				{product.comments.map((comment) => (
 					<CommentItem
@@ -195,7 +196,7 @@ export default function ProductPage() {
 					/>
 				))}
 			</div>
-			<div className="mb-12 mt-24">
+			<div className="mt-24 mb-12">
 				{user ? (
 					<Form
 						method="POST"
@@ -214,10 +215,10 @@ export default function ProductPage() {
 						<input type="hidden" name="userId" value={user.id} />
 						<textarea
 							name="text"
-							className="border px-2 py-1 rounded w-full min-h-[5rem]"
+							className="min-h-[5rem] w-full rounded border px-2 py-1"
 							placeholder="Напишите свой отзыв!"
 						/>
-						<div className="flex justify-between items-baseline mt-2 gap-2">
+						<div className="mt-2 flex items-baseline justify-between gap-2">
 							{/* <div className="flex-1"></div> */}
 							<input
 								type="file"
@@ -231,7 +232,7 @@ export default function ProductPage() {
               </label> */}
 							<button
 								type="submit"
-								className="bg-blue-100 hover:bg-blue-200 transition-colors text-blue-600 px-4 py-2 rounded uppercase font-medium"
+								className="rounded bg-blue-100 px-4 py-2 font-medium text-blue-600 uppercase transition-colors hover:bg-blue-200"
 							>
 								Отправить
 							</button>
@@ -255,10 +256,10 @@ function AlbumImage({
 	community?: boolean;
 }) {
 	return (
-		<div className="snap-center relative shrink-0 rounded-lg w-[95%] md:w-auto md:h-[50vh] aspect-square md:aspect-[4/3] overflow-hidden">
-			<img src={link} alt={link} className="object-cover w-full h-full" />
+		<div className="relative aspect-square w-[95%] shrink-0 snap-center overflow-hidden rounded-lg md:aspect-[4/3] md:h-[50vh] md:w-auto">
+			<img src={link} alt={link} className="h-full w-full object-cover" />
 			{community && (
-				<p className="absolute top-0 left-0 p-2 px-3 py-1 m-1 bg-white rounded font-medium">
+				<p className="absolute top-0 left-0 m-1 rounded bg-white p-2 px-3 py-1 font-medium">
 					Коммьюнити
 				</p>
 			)}
@@ -273,7 +274,8 @@ const PaperClipIcon = ({ className }: { className?: string }) => (
 		viewBox="0 0 24 24"
 		strokeWidth={1.5}
 		stroke="currentColor"
-		className={clsx(className || "w-6 h-6")}
+		role="graphics-symbol"
+		className={clsx(className || "h-6 w-6")}
 	>
 		<path
 			strokeLinecap="round"

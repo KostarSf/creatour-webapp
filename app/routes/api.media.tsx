@@ -1,3 +1,4 @@
+import { unlink } from "node:fs/promises";
 import cuid2 from "@paralleldrive/cuid2";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import {
@@ -9,7 +10,6 @@ import {
 	unstable_createMemoryUploadHandler,
 } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { unlink } from "fs/promises";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 
@@ -51,7 +51,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			return badRequest({
 				fieldErrors: null,
 				fields: null,
-				formError: `Форма неверно отправлена.`,
+				formError: "Форма неверно отправлена.",
 			});
 		}
 
@@ -69,7 +69,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 				fields: fields,
 				formError: `Неверный тип родителя медиа - ${parentType}.`,
 			});
-		} else if (parentType === "place") {
+		}
+		if (parentType === "place") {
 			const place = await db.place.findUnique({ where: { id: parentId } });
 			if (!place) {
 				return badRequest({
@@ -115,7 +116,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		});
 
 		return redirect(redirectTo);
-	} else if (request.method === "DELETE") {
+	}
+	if (request.method === "DELETE") {
 		const form = await request.formData();
 
 		const redirectTo = form.get("redirectTo");
@@ -125,7 +127,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			return badRequest({
 				fieldErrors: null,
 				fields: null,
-				formError: `Форма неверно отправлена.`,
+				formError: "Форма неверно отправлена.",
 			});
 		}
 

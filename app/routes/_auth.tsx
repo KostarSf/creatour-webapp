@@ -6,23 +6,23 @@ export default function AuthLayout() {
 	return (
 		<div className="flex min-h-screen w-screen items-stretch">
 			<div className="flex-grow md:flex-shrink-0 md:flex-grow-0">
-				<div className="bg-white px-6 py-8 md:px-12 md:py-12 lg:px-24 lg:py-16 flex flex-col items-stretch sm:items-center md:items-start">
+				<div className="flex flex-col items-stretch bg-white px-6 py-8 sm:items-center md:items-start md:px-12 md:py-12 lg:px-24 lg:py-16">
 					<Link
-						to={`/`}
-						className="md:hidden text-4xl font-serif font-semibold mb-4 text-center sm:text-left"
+						to={"/"}
+						className="mb-4 text-center font-semibold font-serif text-4xl sm:text-left md:hidden"
 					>
 						Креатур
 					</Link>
 					<div className="space-x-10 text-center sm:text-left">
 						<NavLink
 							to={{
-								pathname: `/login`,
+								pathname: "/login",
 								search: searchParams.toString(),
 							}}
 							className={({ isActive, isPending }) =>
 								`${
 									isActive || isPending
-										? "border-b-2 border-blue-500"
+										? "border-blue-500 border-b-2"
 										: "text-gray-500"
 								} px-1 py-0.5 transition-colors hover:text-black`
 							}
@@ -31,13 +31,13 @@ export default function AuthLayout() {
 						</NavLink>
 						<NavLink
 							to={{
-								pathname: `/register`,
+								pathname: "/register",
 								search: searchParams.toString(),
 							}}
 							className={({ isActive, isPending }) =>
 								`${
 									isActive || isPending
-										? "border-b-2 border-blue-500"
+										? "border-blue-500 border-b-2"
 										: "text-gray-500"
 								} px-1 py-0.5 transition-colors hover:text-black`
 							}
@@ -48,15 +48,15 @@ export default function AuthLayout() {
 					<Outlet />
 				</div>
 			</div>
-			<div className='hidden flex-1 bg-[url("/images/auth-bg.webp")] bg-cover bg-center md:block'>
-				<div className="lg:px-24 lg:py-16 text-right md:px-12 md:py-12">
+			<div className="hidden flex-1 bg-[url(/images/auth-bg.webp)] bg-center bg-cover md:block">
+				<div className="text-right md:px-12 md:py-12 lg:px-24 lg:py-16">
 					<Link
-						to={`/`}
-						className="font-serif text-5xl lg:text-6xl font-bold text-white hover:text-blue-500 transition-colors"
+						to={"/"}
+						className="font-bold font-serif text-5xl text-white transition-colors hover:text-blue-500 lg:text-6xl"
 					>
 						Креатур
 					</Link>
-					<p className="mt-16 text-3xl/normal lg:text-4xl/normal tracking-widest text-white">
+					<p className="mt-16 text-3xl/normal text-white tracking-widest lg:text-4xl/normal">
 						Отдыхай <br />
 						креативно <br />
 						вместе с <br />

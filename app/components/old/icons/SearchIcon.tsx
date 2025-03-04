@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function SearchIcon({
 	type = "solid",
 }: {
@@ -12,6 +10,7 @@ export default function SearchIcon({
 			viewBox="0 0 24 24"
 			strokeWidth={1.5}
 			stroke="currentColor"
+			role="graphics-symbol"
 			className="h-6 w-6"
 		>
 			<path
@@ -25,6 +24,7 @@ export default function SearchIcon({
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 20 20"
 			fill="currentColor"
+			role="graphics-symbol"
 			className="h-5 w-5"
 		>
 			<path

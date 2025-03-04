@@ -34,7 +34,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 	if (typeof userId !== "string") {
 		return badRequest({
-			error: `Форма неверно отправлена.`,
+			error: "Форма неверно отправлена.",
 		});
 	}
 
@@ -44,9 +44,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	await db.user.update({
 		where: { id: userId },
 		data: {
-			avatar: "/avatars/" + avatar.name,
+			avatar: `/avatars/${avatar.name}`,
 		},
 	});
 
 	return json({ error: null });
 };
+
+export type UploadAvatarAction = typeof action;

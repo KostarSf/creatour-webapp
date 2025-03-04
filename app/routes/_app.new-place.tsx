@@ -14,7 +14,7 @@ import { badRequest } from "~/utils/request.server";
 import { requireUserId } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => [
-	{ title: `Добавление нового места | Креатур` },
+	{ title: "Добавление нового места | Креатур" },
 ];
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -87,7 +87,7 @@ export default function NewPlacePage() {
 	}, [data]);
 
 	return (
-		<div className="max-w-xl mx-auto">
+		<div className="mx-auto max-w-xl">
 			<h1 className="text-xl ">Добавление нового места</h1>
 			<Form method="POST" className="py-6 md:py-12">
 				<div className="space-y-3">
@@ -110,7 +110,7 @@ export default function NewPlacePage() {
 						label="Полное описание"
 					/>
 				</div>
-				<div className="space-y-3 mt-6">
+				<div className="mt-6 space-y-3">
 					<InputField
 						type="text"
 						name="city"
@@ -130,7 +130,7 @@ export default function NewPlacePage() {
 				<div className="mt-12">
 					<button
 						type="submit"
-						className="w-full uppercase text-blue-600 bg-blue-100 px-4 py-2 rounded hover:bg-blue-200 transition-colors font-medium"
+						className="w-full rounded bg-blue-100 px-4 py-2 font-medium text-blue-600 uppercase transition-colors hover:bg-blue-200"
 					>
 						Добавить
 					</button>
@@ -148,14 +148,13 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
 	({ label, id, required, ...other }, forwardedRef) => (
 		<div className="flex flex-col">
 			<p className="space-x-1">
-				<label htmlFor={id}>{label}</label>
-				{required && <label>*</label>}
+				<label htmlFor={id}>{label + (required ? " *" : "")}</label>
 			</p>
 			<input
 				required={required}
 				ref={forwardedRef}
 				id={id}
-				className="w-full border px-2 py-1 rounded"
+				className="w-full rounded border px-2 py-1"
 				{...other}
 			/>
 		</div>
@@ -174,9 +173,9 @@ const InputArea = forwardRef<HTMLAreaElement, InputAreaProps>(
 			<textarea
 				ref={forwardedRef}
 				id={id}
-				className="w-full border px-2 py-1 rounded min-h-[2.125rem]"
+				className="min-h-[2.125rem] w-full rounded border px-2 py-1"
 				{...other}
-			></textarea>
+			/>
 		</div>
 	),
 );

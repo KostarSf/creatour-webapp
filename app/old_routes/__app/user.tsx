@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
-import CatalogLayout from "~/components/CatalogLayout";
+import CatalogLayout from "~/components/old/CatalogLayout";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
 
@@ -140,7 +140,7 @@ function SideBlockUser({
 			<Form action="/logout" method="post">
 				<button
 					type="submit"
-					className="rounded-lg bg-blue-600 px-5 py-1 text-lg font-semibold text-white"
+					className="rounded-lg bg-blue-600 px-5 py-1 font-semibold text-lg text-white"
 				>
 					Выйти
 				</button>

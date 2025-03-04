@@ -203,6 +203,7 @@ export default function PlaceRoute() {
 											{media.type === "image" ? (
 												<img src={media.url} alt={"media"} className="w-24" />
 											) : (
+												// biome-ignore lint/a11y/useMediaCaption: <explanation>
 												<video src={media.url} className="w-24" loop />
 											)}
 										</div>
@@ -235,7 +236,7 @@ export default function PlaceRoute() {
 							</option>
 						))}
 					</select>
-					<textarea name="text" className="border" required></textarea>
+					<textarea name="text" className="border" required />
 					<input
 						type="file"
 						name="media"
@@ -247,7 +248,7 @@ export default function PlaceRoute() {
 						Отправить
 					</button>
 				</Form>
-				<h2 className="mb-2 mt-8 font-medium">
+				<h2 className="mt-8 mb-2 font-medium">
 					Рейтинг: <b>{totalRatimg || null}</b>
 				</h2>
 				{data.place.rating.length > 0 ? (
@@ -326,7 +327,7 @@ export default function PlaceRoute() {
 						Оценить
 					</button>
 				</Form>
-				<h2 className="mb-2 mt-8 font-medium">Медиа:</h2>
+				<h2 className="mt-8 mb-2 font-medium">Медиа:</h2>
 				<div className="flex flex-col gap-1">
 					{data.place.media.length > 0 ? (
 						data.place.media.map((media) => (
@@ -338,6 +339,7 @@ export default function PlaceRoute() {
 										className="w-32"
 									/>
 								) : (
+									// biome-ignore lint/a11y/useMediaCaption: <explanation>
 									<video src={media.url} className="w-32" loop />
 								)}
 								<div>
@@ -406,7 +408,7 @@ export default function PlaceRoute() {
 						name="description"
 						className="border"
 						placeholder="Описание (не обязательно)"
-					></textarea>
+					/>
 					<button type="submit" className="bg-blue-600 text-white">
 						Добавить
 					</button>

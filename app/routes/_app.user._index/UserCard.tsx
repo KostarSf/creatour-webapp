@@ -1,10 +1,11 @@
+import type { User } from "@prisma/client";
 import { Link, useFetcher } from "@remix-run/react";
+import clsx from "clsx";
 import type { PropsWithChildren } from "react";
 import { useEffect, useState } from "react";
-import clsx from "clsx";
-import type { User } from "@prisma/client";
-import { NoImageIcon } from "~/components/NoImageIcon";
 import { InfoField } from "~/components/InfoField";
+import { NoImageIcon } from "~/components/NoImageIcon";
+import type { UploadAvatarAction } from "../api.upload-avatar";
 
 type Props = {
 	user: User;
@@ -14,7 +15,7 @@ type Props = {
 export default function UserCard({ user, checksCount }: Props) {
 	const [changingInfo, setChangingInfo] = useState(false);
 
-	const fetcher = useFetcher();
+	const fetcher = useFetcher<UploadAvatarAction>();
 
 	useEffect(() => {
 		if (fetcher.data?.error) {
@@ -41,39 +42,40 @@ export default function UserCard({ user, checksCount }: Props) {
 	};
 
 	return (
-		<div className="my-6 md:my-12 mx-auto max-w-7xl flex flex-col gap-6 lg:flex-row">
+		<div className="mx-auto my-6 flex max-w-7xl flex-col gap-6 md:my-12 lg:flex-row">
 			<div className="flex-1">
 				<CardContainer>
 					<fetcher.Form method="POST">
-						<div className="flex justify-between items-start">
+						<div className="flex items-start justify-between">
 							<div className="flex items-center gap-4">
-								<div className="w-12 h-12 rounded-full overflow-hidden bg-slate-400 hover:bg-slate-300 transition-colors flex-shrink-0 relative">
-									<input
-										type="file"
-										name="avatar"
-										accept="image/*"
-										className="sr-only"
-										id="avatar-input"
-										onChange={(e) => submitAvatar(e.target.files)}
-									/>
+								<div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full bg-slate-400 transition-colors hover:bg-slate-300">
 									<label
 										htmlFor="avatar-input"
-										className="w-full h-full block cursor-pointer"
-									></label>
-									<div className="absolute inset-0 grid place-items-center pointer-events-none">
+										className="block h-full w-full cursor-pointer"
+									>
+										<input
+											type="file"
+											name="avatar"
+											accept="image/*"
+											className="sr-only"
+											id="avatar-input"
+											onChange={(e) => submitAvatar(e.target.files)}
+										/>
+									</label>
+									<div className="pointer-events-none absolute inset-0 grid place-items-center">
 										{user.avatar ? (
 											<img
 												src={user.avatar}
 												alt="avatar"
-												className="w-full h-full object-cover"
+												className="h-full w-full object-cover"
 											/>
 										) : (
-											<NoImageIcon className="w-8 h-8 text-slate-100" />
+											<NoImageIcon className="h-8 w-8 text-slate-100" />
 										)}
 									</div>
 								</div>
 								<div>
-									<p className="font-serif font-bold text-xl/none">
+									<p className="font-bold font-serif text-xl/none">
 										{user.username}
 									</p>
 									<p>ID {user.id.split("-")[0].toUpperCase()}</p>
@@ -83,7 +85,7 @@ export default function UserCard({ user, checksCount }: Props) {
 								onClick={() => setChangingInfo(true)}
 								type="button"
 								className={clsx(
-									"uppercase text-blue-500 font-medium px-4 py-1 hover:underline",
+									"px-4 py-1 font-medium text-blue-500 uppercase hover:underline",
 									changingInfo && "hidden",
 								)}
 							>
@@ -94,15 +96,15 @@ export default function UserCard({ user, checksCount }: Props) {
 								name="intent"
 								value="change-info"
 								className={clsx(
-									"uppercase text-blue-500 bg-blue-50 px-4 py-1 rounded hover:bg-blue-100 transition-colors font-medium",
+									"rounded bg-blue-50 px-4 py-1 font-medium text-blue-500 uppercase transition-colors hover:bg-blue-100",
 									!changingInfo && "hidden",
 								)}
 							>
 								Сохранить
 							</button>
 						</div>
-						<div className="flex flex-col gap-3 mt-6 md:pl-16 lg:flex-row">
-							<div className="space-y-3 flex-1">
+						<div className="mt-6 flex flex-col gap-3 md:pl-16 lg:flex-row">
+							<div className="flex-1 space-y-3">
 								<InfoField
 									type="text"
 									disabled={!changingInfo}
@@ -131,26 +133,26 @@ export default function UserCard({ user, checksCount }: Props) {
 			</div>
 			<div className="flex flex-col gap-6 xl:flex-1">
 				<CardContainer>
-					<p className="font-serif font-bold text-xl/none mb-4">
+					<p className="mb-4 font-bold font-serif text-xl/none">
 						Способы оплаты
 					</p>
-					<div className="flex justify-between items-baseline flex-wrap gap-4">
+					<div className="flex flex-wrap items-baseline justify-between gap-4">
 						<p className="font-mono">**** 1234 01/23</p>
-						<p className="uppercase text-gray-500 font-medium cursor-default">
+						<p className="cursor-default font-medium text-gray-500 uppercase">
 							Сменить
 						</p>
 					</div>
 				</CardContainer>
 				<CardContainer>
-					<p className="font-serif font-bold text-xl/none mb-2">
+					<p className="mb-2 font-bold font-serif text-xl/none">
 						Чеки{" "}
-						<span className="ml-4 font-sans font-normal text-gray-500 text-base">
+						<span className="ml-4 font-normal font-sans text-base text-gray-500">
 							({checksCount} всего)
 						</span>
 					</p>
 					<Link
 						to={"checks"}
-						className="text-blue-500 uppercase font-medium text-lg hover:underline"
+						className="font-medium text-blue-500 text-lg uppercase hover:underline"
 					>
 						Смотреть
 					</Link>
@@ -161,7 +163,7 @@ export default function UserCard({ user, checksCount }: Props) {
 }
 
 const CardContainer = ({ children }: PropsWithChildren) => (
-	<div className="border shadow-lg shadow-blue-900/5 p-6 -mx-6 md:mx-0 md:rounded-lg">
+	<div className="-mx-6 border p-6 shadow-blue-900/5 shadow-lg md:mx-0 md:rounded-lg">
 		{children}
 	</div>
 );

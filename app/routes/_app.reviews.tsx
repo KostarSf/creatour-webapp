@@ -13,7 +13,7 @@ import CommentItem from "~/components/CommentItem";
 import RatingBar from "~/components/RatingBar";
 import { db } from "~/utils/db.server";
 
-export const meta: MetaFunction = () => [{ title: `Наши отзывы | Креатур` }];
+export const meta: MetaFunction = () => [{ title: "Наши отзывы | Креатур" }];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	// const placesPromise = db.place.findMany({
@@ -65,15 +65,15 @@ export default function ReviewsPage() {
 	return (
 		<div>
 			<div>
-				<h1 className="my-6 md:my-12 text-2xl font-bold font-serif">Отзывы</h1>
+				<h1 className="my-6 font-bold font-serif text-2xl md:my-12">Отзывы</h1>
 			</div>
-			<div className="max-w-7xl mx-auto">
+			<div className="mx-auto max-w-7xl">
 				{/* <div className='space-y-6 mb-12'>
           {places.map((place) => (
             <CommentSection key={place.id} name='place' parent={place} />
           ))}
         </div> */}
-				<div className="space-y-6 mb-12">
+				<div className="mb-12 space-y-6">
 					{products.map((product) => (
 						<CommentSection key={product.id} name="product" parent={product} />
 					))}
@@ -99,22 +99,23 @@ const CommentSection = ({
 	return (
 		<div>
 			<Link
-				to={`/${name}s/` + parent.id}
-				className="flex flex-col gap-3 mb-6 md:flex-row md:gap-6 md:hover:shadow-lg md:shadow-blue-800/10 transition-shadow md:py-3 md:px-6 md:rounded-md md:-mx-6"
+				to={`/${name}s/${parent.id}`}
+				className="md:-mx-6 mb-6 flex flex-col gap-3 transition-shadow md:flex-row md:gap-6 md:rounded-md md:px-6 md:py-3 md:shadow-blue-800/10 md:hover:shadow-lg"
 			>
-				<div className="w-full md:w-36 h-48 md:h-24 rounded-md bg-slate-200 overflow-hidden grid place-items-center text-slate-50 shrink-0">
+				<div className="grid h-48 w-full shrink-0 place-items-center overflow-hidden rounded-md bg-slate-200 text-slate-50 md:h-24 md:w-36">
 					{parent.image ? (
 						<img
-							src={`/images/${name}s/` + parent.image}
+							src={`/images/${name}s/${parent.image}`}
 							alt={parent.name}
-							className="w-full h-full object-cover object-center"
+							className="h-full w-full object-cover object-center"
 						/>
 					) : (
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 20 20"
 							fill="currentColor"
-							className="w-24 h-24"
+							role="graphics-symbol"
+							className="h-24 w-24"
 						>
 							<path
 								fillRule="evenodd"
@@ -124,10 +125,10 @@ const CommentSection = ({
 						</svg>
 					)}
 				</div>
-				<div className="grow flex flex-col">
-					<p className="font-serif font-bold text-xl">{parent.name}</p>
+				<div className="flex grow flex-col">
+					<p className="font-bold font-serif text-xl">{parent.name}</p>
 					<p className="text-slate-800 md:order-1">{parent.short}</p>
-					<div className="flex justify-between md:justify-start md:gap-12 items-center mt-3 md:mt-0 md:mb-3">
+					<div className="mt-3 flex items-center justify-between md:mt-0 md:mb-3 md:justify-start md:gap-12">
 						<p className="text-slate-500 text-sm md:order-1">
 							{parent.comments.length} отзывов
 						</p>

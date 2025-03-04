@@ -27,35 +27,31 @@ export default function FeedbackDialog({
 			body?.classList.add("overflow-hidden");
 		} else {
 			body?.classList.remove("overflow-hidden");
-			PICheckRef.current!.checked = false;
-			TOSCheckRef.current!.checked = false;
+			if (PICheckRef.current) PICheckRef.current.checked = false;
+			if (TOSCheckRef.current) TOSCheckRef.current.checked = false;
 		}
 	}, [visible]);
 
 	return (
 		<div
-			className={
-				"fixed inset-0 z-10 flex items-center justify-center transition " +
-				(visible
+			className={`fixed inset-0 z-10 flex items-center justify-center transition ${
+				visible
 					? "pointer-events-auto opacity-100"
-					: "pointer-events-none opacity-0")
-			}
+					: "pointer-events-none opacity-0"
+			}`}
 			style={{
 				background: "rgba(200, 200, 200, 0.9)",
 			}}
 			onClick={onClose}
 		>
 			<div
-				className={
-					"h-full w-full overflow-hidden overflow-y-auto rounded bg-white px-4 shadow-xl transition md:h-fit md:max-h-full md:max-w-lg " +
-					(visible ? " translate-y-0" : " -translate-y-4")
-				}
+				className={`h-full w-full overflow-hidden overflow-y-auto rounded bg-white px-4 shadow-xl transition md:h-fit md:max-h-full md:max-w-lg ${visible ? " translate-y-0" : " -translate-y-4"}`}
 				onClick={(e) => e.stopPropagation()}
 			>
 				<Form method={method} action={action} className="h-full">
 					<div className="flex h-full flex-col items-stretch">
 						<div className="-mx-4 mb-4 flex items-center justify-between gap-2 border-b p-4 ">
-							<p className="text-lg font-semibold leading-5 text-slate-500">
+							<p className="font-semibold text-lg text-slate-500 leading-5">
 								Автоматическое посевное утройство для полей
 							</p>
 							<button
@@ -106,7 +102,7 @@ export default function FeedbackDialog({
 							</button>
 							<button
 								type="submit"
-								className="rounded bg-blue-500 px-12 py-2 font-semibold text-white transition hover:bg-blue-400 hover:shadow-md hover:shadow-blue-100"
+								className="rounded bg-blue-500 px-12 py-2 font-semibold text-white transition hover:bg-blue-400 hover:shadow-blue-100 hover:shadow-md"
 							>
 								Отправить
 							</button>

@@ -7,6 +7,7 @@ export const NoImageIcon = (props: ComponentPropsWithoutRef<"svg">) => (
 		viewBox="0 0 24 24"
 		strokeWidth="1.5"
 		stroke="currentColor"
+		role="graphics-symbol"
 		{...props}
 	>
 		<path

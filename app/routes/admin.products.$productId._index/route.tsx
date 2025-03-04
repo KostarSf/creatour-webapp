@@ -53,7 +53,8 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 			},
 		});
 		return new Response("", { status: 200 });
-	} else if (intent === "removeplace") {
+	}
+	if (intent === "removeplace") {
 		const pointId = form.get("point");
 		if (typeof pointId !== "string") {
 			throw new Response("Ошибка отправки формы", {
@@ -70,7 +71,8 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 		}
 		await db.routePoint.delete({ where: { id: pointId } });
 		return new Response("Ok", { status: 200 });
-	} else if (intent === "updateplace") {
+	}
+	if (intent === "updateplace") {
 		const pointId = form.get("point");
 		const order = form.get("order");
 		const date = form.get("date");
@@ -95,17 +97,16 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 			where: { id: pointId },
 			data: {
 				order: Number(order),
-				date: !isNaN(new Date(date).getTime())
+				date: !Number.isNaN(new Date(date).getTime())
 					? new Date(date).toISOString()
 					: undefined,
 			},
 		});
 		return new Response("Ok", { status: 200 });
-	} else {
-		throw new Response(`Действие ${form.get("intent")} не поддерживается`, {
-			status: 400,
-		});
 	}
+	throw new Response(`Действие ${form.get("intent")} не поддерживается`, {
+		status: 400,
+	});
 };
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -367,7 +368,7 @@ export default function ProductRoute() {
 						Добавить
 					</button>
 				</Form>
-				<h2 className="mb-2 mt-8 font-medium">Комментарии</h2>
+				<h2 className="mt-8 mb-2 font-medium">Комментарии</h2>
 				<div className="flex flex-col gap-2">
 					{data.product.comments.length > 0 ? (
 						data.product.comments.map((comment) => (
@@ -409,6 +410,7 @@ export default function ProductRoute() {
 											{media.type === "image" ? (
 												<img src={media.url} alt={"media"} className="w-24" />
 											) : (
+												// biome-ignore lint/a11y/useMediaCaption: <explanation>
 												<video src={media.url} className="w-24" loop />
 											)}
 										</div>
@@ -441,7 +443,7 @@ export default function ProductRoute() {
 							</option>
 						))}
 					</select>
-					<textarea name="text" className="border"></textarea>
+					<textarea name="text" className="border" />
 					<input
 						type="file"
 						name="media"
@@ -453,7 +455,7 @@ export default function ProductRoute() {
 						Отправить
 					</button>
 				</Form>
-				<h2 className="mb-2 mt-8 font-medium">
+				<h2 className="mt-8 mb-2 font-medium">
 					Рейтинг: <b>{totalRatimg || null}</b>
 				</h2>
 				{data.product.rating.length > 0 ? (
@@ -532,7 +534,7 @@ export default function ProductRoute() {
 						Оценить
 					</button>
 				</Form>
-				<h2 className="mb-2 mt-8 font-medium">Медиа:</h2>
+				<h2 className="mt-8 mb-2 font-medium">Медиа:</h2>
 				<div className="flex flex-col gap-1">
 					{data.product.media.length > 0 ? (
 						data.product.media.map((media) => (
@@ -544,6 +546,7 @@ export default function ProductRoute() {
 										className="w-32"
 									/>
 								) : (
+									// biome-ignore lint/a11y/useMediaCaption: <explanation>
 									<video src={media.url} className="w-32" loop />
 								)}
 								<div>
@@ -617,7 +620,7 @@ export default function ProductRoute() {
 						name="description"
 						className="border"
 						placeholder="Описание (не обязательно)"
-					></textarea>
+					/>
 					<button type="submit" className="bg-blue-600 text-white">
 						Добавить
 					</button>

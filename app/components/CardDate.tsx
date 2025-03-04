@@ -9,7 +9,7 @@ export default function CardDate(props: Props) {
 
 	return (
 		<div className={props.className}>
-			<p className="font-serif text-xl/none font-bold tracking-wide">
+			<p className="font-bold font-serif text-xl/none tracking-wide">
 				{date.toLocaleTimeString("ru-ru", {
 					hour: "2-digit",
 					minute: "2-digit",

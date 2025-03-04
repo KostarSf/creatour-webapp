@@ -10,7 +10,7 @@ export default function ActionLinkButton({ to, children }: Props) {
 	return (
 		<Link
 			to={to}
-			className="text-lg uppercase bg-blue-100 text-blue-500 rounded font-medium hover:bg-blue-200 px-4 py-1"
+			className="rounded bg-blue-100 px-4 py-1 font-medium text-blue-500 text-lg uppercase hover:bg-blue-200"
 		>
 			{children}
 		</Link>
