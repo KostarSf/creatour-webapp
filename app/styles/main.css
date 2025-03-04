@@ -1,45 +1,45 @@
 /* Header mobile menu */
 
 [data-mobile-menu-switcher] {
-  display: none;
+	display: none;
 }
 
 .mobile-menu-canvas {
-  pointer-events: none;
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100vh;
-  overflow-y: auto;
-  opacity: 0;
-  transform: translateY(-1rem);
+	pointer-events: none;
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 100vh;
+	overflow-y: auto;
+	opacity: 0;
+	transform: translateY(-1rem);
 }
 
 [data-mobile-menu-switcher]:checked ~ .mobile-menu-canvas {
-  pointer-events: all;
-  opacity: 1;
-  transform: translateY(0);
+	pointer-events: all;
+	opacity: 1;
+	transform: translateY(0);
 }
 
 /* Header navigation */
 
 .nav-sub {
-  position: relative;
+	position: relative;
 }
 
 .nav-sub:hover .nav-sub-menu {
-  display: block;
+	display: block;
 }
 
 /* Landing */
 
 #creatour {
-  background: url('/images/landing/landing_bg.jpg');
-  background-size: cover;
-  background-position: center center;
+	background: url("/images/landing/landing_bg.jpg");
+	background-size: cover;
+	background-position: center center;
 
-  min-height: 660px;
+	min-height: 660px;
 }
