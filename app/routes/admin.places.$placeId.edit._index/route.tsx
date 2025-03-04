@@ -50,7 +50,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 		return badRequest({
 			fieldErrors: null,
 			fields: null,
-			formError: `Форма неверно отправлена.`,
+			formError: "Форма неверно отправлена.",
 		});
 	}
 
@@ -178,7 +178,7 @@ export default function PlaceEditRoute() {
 						defaultValue={
 							actionData?.fields?.description || data.place.description || ""
 						}
-					></textarea>
+					/>
 				</label>
 
 				<hr className="my-4" />

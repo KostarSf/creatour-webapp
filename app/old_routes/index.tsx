@@ -3,15 +3,15 @@ import { Link } from "@remix-run/react";
 export default function LandingPage() {
 	return (
 		<>
-			<header className="absolute top-0 left-0 right-0 z-50">
+			<header className="absolute top-0 right-0 left-0 z-50">
 				<nav className="flex justify-center gap-3 py-3 font-medium text-white">
-					<a href="#creatour" className="block py-2 px-4 text-lg drop-shadow">
+					<a href="#creatour" className="block px-4 py-2 text-lg drop-shadow">
 						Креатур
 					</a>
-					<a href="#about" className="block py-2 px-4 text-lg drop-shadow">
+					<a href="#about" className="block px-4 py-2 text-lg drop-shadow">
 						О нас
 					</a>
-					<a href="#contacts" className="block py-2 px-4 text-lg drop-shadow">
+					<a href="#contacts" className="block px-4 py-2 text-lg drop-shadow">
 						Контакты
 					</a>
 				</nav>
@@ -19,7 +19,7 @@ export default function LandingPage() {
 			<main>
 				<a
 					href="#creatour"
-					className="fixed bottom-0 right-0 z-30 m-8 rounded-full p-2"
+					className="fixed right-0 bottom-0 z-30 m-8 rounded-full p-2"
 					style={{
 						background: "rgba(255, 255, 255, 0.6)",
 					}}
@@ -32,7 +32,7 @@ export default function LandingPage() {
 				</a>
 				<section id="creatour" className="relative z-40 h-screen">
 					<div className="absolute inset-0 flex flex-col items-start justify-center px-16">
-						<h1 className="mb-8 font-serif text-7xl leading-tight text-white drop-shadow">
+						<h1 className="mb-8 font-serif text-7xl text-white leading-tight drop-shadow">
 							Открой для себя <br />
 							Креативный туризм
 						</h1>
@@ -41,24 +41,28 @@ export default function LandingPage() {
 						</p>
 						<a
 							href="/products"
-							className="inline-block rounded-full bg-blue-600 px-10 py-4 text-xl font-semibold text-white"
+							className="inline-block rounded-full bg-blue-600 px-10 py-4 font-semibold text-white text-xl"
 						>
 							Подобрать тур
 						</a>
 					</div>
-					<div className="absolute left-0 right-0 bottom-0 px-16 pb-14">
+					<div className="absolute right-0 bottom-0 left-0 px-16 pb-14">
 						<div className="drop-shadow">
-							<p className="mb-2 text-xl text-white">Мы в соцсетях</p>
+							<p className="mb-2 text-white text-xl">Мы в соцсетях</p>
 							<div className="flex items-center gap-4">
+								{/* biome-ignore lint/a11y/useValidAnchor: <explanation> */}
 								<a href="#" className="cursor-pointer">
 									<img src="/images/landing/yt_icon.svg" alt="yt" />
 								</a>
+								{/* biome-ignore lint/a11y/useValidAnchor: <explanation> */}
 								<a href="#" className="cursor-pointer">
 									<img src="/images/landing/fb_icon.svg" alt="yt" />
 								</a>
+								{/* biome-ignore lint/a11y/useValidAnchor: <explanation> */}
 								<a href="#" className="cursor-pointer">
 									<img src="/images/landing/tw_icon.svg" alt="yt" />
 								</a>
+								{/* biome-ignore lint/a11y/useValidAnchor: <explanation> */}
 								<a href="#" className="cursor-pointer">
 									<img src="/images/landing/vk_icon.svg" alt="yt" />
 								</a>
@@ -81,10 +85,10 @@ export default function LandingPage() {
 								style={{
 									backgroundColor: "rgba(0, 0, 0, 0.3)",
 								}}
-							></div>
-							<div className="z-10"></div>
+							/>
+							<div className="z-10" />
 							<div className="z-10 flex items-end justify-between">
-								<p className="text-xl text-white drop-shadow">
+								<p className="text-white text-xl drop-shadow">
 									Мало-Коннюшенный мост <br /> в Санкт-Петербурге
 								</p>
 								<img
@@ -94,7 +98,7 @@ export default function LandingPage() {
 							</div>
 						</Link>
 						<div className="py-10">
-							<h2 className="mb-6 font-serif text-4xl font-bold">
+							<h2 className="mb-6 font-bold font-serif text-4xl">
 								Посмотрите все направления туров
 							</h2>
 							<p className="mb-10 text-lg">
@@ -104,7 +108,7 @@ export default function LandingPage() {
 							</p>
 							<Link
 								to="/places"
-								className="inline-block rounded-full border-2 border-blue-600 px-10 py-4 text-xl font-semibold text-blue-600"
+								className="inline-block rounded-full border-2 border-blue-600 px-10 py-4 font-semibold text-blue-600 text-xl"
 							>
 								Смотреть все
 							</Link>
@@ -124,15 +128,15 @@ export default function LandingPage() {
 								style={{
 									backgroundColor: "rgba(0, 0, 0, 0.3)",
 								}}
-							></div>
+							/>
 							<div className="z-10 drop-shadow">
-								<p className="font-serif text-xl font-semibold text-white">
+								<p className="font-semibold font-serif text-white text-xl">
 									Отзыв
 								</p>
 								<p className="text-lg text-white">Елена Ивановна</p>
 							</div>
 							<div className="z-10 flex items-end justify-between">
-								<p className="text-xl text-white drop-shadow">
+								<p className="text-white text-xl drop-shadow">
 									Пожалуй, это был лучший <br /> гастрономический тур на Юге
 								</p>
 								<img
@@ -142,7 +146,7 @@ export default function LandingPage() {
 							</div>
 						</Link>
 						<div className="py-10">
-							<h2 className="mb-6 font-serif text-4xl font-bold">
+							<h2 className="mb-6 font-bold font-serif text-4xl">
 								Что пишут участники наших турпрограмм
 							</h2>
 							<p className="mb-10 text-lg">
@@ -151,7 +155,7 @@ export default function LandingPage() {
 							</p>
 							<Link
 								to="#"
-								className="inline-block rounded-full border-2 border-blue-600 px-10 py-4 text-xl font-semibold text-blue-600"
+								className="inline-block rounded-full border-2 border-blue-600 px-10 py-4 font-semibold text-blue-600 text-xl"
 							>
 								Читать отзывы
 							</Link>
@@ -168,10 +172,10 @@ export default function LandingPage() {
 								className="h-28 w-28 rounded-xl object-cover lg:h-36 lg:w-36"
 							/>
 							<div className="my-2 ml-10">
-								<p className="mb-2 text-2xl font-medium lg:text-3xl">
+								<p className="mb-2 font-medium text-2xl lg:text-3xl">
 									Дарья Середа
 								</p>
-								<p className="text-md font-mono leading-5 text-slate-700">
+								<p className="font-mono text-md text-slate-700 leading-5">
 									Продакт-менеджер <br /> Дизайнер
 								</p>
 							</div>
@@ -183,10 +187,10 @@ export default function LandingPage() {
 								className="h-28 w-28 rounded-xl object-cover lg:h-36 lg:w-36"
 							/>
 							<div className="my-2 ml-10">
-								<p className="mb-2 text-2xl font-medium lg:text-3xl">
+								<p className="mb-2 font-medium text-2xl lg:text-3xl">
 									Максим Песков
 								</p>
-								<p className="text-md font-mono leading-5 text-slate-700">
+								<p className="font-mono text-md text-slate-700 leading-5">
 									Программист
 								</p>
 							</div>

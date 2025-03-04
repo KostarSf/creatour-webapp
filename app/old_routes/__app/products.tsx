@@ -58,7 +58,7 @@ function CategoryLink({
 }) {
 	return (
 		<NavLink
-			to={"." + (category ? `/${category}` : "")}
+			to={`.${category ? `/${category}` : ""}`}
 			className="text-slate-500 hover:text-blue-600 hover:underline"
 			style={({ isActive }) =>
 				isActive

@@ -7,7 +7,7 @@ import { db } from "~/utils/db.server";
 import { getUserId } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => [
-	{ title: `Продажи ваших турпродуктов | Креатур` },
+	{ title: "Продажи ваших турпродуктов | Креатур" },
 ];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -57,7 +57,7 @@ export default function UserChecksPage() {
 			<div className="my-6 md:my-12">
 				<h1 className="font-medium text-xl">Продажи ваших турпродуктов</h1>
 			</div>
-			<div className="my-6 md:my-12 overflow-x-auto">
+			<div className="my-6 overflow-x-auto md:my-12">
 				<CheckTable checks={checks} />
 			</div>
 		</>

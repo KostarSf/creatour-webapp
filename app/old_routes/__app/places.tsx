@@ -29,7 +29,9 @@ export default function AllPlaces() {
 						name={p.name}
 						short={p.short}
 						rating={
-							isNaN(totalRatimg) ? "Оценок пока нет" : String(totalRatimg)
+							Number.isNaN(totalRatimg)
+								? "Оценок пока нет"
+								: String(totalRatimg)
 						}
 						image={p.image}
 					/>

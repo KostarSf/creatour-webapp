@@ -74,10 +74,7 @@ function PageLink({
 	return (
 		<Link
 			to={`?page=${page}`}
-			className={
-				"px-1 text-slate-600 hover:text-blue-500 hover:underline sm:px-2" +
-				(selected ? " font-semibold text-black underline" : "")
-			}
+			className={`px-1 text-slate-600 hover:text-blue-500 hover:underline sm:px-2 ${selected ? "font-semibold text-black underline" : ""}`}
 		>
 			{title}
 		</Link>

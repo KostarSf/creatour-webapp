@@ -1,8 +1,8 @@
 import { Link } from "@remix-run/react";
-import React from "react";
+import type React from "react";
 import HeaderMobileMenu from "./HeaderMobileMenu";
 import HeaderNavigation from "./HeaderNavigation";
-import SearchBlock from "./SearchBlock";
+// import SearchBlock from "./SearchBlock";
 
 export default function AppLayout({ children }: React.PropsWithChildren) {
 	return (
@@ -55,7 +55,7 @@ function Main({ children }: React.PropsWithChildren) {
 function Footer() {
 	return (
 		<footer className="mt-8 px-2 py-8 md:pb-2">
-			<div className="text-center text-sm text-slate-500">
+			<div className="text-center text-slate-500 text-sm">
 				© 2022-2023 | ООО Креатур
 			</div>
 		</footer>

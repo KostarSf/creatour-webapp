@@ -8,7 +8,7 @@ export default function RatingBar({
 	ratings: Rating[];
 	className?: string;
 }) {
-	if (ratings.length === 0) return <div className={className}></div>;
+	if (ratings.length === 0) return <div className={className} />;
 
 	const totalRating = Math.ceil(
 		ratings.reduce((prev, rating) => prev + rating.value, 0) /
@@ -20,11 +20,13 @@ export default function RatingBar({
 		<div className={clsx("flex gap-2 text-yellow-500", className)}>
 			{Array.from(Array(totalRating)).map((a, i) => (
 				<svg
+					// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 					key={i}
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 20 20"
 					fill="currentColor"
-					className="w-5 h-5"
+					role="graphics-symbol"
+					className="h-5 w-5"
 				>
 					<path
 						fillRule="evenodd"

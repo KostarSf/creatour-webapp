@@ -14,7 +14,7 @@ import { badRequest } from "~/utils/request.server";
 import { requireUserId } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => [
-	{ title: `Добавление нового турпродукта | Креатур` },
+	{ title: "Добавление нового турпродукта | Креатур" },
 ];
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -55,7 +55,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			type !== "quest" &&
 			type !== "event") ||
 		typeof price !== "string" ||
-		isNaN(Number(price))
+		Number.isNaN(Number(price))
 	) {
 		return badRequest({
 			error: "Форма неверно отправлена",
@@ -108,7 +108,7 @@ export default function NewProductPage() {
 	}, [data]);
 
 	return (
-		<div className="max-w-xl mx-auto">
+		<div className="mx-auto max-w-xl">
 			<h1 className="text-xl ">Добавление нового турпродукта</h1>
 			<Form method="POST" className="py-6 md:py-12">
 				<div className="space-y-3">
@@ -144,7 +144,7 @@ export default function NewProductPage() {
 						label="Цена"
 					/>
 				</div>
-				<div className="space-y-3 mt-6">
+				<div className="mt-6 space-y-3">
 					<InputField
 						type="text"
 						name="city"
@@ -172,7 +172,7 @@ export default function NewProductPage() {
 				<div className="mt-12">
 					<button
 						type="submit"
-						className="w-full uppercase text-blue-600 bg-blue-100 px-4 py-2 rounded hover:bg-blue-200 transition-colors font-medium"
+						className="w-full rounded bg-blue-100 px-4 py-2 font-medium text-blue-600 uppercase transition-colors hover:bg-blue-200"
 					>
 						Добавить
 					</button>
@@ -190,14 +190,13 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
 	({ label, id, required, ...other }, forwardedRef) => (
 		<div className="flex flex-col">
 			<p className="space-x-1">
-				<label htmlFor={id}>{label}</label>
-				{required && <label>*</label>}
+				<label htmlFor={id}>{label + (required ? " *" : "")}</label>
 			</p>
 			<input
 				required={required}
 				ref={forwardedRef}
 				id={id}
-				className="w-full border px-2 py-1 rounded"
+				className="w-full rounded border px-2 py-1"
 				{...other}
 			/>
 		</div>
@@ -208,16 +207,16 @@ interface InputAreaProps extends ComponentPropsWithRef<"textarea"> {
 	label: string;
 }
 
-const InputArea = forwardRef<HTMLAreaElement, InputAreaProps>(
+const InputArea = forwardRef<HTMLTextAreaElement, InputAreaProps>(
 	({ label, id, ...other }, forwardedRef) => (
 		<div>
 			<label htmlFor={id}>{label}</label>
 			<textarea
 				ref={forwardedRef}
 				id={id}
-				className="w-full border px-2 py-1 rounded min-h-[2.125rem]"
+				className="min-h-[2.125rem] w-full rounded border px-2 py-1"
 				{...other}
-			></textarea>
+			/>
 		</div>
 	),
 );
@@ -234,7 +233,7 @@ const InputSelect = forwardRef<HTMLSelectElement, InputSelectProps>(
 			<select
 				ref={forwardedRef}
 				id={id}
-				className="w-full border px-2 py-1 rounded bg-white"
+				className="w-full rounded border bg-white px-2 py-1"
 				{...other}
 			>
 				{children}

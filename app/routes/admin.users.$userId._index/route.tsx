@@ -198,6 +198,7 @@ export default function UserRoute() {
 												{media.type === "image" ? (
 													<img src={media.url} alt={"media"} className="w-24" />
 												) : (
+													// biome-ignore lint/a11y/useMediaCaption: <explanation>
 													<video src={media.url} className="w-24" loop />
 												)}
 											</div>
@@ -210,7 +211,7 @@ export default function UserRoute() {
 						<p>Комментариев пока нет</p>
 					)}
 				</div>
-				<h2 className="mb-2 mt-8 font-medium">Оценки:</h2>
+				<h2 className="mt-8 mb-2 font-medium">Оценки:</h2>
 				{data.user.ratings.length > 0 ? (
 					data.user.ratings.map((rating) => {
 						const isPlace = rating.place !== null;

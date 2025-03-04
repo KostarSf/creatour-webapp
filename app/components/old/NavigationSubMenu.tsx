@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { NavLink } from "react-router-dom";
 import ChevronDownIcon from "./icons/ChevronDownIcon";
 
@@ -43,7 +43,7 @@ export default function NavigationSubMenu({
 				</p>
 			)}
 
-			<div className="nav-sub-menu white rounded bg-white px-4 md:absolute md:-left-2 md:hidden md:w-max md:p-2 md:shadow-lg">
+			<div className="nav-sub-menu white md:-left-2 rounded bg-white px-4 md:absolute md:hidden md:w-max md:p-2 md:shadow-lg">
 				{children}
 			</div>
 		</div>

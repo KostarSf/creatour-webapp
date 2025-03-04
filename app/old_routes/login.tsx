@@ -18,13 +18,13 @@ export const meta: MetaFunction = () => [
 
 function validateUsername(username: unknown) {
 	if (typeof username !== "string" || username.length < 3) {
-		return `Имя пользователя должно содержать как минимум 3 символа`;
+		return "Имя пользователя должно содержать как минимум 3 символа";
 	}
 }
 
 function validatePassword(password: unknown) {
 	if (typeof password !== "string" || password.length < 4) {
-		return `Пароль должен содержать как минимум 4 символа`;
+		return "Пароль должен содержать как минимум 4 символа";
 	}
 }
 
@@ -45,7 +45,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return badRequest({
 			fieldErrors: null,
 			fields: null,
-			formError: `Форма неверно отправлена.`,
+			formError: "Форма неверно отправлена.",
 		});
 	}
 
@@ -53,7 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		loginType,
 		username,
 		password,
-		role: typeof role == "string" ? role : "user",
+		role: typeof role === "string" ? role : "user",
 	};
 	const fieldErrors = {
 		username: validateUsername(username),
@@ -70,7 +70,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 				return badRequest({
 					fieldErrors: null,
 					fields,
-					formError: `Логин или пароль неверны.`,
+					formError: "Логин или пароль неверны.",
 				});
 			}
 			return createUserSession(user.id, redirectTo);
@@ -89,7 +89,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 				return badRequest({
 					fieldErrors: null,
 					fields,
-					formError: `Что-то пошло не так при создании пользователя.`,
+					formError: "Что-то пошло не так при создании пользователя.",
 				});
 			}
 			await db.user.update({
@@ -102,7 +102,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			return badRequest({
 				fieldErrors: null,
 				fields,
-				formError: `Неверный тип логина.`,
+				formError: "Неверный тип логина.",
 			});
 		}
 	}
@@ -156,7 +156,7 @@ export default function Login() {
 						<div className="mb-4 w-60">
 							<label
 								htmlFor="role-input"
-								className="block text-sm font-semibold text-slate-700"
+								className="block font-semibold text-slate-700 text-sm"
 							>
 								Тип аккаунта
 							</label>
@@ -176,7 +176,7 @@ export default function Login() {
 					<div className="w-60">
 						<label
 							htmlFor="username-input"
-							className="block text-sm font-semibold text-slate-700"
+							className="block font-semibold text-slate-700 text-sm"
 						>
 							Имя пользователя
 						</label>
@@ -193,7 +193,7 @@ export default function Login() {
 						/>
 						{actionData?.fieldErrors?.username ? (
 							<p
-								className="text-sm font-semibold text-red-700"
+								className="font-semibold text-red-700 text-sm"
 								role="alert"
 								id="username-error"
 							>
@@ -204,7 +204,7 @@ export default function Login() {
 					<div className="mt-4 w-60">
 						<label
 							htmlFor="password-input"
-							className="block text-sm font-semibold text-slate-700"
+							className="block font-semibold text-slate-700 text-sm"
 						>
 							Пароль
 						</label>
@@ -221,7 +221,7 @@ export default function Login() {
 						/>
 						{actionData?.fieldErrors?.password ? (
 							<p
-								className="text-sm font-semibold text-red-700"
+								className="font-semibold text-red-700 text-sm"
 								role="alert"
 								id="password-error"
 							>
@@ -231,14 +231,14 @@ export default function Login() {
 					</div>
 					<div id="form-error-message">
 						{actionData?.formError ? (
-							<p className="text-sm font-semibold text-red-700" role="alert">
+							<p className="font-semibold text-red-700 text-sm" role="alert">
 								{actionData.formError}
 							</p>
 						) : null}
 					</div>
 					<button
 						type="submit"
-						className="mt-8 inline-block rounded bg-blue-600 px-4 py-1 text-center text-lg font-semibold text-white"
+						className="mt-8 inline-block rounded bg-blue-600 px-4 py-1 text-center font-semibold text-lg text-white"
 					>
 						Отправить
 					</button>

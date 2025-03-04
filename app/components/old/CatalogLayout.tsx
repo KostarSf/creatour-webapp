@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 
 export default function CatalogLayout({
 	children,
@@ -13,7 +13,7 @@ export default function CatalogLayout({
 				{children}
 			</div>
 			{sideBlock ? (
-				<div className="border-t border-slate-100 shadow md:border-none md:shadow-none ">
+				<div className="border-slate-100 border-t shadow md:border-none md:shadow-none ">
 					<div className="box-content p-4 md:sticky md:top-14 md:w-60 lg:top-16 lg:w-72">
 						{sideBlock}
 					</div>

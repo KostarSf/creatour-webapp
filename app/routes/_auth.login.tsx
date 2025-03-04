@@ -41,7 +41,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	if (typeof email !== "string" || typeof password !== "string") {
 		return badRequest({
 			fields: null,
-			formError: `Форма неверно отправлена.`,
+			formError: "Форма неверно отправлена.",
 		});
 	}
 
@@ -55,7 +55,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	if (!user) {
 		return badRequest({
 			fields,
-			formError: `Логин или пароль неверны.`,
+			formError: "Логин или пароль неверны.",
 		});
 	}
 
@@ -68,11 +68,11 @@ export default function LoginRoute() {
 
 	return (
 		<>
-			<div className="my-12 md:my-16 text-center md:text-left">
-				<p className="text-3xl/relaxed md:text-4xl/relaxed font-medium tracking-widest">
+			<div className="my-12 text-center md:my-16 md:text-left">
+				<p className="font-medium text-3xl/relaxed tracking-widest md:text-4xl/relaxed">
 					Мы скучали!
 				</p>
-				<p className="md:text-lg leading-relaxed text-gray-800">
+				<p className="text-gray-800 leading-relaxed md:text-lg">
 					Войдите, чтобы продолжить
 				</p>
 			</div>
@@ -82,7 +82,7 @@ export default function LoginRoute() {
 					name="redirectTo"
 					value={searchParams.get("redirectTo") ?? undefined}
 				/>
-				<div className="group relative w-full rounded-md overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
+				<div className="group relative w-full overflow-hidden rounded-md border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
 					<input
 						type="text"
 						name="email"
@@ -92,7 +92,7 @@ export default function LoginRoute() {
 						required
 					/>
 				</div>
-				<div className="group relative mt-2 w-full rounded-md overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
+				<div className="group relative mt-2 w-full overflow-hidden rounded-md border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
 					<input
 						type="password"
 						name="password"
@@ -102,7 +102,7 @@ export default function LoginRoute() {
 						required
 					/>
 				</div>
-				<div className="mt-12 md:mt-8 flex flex-wrap justify-between gap-2">
+				<div className="mt-12 flex flex-wrap justify-between gap-2 md:mt-8">
 					<div className="flex gap-2 align-middle">
 						<input
 							type="checkbox"
@@ -111,7 +111,7 @@ export default function LoginRoute() {
 							className="cursor-pointer"
 							defaultChecked={actionData?.fields?.remember}
 						/>
-						<label htmlFor="remember" className="select-none cursor-pointer">
+						<label htmlFor="remember" className="cursor-pointer select-none">
 							Запомнить меня
 						</label>
 					</div>
@@ -122,7 +122,7 @@ export default function LoginRoute() {
             Забыли пароль?
           </Link> */}
 				</div>
-				<div className="mt-4 md:mt-12 text-center md:text-left">
+				<div className="mt-4 text-center md:mt-12 md:text-left">
 					<button
 						type="submit"
 						className="w-full rounded-md bg-blue-500 px-14 py-3 font-medium text-white transition-colors hover:bg-blue-600 md:w-auto"
@@ -130,7 +130,7 @@ export default function LoginRoute() {
 						Войти
 					</button>
 					{actionData?.formError ? (
-						<p className="text-sm font-semibold text-red-700 mt-2" role="alert">
+						<p className="mt-2 font-semibold text-red-700 text-sm" role="alert">
 							{actionData.formError}
 						</p>
 					) : null}

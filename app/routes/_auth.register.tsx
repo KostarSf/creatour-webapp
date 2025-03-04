@@ -33,25 +33,25 @@ function validateRole(role: unknown) {
 		role !== "creator" &&
 		role !== "admin"
 	) {
-		return `Роль указана неверно`;
+		return "Роль указана неверно";
 	}
 }
 
 function validateUsername(username: unknown) {
 	if (typeof username !== "string" || username.length < 3) {
-		return `Имя должно содержать как минимум 3 символа`;
+		return "Имя должно содержать как минимум 3 символа";
 	}
 }
 
 function validateEmail(email: unknown) {
 	if (typeof email !== "string" || email.length < 3 || !email.includes("@")) {
-		return `Неправильный Email адрес`;
+		return "Неправильный Email адрес";
 	}
 }
 
 function validatePassword(password: unknown) {
 	if (typeof password !== "string" || password.length < 4) {
-		return `Пароль должен содержать как минимум 4 символа`;
+		return "Пароль должен содержать как минимум 4 символа";
 	}
 }
 
@@ -73,7 +73,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return badRequest({
 			fieldErrors: null,
 			fields: null,
-			formError: `Форма неверно отправлена.`,
+			formError: "Форма неверно отправлена.",
 		});
 	}
 
@@ -98,7 +98,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return badRequest({
 			fieldErrors: null,
 			fields,
-			formError: `Такой Email уже занят`,
+			formError: "Такой Email уже занят",
 		});
 	}
 	const user = await register({ username, email, password, role });
@@ -106,7 +106,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return badRequest({
 			fieldErrors: null,
 			fields,
-			formError: `Что-то пошло не так при создании пользователя.`,
+			formError: "Что-то пошло не так при создании пользователя.",
 		});
 	}
 	return createUserSession(user.id, true, redirectTo);
@@ -118,11 +118,11 @@ export default function LoginRoute() {
 
 	return (
 		<>
-			<div className="my-12 md:my-16 text-center md:text-left">
-				<p className="text-2xl md:text-3xl/relaxed font-medium tracking-widest">
+			<div className="my-12 text-center md:my-16 md:text-left">
+				<p className="font-medium text-2xl tracking-widest md:text-3xl/relaxed">
 					Добро пожаловать!
 				</p>
-				<p className="md:text-lg leading-relaxed text-gray-800">
+				<p className="text-gray-800 leading-relaxed md:text-lg">
 					Зарегистрируйтесь и начните <br /> открывать новые направления!
 				</p>
 			</div>
@@ -134,7 +134,7 @@ export default function LoginRoute() {
 				/>
 				<div className="group relative w-full overflow-hidden rounded-md border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
 					<select
-						className="w-full px-4 py-3 outline-none bg-white"
+						className="w-full bg-white px-4 py-3 outline-none"
 						name="role"
 						required
 						defaultValue={actionData?.fields?.role}
@@ -151,7 +151,7 @@ export default function LoginRoute() {
 				{actionData?.fieldErrors?.role ? (
 					<p
 						id="role-error"
-						className="text-red-700 px-4 font-medium mt-1 mb-4 text-sm"
+						className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm"
 					>
 						{actionData.fieldErrors.role}
 					</p>
@@ -173,12 +173,12 @@ export default function LoginRoute() {
 				{actionData?.fieldErrors?.username ? (
 					<p
 						id="username-error"
-						className="text-red-700 px-4 font-medium mt-1 mb-4 text-sm"
+						className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm"
 					>
 						{actionData.fieldErrors.username}
 					</p>
 				) : null}
-				<div className="group relative mt-2 w-full rounded-md overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
+				<div className="group relative mt-2 w-full overflow-hidden rounded-md border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
 					<input
 						type="email"
 						name="email"
@@ -195,12 +195,12 @@ export default function LoginRoute() {
 				{actionData?.fieldErrors?.email ? (
 					<p
 						id="email-error"
-						className="text-red-700 px-4 font-medium mt-1 mb-4 text-sm"
+						className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm"
 					>
 						{actionData.fieldErrors.email}
 					</p>
 				) : null}
-				<div className="group relative mt-2 w-full rounded-md overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
+				<div className="group relative mt-2 w-full overflow-hidden rounded-md border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
 					<input
 						type="password"
 						name="password"
@@ -217,12 +217,12 @@ export default function LoginRoute() {
 				{actionData?.fieldErrors?.password ? (
 					<p
 						id="password-error"
-						className="text-red-700 px-4 font-medium mt-1 mb-4 text-sm"
+						className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm"
 					>
 						{actionData.fieldErrors.password}
 					</p>
 				) : null}
-				<div className="mt-4 md:mt-12 text-center md:text-left">
+				<div className="mt-4 text-center md:mt-12 md:text-left">
 					<button
 						type="submit"
 						className="w-full rounded-md bg-blue-500 px-14 py-3 font-medium text-white transition-colors hover:bg-blue-600 md:w-auto"
@@ -230,7 +230,7 @@ export default function LoginRoute() {
 						Зарегистрироваться
 					</button>
 					{actionData?.formError ? (
-						<p className="text-sm font-semibold text-red-700 mt-2" role="alert">
+						<p className="mt-2 font-semibold text-red-700 text-sm" role="alert">
 							{actionData.formError}
 						</p>
 					) : null}

@@ -22,7 +22,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return badRequest({
 			fieldErrors: null,
 			fields: null,
-			formError: `Форма неверно отправлена.`,
+			formError: "Форма неверно отправлена.",
 		});
 	}
 
@@ -40,7 +40,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			fields,
 			formError: sameUsername
 				? `Имя пользователя ${username} занято. `
-				: "" + sameEmail
+				: `${sameEmail}`
 					? `Электронная почта ${email} занята. `
 					: "",
 		});
@@ -51,13 +51,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	});
 	if (user) {
 		return redirect(`/admin/users/${user.id}`);
-	} else {
-		return badRequest({
-			fieldErrors: null,
-			fields,
-			formError: `Что-то пошло не так`,
-		});
 	}
+	return badRequest({
+		fieldErrors: null,
+		fields,
+		formError: "Что-то пошло не так",
+	});
 };
 
 export default function NewUser() {

@@ -13,7 +13,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return badRequest({
 			fieldErrors: null,
 			fields: null,
-			formError: `Форма неверно отправлена.`,
+			formError: "Форма неверно отправлена.",
 		});
 	}
 
@@ -27,7 +27,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return badRequest({
 			fieldErrors: null,
 			fields,
-			formError: `Такой тег уже существует. `,
+			formError: "Такой тег уже существует. ",
 		});
 	}
 	const tag = await db.tag.create({
@@ -35,13 +35,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	});
 	if (tag) {
 		return redirect(`/admin/tags/${tag.id}`);
-	} else {
-		return badRequest({
-			fieldErrors: null,
-			fields,
-			formError: `Что-то пошло не так`,
-		});
 	}
+	return badRequest({
+		fieldErrors: null,
+		fields,
+		formError: "Что-то пошло не так",
+	});
 };
 
 export default function NewTag() {

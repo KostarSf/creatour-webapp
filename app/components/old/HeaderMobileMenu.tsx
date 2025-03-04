@@ -1,8 +1,8 @@
 import React from "react";
 import HeaderNavigation from "./HeaderNavigation";
+import SearchBlock from "./SearchBlock";
 import CloseIcon from "./icons/CloseIcon";
 import MobileMenuIcon from "./icons/MobileMenuIcon";
-import SearchBlock from "./SearchBlock";
 
 export default function HeaderMobileMenu() {
 	const mobileMenuBtnRef = React.useRef<HTMLInputElement>(null);
@@ -23,7 +23,6 @@ export default function HeaderMobileMenu() {
 						</div>
 						<label
 							className="-mr-3 block cursor-pointer rounded bg-slate-100 p-3 text-slate-500"
-							tabIndex={0}
 							htmlFor="mobile-menu-switcher"
 						>
 							<CloseIcon />
@@ -41,11 +40,10 @@ export default function HeaderMobileMenu() {
 						</div>
 					</div>
 				</div>
-				<label htmlFor="mobile-menu-switcher" className="block flex-1"></label>
+				<label htmlFor="mobile-menu-switcher" className="block flex-1" />
 			</div>
 			<label
 				className="-mr-3 block cursor-pointer rounded p-3 text-slate-500"
-				tabIndex={0}
 				htmlFor="mobile-menu-switcher"
 			>
 				<MobileMenuIcon />

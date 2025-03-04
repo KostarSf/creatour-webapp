@@ -1,4 +1,4 @@
-import type { Media, Rating, User, Comment } from "@prisma/client";
+import type { Comment, Media, Rating, User } from "@prisma/client";
 import RatingBar from "./RatingBar";
 
 export default function CommentItem({
@@ -14,18 +14,18 @@ export default function CommentItem({
 	return (
 		<div>
 			<div className="flex items-start gap-4">
-				<div className="w-10 h-10 rounded-full mt-1 overflow-hidden bg-slate-300 shrink-0">
+				<div className="mt-1 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-slate-300">
 					{comment.user.avatar && (
 						<img
 							src={comment.user.avatar}
 							alt=""
-							className="w-full h-full object-cover object-center"
+							className="h-full w-full object-cover object-center"
 						/>
 					)}
 				</div>
 				<div className="flex-1">
-					<div className="flex items-baseline gap-2 justify-between md:justify-start md:gap-12">
-						<p className="text-lg/none font-medium">{comment.user.username}</p>
+					<div className="flex items-baseline justify-between gap-2 md:justify-start md:gap-12">
+						<p className="font-medium text-lg/none">{comment.user.username}</p>
 						<p className="text-slate-500">
 							{new Date(comment.createdAt).toLocaleString("ru-ru", {
 								day: "numeric",
@@ -49,7 +49,7 @@ export default function CommentItem({
 								src={image.url}
 								alt={image.url}
 								key={image.id}
-								className="w-24 h-24 rounded mt-2 object-cover"
+								className="mt-2 h-24 w-24 rounded object-cover"
 							/>
 						))}
 					</div>

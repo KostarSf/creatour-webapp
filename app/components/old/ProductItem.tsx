@@ -24,17 +24,17 @@ export default function ProjectItem({
 				className="block h-14 w-24 shrink-0 rounded object-cover md:h-28 md:w-48"
 			/>
 			<div>
-				<h2 className="text-2xl font-semibold leading-none hover:text-blue-600 md:mb-3">
+				<h2 className="font-semibold text-2xl leading-none hover:text-blue-600 md:mb-3">
 					{name}
 				</h2>
 				<p className="md:mb-2">{short}</p>
 				<div className="flex flex-col justify-between sm:flex-row sm:items-center">
 					<div>
-						<p className="text-sm font-semibold ">
+						<p className="font-semibold text-sm ">
 							{ProductTypeToLocalizedString(type)}
 						</p>
 						<p className="text-sm">
-							Рейтинг: {isNaN(rating) ? "Оценок пока нет" : rating}
+							Рейтинг: {Number.isNaN(rating) ? "Оценок пока нет" : rating}
 						</p>
 					</div>
 				</div>

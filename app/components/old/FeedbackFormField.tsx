@@ -15,8 +15,8 @@ export default function FeedbackFormField({
 		<>
 			{caption ? (
 				<label
-					htmlFor={"feedbackForm_" + name}
-					className="mt-3 px-2 text-sm font-semibold text-slate-500"
+					htmlFor={`feedbackForm_${name}`}
+					className="mt-3 px-2 font-semibold text-slate-500 text-sm"
 				>
 					{caption}
 				</label>
@@ -24,8 +24,8 @@ export default function FeedbackFormField({
 			<input
 				type={type}
 				name={name}
-				id={"feedbackForm_" + name}
-				className={"rounded border px-2 py-1" + (!caption ? " mt-3" : "")}
+				id={`feedbackForm_${name}`}
+				className={`rounded border px-2 py-1 ${!caption ? "mt-3" : ""}`}
 				required={required}
 				placeholder={placeholder}
 			/>

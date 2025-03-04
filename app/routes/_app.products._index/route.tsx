@@ -12,7 +12,7 @@ import { badRequest } from "~/utils/request.server";
 import { getUserId, requireUserId } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => [
-	{ title: `Календарь мероприятий | Креатур` },
+	{ title: "Календарь мероприятий | Креатур" },
 ];
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -92,9 +92,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		return json({
 			error: null,
 		});
-	} else {
-		return redirect(redirectTo);
 	}
+	return redirect(redirectTo);
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -139,11 +138,11 @@ export default function ProductsCatalog() {
 			</div>
 			<div className="my-6 md:my-12">
 				{products.length === 0 ? (
-					<p className="text-center mt-24 text-xl text-slate-400">
+					<p className="mt-24 text-center text-slate-400 text-xl">
 						Каталог пока что пуст! Зайдите позже
 					</p>
 				) : (
-					<div className="space-y-6 mt-6 md:mt-12 -mx-6 md:mx-auto max-w-7xl">
+					<div className="-mx-6 mt-6 max-w-7xl space-y-6 md:mx-auto md:mt-12">
 						{products.map((product) => (
 							<ProductCard
 								type="product"

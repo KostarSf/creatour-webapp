@@ -1,17 +1,17 @@
 import type { Place, Product, RoutePoint } from "@prisma/client";
 import { Form, Link } from "@remix-run/react";
 import clsx from "clsx";
-import { NoImageIcon } from "./NoImageIcon";
-import CardDate from "./CardDate";
 import type { ReactNode } from "react";
+import CardDate from "./CardDate";
+import { NoImageIcon } from "./NoImageIcon";
 
-export function ProductCard({
+export function ProductCard<TType extends CardType>({
 	type,
 	object,
 	buyed,
 	userId,
 	canBuy,
-}: CardProps & {
+}: CardProps<TType> & {
 	buyed?: boolean;
 	userId?: string;
 	canBuy: boolean;
@@ -21,7 +21,7 @@ export function ProductCard({
 			footer={
 				type === "product" ? (
 					<>
-						<div></div>
+						<div />
 						{userId ? (
 							<Form
 								method="POST"
@@ -40,15 +40,16 @@ export function ProductCard({
 								<input type="hidden" name="userId" value={userId} />
 								<input type="hidden" name="productId" value={object.id} />
 								<button
+									type="submit"
 									name="intent"
 									value="activate-product"
 									disabled={buyed || !canBuy}
 									className={clsx(
-										"uppercase px-6 py-2 rounded  font-medium transition-colors",
+										"rounded px-6 py-2 font-medium uppercase transition-colors",
 										canBuy
 											? !buyed
-												? "text-blue-600 hover:bg-blue-200 bg-blue-100"
-												: "text-green-600 bg-green-100"
+												? "bg-blue-100 text-blue-600 hover:bg-blue-200"
+												: "bg-green-100 text-green-600"
 											: "text-blue-600",
 									)}
 								>
@@ -56,7 +57,7 @@ export function ProductCard({
 										? "Приобретено"
 										: object.price === 0
 											? "Бесплатно"
-											: object.price + " ₽"}
+											: `${object.price} ₽`}
 								</button>
 							</Form>
 						) : null}
@@ -69,11 +70,11 @@ export function ProductCard({
 	);
 }
 
-export function ServiceProductCard({
+export function ServiceProductCard<TType extends CardType>({
 	type,
 	object,
 	usedIn,
-}: CardProps & {
+}: CardProps<TType> & {
 	usedIn?: RoutePoint &
 		{
 			product: Product;
@@ -91,21 +92,21 @@ export function ServiceProductCard({
 								name="intent"
 								value={`${type}-active-toggle`}
 								className={clsx(
-									"uppercase px-6 py-2 rounded  font-medium transition-colors",
+									"rounded px-6 py-2 font-medium uppercase transition-colors",
 									object.active
-										? "text-green-600 hover:bg-green-200 bg-green-100"
-										: "text-gray-600 hover:bg-gray-200 bg-gray-100",
+										? "bg-green-100 text-green-600 hover:bg-green-200"
+										: "bg-gray-100 text-gray-600 hover:bg-gray-200",
 								)}
 							>
 								{object.active ? "Активно" : "Неактивно"}
 							</button>
 						</Form>
 					) : (
-						<div></div>
+						<div />
 					)}
 					<Link
 						to={`/admin/${type}s/${object.id}/edit`}
-						className="uppercase px-6 py-2 rounded text-blue-600 font-medium hover:bg-blue-100 transition-colors"
+						className="rounded px-6 py-2 font-medium text-blue-600 uppercase transition-colors hover:bg-blue-100"
 					>
 						Изменить
 					</Link>
@@ -115,7 +116,7 @@ export function ServiceProductCard({
 				type === "product"
 					? object.price === 0
 						? "Бесплатно"
-						: object.price + " ₽"
+						: `${object.price} ₽`
 					: ""
 			}
 			type={type}
@@ -141,53 +142,55 @@ export function ServiceProductCard({
 	);
 }
 
-type CardProps =
-	| {
+type CardType = "place" | "product";
+
+type CardProps<TType extends CardType> = TType extends "place"
+	? {
 			type: "place";
 			object: Place;
-	  }
-	| {
+		}
+	: {
 			type: "product";
 			object: Product;
-	  };
+		};
 
-type CardBaseProps = CardProps & {
+type CardBaseProps<TType extends CardType> = CardProps<TType> & {
 	topLeftText?: string;
 	footer?: ReactNode;
 	children?: ReactNode;
 };
 
-function ProductCardBase({
+function ProductCardBase<TType extends CardType>({
 	type,
 	object,
 	topLeftText,
 	footer,
 	children,
-}: CardBaseProps) {
+}: CardBaseProps<TType>) {
 	return (
-		<div className="shadow md:rounded px-6 md:px-0 overflow-hidden flex flex-col lg:flex-row lg:items-stretch">
+		<div className="flex flex-col overflow-hidden px-6 shadow md:rounded md:px-0 lg:flex-row lg:items-stretch">
 			<Link
 				to={`/${type}s/${object.id}`}
-				className="bg-slate-300 h-48 lg:h-auto lg:w-[40%] -mx-6 md:mx-0 relative block text-white flex-shrink-0 md:rounded overflow-hidden"
+				className="-mx-6 relative block h-48 flex-shrink-0 overflow-hidden bg-slate-300 text-white md:mx-0 md:rounded lg:h-auto lg:w-[40%]"
 			>
 				{object.image ? (
 					<div className="absolute inset-0">
 						<img
-							src={`/images/${type}s/` + object.image}
+							src={`/images/${type}s/${object.image}`}
 							alt={object.name}
-							className="w-full h-full object-cover object-center"
+							className="h-full w-full object-cover object-center"
 						/>
 					</div>
 				) : (
-					<div className="w-full h-full grid place-items-center">
-						<NoImageIcon className="w-32 h-32 text-slate-100" />
+					<div className="grid h-full w-full place-items-center">
+						<NoImageIcon className="h-32 w-32 text-slate-100" />
 					</div>
 				)}
 				<div className="absolute inset-0 flex flex-col justify-between bg-black/10 p-6">
 					<div className="flex justify-between">
 						{type === "product" && (
 							<>
-								<div className="text-base/none uppercase font-medium">
+								<div className="font-medium text-base/none uppercase">
 									{topLeftText}
 								</div>
 								<div className="text-right">
@@ -208,11 +211,11 @@ function ProductCardBase({
 					</div>
 				</div>
 			</Link>
-			<div className="flex flex-col pb-6 gap-12 md:px-6 pt-3 flex-1 lg:min-h-[12rem]">
+			<div className="flex flex-1 flex-col gap-12 pt-3 pb-6 md:px-6 lg:min-h-[12rem]">
 				<div className="flex-1">
 					<Link
 						to={`/${type}s/${object.id}`}
-						className="font-serif text-2xl md:text-3xl font-bold"
+						className="font-bold font-serif text-2xl md:text-3xl"
 					>
 						{object.name}
 					</Link>
@@ -220,7 +223,7 @@ function ProductCardBase({
 					<div>{children}</div>
 				</div>
 				{footer && (
-					<div className="flex items-center justify-between flex-wrap gap-2">
+					<div className="flex flex-wrap items-center justify-between gap-2">
 						{footer}
 					</div>
 				)}
