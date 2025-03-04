@@ -1,4 +1,4 @@
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import type { CheckData } from "~/components/CheckTable";
@@ -6,11 +6,11 @@ import CheckTable from "~/components/CheckTable";
 import { db } from "~/utils/db.server";
 import { getUserId } from "~/utils/session.server";
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
 	{ title: `Продажи ваших турпродуктов | Креатур` },
 ];
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const userId = await getUserId(request);
 	if (!userId) throw redirect("/");
 

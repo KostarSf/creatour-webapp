@@ -1,11 +1,10 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Response } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 
-export const action = async ({ params, request }: ActionArgs) => {
+export const action = async ({ params, request }: ActionFunctionArgs) => {
 	const form = await request.formData();
 	if (form.get("intent") !== "delete") {
 		throw new Response(`Действие ${form.get("intent")} не поддерживается`, {
@@ -24,7 +23,7 @@ export const action = async ({ params, request }: ActionArgs) => {
 	return redirect("/admin/tags");
 };
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const tag = await db.tag.findUnique({
 		where: { id: params.tagId },
 	});

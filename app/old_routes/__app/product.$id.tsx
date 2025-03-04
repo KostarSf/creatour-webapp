@@ -1,6 +1,5 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Response } from "@remix-run/node";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import SideButtonLink from "~/components/SideButtonLink";
 import { db } from "~/utils/db.server";
@@ -13,7 +12,7 @@ function validateComment(comment: string) {
 	}
 }
 
-export async function loader({ params, request }: LoaderArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
 	const product = await db.product.findUnique({
 		where: { id: params.id },
 		include: {
@@ -53,7 +52,7 @@ export async function loader({ params, request }: LoaderArgs) {
 	});
 }
 
-export async function action({ params, request }: ActionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request);
 
 	const form = await request.formData();

@@ -1,17 +1,17 @@
-import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
-import { json, redirect, type LoaderArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import { type LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { logout, requireUserId } from "~/utils/session.server";
-import UserCard from "./UserCard";
 import NextEventBanner from "./NextEventBanner";
+import UserCard from "./UserCard";
 
-export const meta: V2_MetaFunction<typeof loader> = ({ data }) => [
+export const meta: MetaFunction<typeof loader> = ({ data }) => [
 	{ title: `${data.user.username} | Личный кабинет` },
 ];
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
 	const user = await db.user.findUnique({ where: { id: userId } });
 	if (!user || user.role !== "user") {
@@ -51,7 +51,7 @@ export const action = async ({ request }: ActionArgs) => {
 	});
 };
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const userId = await requireUserId(request);
 	const user = await db.user.findUnique({ where: { id: userId } });
 

@@ -1,23 +1,25 @@
 import cuid2 from "@paralleldrive/cuid2";
-import type { ActionArgs } from "@remix-run/node";
-import { unstable_parseMultipartFormData } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
+import {
+	unstable_createFileUploadHandler,
+	unstable_parseMultipartFormData,
+} from "@remix-run/node";
 import {
 	unstable_composeUploadHandlers,
 	unstable_createMemoryUploadHandler,
 } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { createFileUploadHandler } from "@remix-run/node/dist/upload/fileUploadHandler";
 import { unlink } from "fs/promises";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
 	if (request.method === "POST") {
 		let mediaName = "";
 		let mediaType = "";
 
 		const uploadHandler = unstable_composeUploadHandlers(
-			createFileUploadHandler({
+			unstable_createFileUploadHandler({
 				directory: "public/media",
 				avoidFileConflicts: true,
 				file: ({ filename }) => {

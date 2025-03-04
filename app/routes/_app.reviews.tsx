@@ -6,16 +6,16 @@ import type {
 	Rating,
 	User,
 } from "@prisma/client";
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import CommentItem from "~/components/CommentItem";
 import RatingBar from "~/components/RatingBar";
 import { db } from "~/utils/db.server";
 
-export const meta: V2_MetaFunction = () => [{ title: `Наши отзывы | Креатур` }];
+export const meta: MetaFunction = () => [{ title: `Наши отзывы | Креатур` }];
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
 	// const placesPromise = db.place.findMany({
 	//   where: { active: true },
 	//   include: {

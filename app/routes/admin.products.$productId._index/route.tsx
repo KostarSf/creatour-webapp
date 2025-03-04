@@ -1,11 +1,10 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Response } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 
-export const action = async ({ params, request }: ActionArgs) => {
+export const action = async ({ params, request }: ActionFunctionArgs) => {
 	const form = await request.formData();
 	const intent = form.get("intent");
 
@@ -109,7 +108,7 @@ export const action = async ({ params, request }: ActionArgs) => {
 	}
 };
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const product = await db.product.findUnique({
 		where: { id: params.productId },
 		include: {
@@ -150,7 +149,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
 };
 
 function getLocalDate(date: Date) {
-	let localDate = new Date(date);
+	const localDate = new Date(date);
 	localDate.setMinutes(localDate.getMinutes() - localDate.getTimezoneOffset());
 	return localDate.toISOString().slice(0, 16);
 }

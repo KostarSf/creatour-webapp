@@ -1,9 +1,9 @@
-import type { ActionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
 	const form = await request.formData();
 
 	const redirectTo = form.get("redirectTo");

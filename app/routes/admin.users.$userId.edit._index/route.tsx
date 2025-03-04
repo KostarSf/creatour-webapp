@@ -1,13 +1,12 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
-import { Response } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
+import bcrypt from "bcryptjs";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import bcrypt from "bcryptjs";
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
 	const form = await request.formData();
 
 	const id = form.get("id");
@@ -92,7 +91,7 @@ export const action = async ({ request }: ActionArgs) => {
 	return redirect(`/admin/users/${id}`);
 };
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const user = await db.user.findUnique({ where: { id: params.userId } });
 	if (!user) {
 		throw new Response("Пользователь не найден", { status: 404 });

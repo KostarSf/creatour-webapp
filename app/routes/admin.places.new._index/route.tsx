@@ -1,11 +1,11 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { useActionData, useLoaderData } from "@remix-run/react";
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
 	const form = await request.formData();
 
 	const name = form.get("name");
@@ -57,7 +57,7 @@ export const action = async ({ request }: ActionArgs) => {
 	}
 };
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const placeowners = await db.user.findMany({ where: { role: "placeowner" } });
 	return json({ placeowners });
 };

@@ -1,11 +1,11 @@
-import type { LoaderArgs } from "@remix-run/node";
-import { redirect, Response } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { Link, NavLink, Outlet } from "@remix-run/react";
 import type { CSSProperties } from "react";
 import { db } from "~/utils/db.server";
 import { requireUserId } from "~/utils/session.server";
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const userId = await requireUserId(request);
 	const user = await db.user.findUnique({ where: { id: userId } });
 	if (!user || user.role === "user") {

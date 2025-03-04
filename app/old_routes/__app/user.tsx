@@ -1,11 +1,11 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import CatalogLayout from "~/components/CatalogLayout";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
 	const userData = await getUser(request);
 	if (!userData) {
 		throw redirect("/login");
