@@ -1,4 +1,4 @@
-import type { ActionArgs, LinksFunction, MetaFunction } from "@remix-run/node";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useActionData, useSearchParams } from "@remix-run/react";
 
 import { db } from "~/utils/db.server";
@@ -7,11 +7,14 @@ import { createUserSession, login, register } from "~/utils/session.server";
 
 import { useState } from "react";
 
-export const meta: MetaFunction = () => ({
-	description:
-		"Войдите в систему, чтобы иметь возможность приобретать турпродукты!",
-	title: "Креатур | Вход",
-});
+export const meta: MetaFunction = () => [
+	{ title: "Креатур | Вход" },
+	{
+		name: "description",
+		content:
+			"Войдите в систему, чтобы иметь возможность приобретать турпродукты!",
+	},
+];
 
 function validateUsername(username: unknown) {
 	if (typeof username !== "string" || username.length < 3) {
@@ -25,7 +28,7 @@ function validatePassword(password: unknown) {
 	}
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
 	const form = await request.formData();
 	const loginType = form.get("loginType");
 	const role = form.get("role");

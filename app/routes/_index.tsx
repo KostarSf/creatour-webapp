@@ -1,11 +1,11 @@
 import { json } from "@remix-run/node";
-import type { V2_MetaFunction } from "@remix-run/react";
+import type { MetaFunction } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import { Link } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { useOptionalUser } from "~/utils/user";
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
 	{ title: `Добро пожаловать | Креатур` },
 	{
 		name: "description",

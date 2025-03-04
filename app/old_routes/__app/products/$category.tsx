@@ -1,11 +1,11 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import ProductItem from "~/components/ProductItem";
 import { db } from "~/utils/db.server";
 
-export async function loader({ params }: LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
 	const category = params.category;
 	if (!category) {
 		return redirect("/projects");

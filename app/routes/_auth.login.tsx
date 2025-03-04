@@ -1,10 +1,14 @@
-import { redirect, type ActionArgs, type LoaderArgs } from "@remix-run/node";
-import type { V2_MetaFunction } from "@remix-run/react";
+import {
+	type ActionFunctionArgs,
+	type LoaderFunctionArgs,
+	redirect,
+} from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/react";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { badRequest } from "~/utils/request.server";
 import { createUserSession, getUser, login } from "~/utils/session.server";
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
 	{ title: "Вход | Креатур" },
 	{
 		name: "description",
@@ -13,7 +17,7 @@ export const meta: V2_MetaFunction = () => [
 	},
 ];
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const url = new URL(request.url);
 	const redirectTo = url.searchParams.get("redirectTo") ?? "/user";
 
@@ -25,7 +29,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 	return {};
 };
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
 	const formData = await request.formData();
 
 	const email = formData.get("email");

@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
@@ -11,7 +11,7 @@ function validateComment(comment: string) {
 	}
 }
 
-export async function loader({ params, request }: LoaderArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
 	const place = await db.place.findUnique({
 		where: { id: params.id },
 		include: {
@@ -38,7 +38,7 @@ export async function loader({ params, request }: LoaderArgs) {
 	});
 }
 
-export async function action({ params, request }: ActionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
 	const userId = await requireUserId(request);
 
 	const form = await request.formData();

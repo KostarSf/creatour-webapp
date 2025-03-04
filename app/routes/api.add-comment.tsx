@@ -1,12 +1,12 @@
-import type { ActionArgs } from "@remix-run/node";
+import cuid2 from "@paralleldrive/cuid2";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import {
 	unstable_composeUploadHandlers,
+	unstable_createFileUploadHandler,
 	unstable_createMemoryUploadHandler,
 	unstable_parseMultipartFormData,
 } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { createFileUploadHandler } from "@remix-run/node/dist/upload/fileUploadHandler";
-import cuid2 from "@paralleldrive/cuid2";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 
@@ -15,11 +15,11 @@ type Media = {
 	type: "image" | "video";
 };
 
-export const action = async ({ request }: ActionArgs) => {
-	let mediafiles: Media[] = [];
+export const action = async ({ request }: ActionFunctionArgs) => {
+	const mediafiles: Media[] = [];
 
 	const uploadHandler = unstable_composeUploadHandlers(
-		createFileUploadHandler({
+		unstable_createFileUploadHandler({
 			directory: "public/media",
 			avoidFileConflicts: true,
 			file: ({ filename }) => {

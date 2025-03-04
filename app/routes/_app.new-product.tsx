@@ -1,4 +1,8 @@
-import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type {
+	ActionFunctionArgs,
+	LoaderFunctionArgs,
+	MetaFunction,
+} from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
@@ -9,11 +13,11 @@ import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { requireUserId } from "~/utils/session.server";
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
 	{ title: `Добавление нового турпродукта | Креатур` },
 ];
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
 	const user = await db.user.findUnique({ where: { id: userId } });
 	if (!user || user.role !== "creator") {
@@ -84,7 +88,7 @@ export const action = async ({ request }: ActionArgs) => {
 	throw redirect("/creator");
 };
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const userId = await requireUserId(request);
 
 	const user = await db.user.findUnique({ where: { id: userId } });

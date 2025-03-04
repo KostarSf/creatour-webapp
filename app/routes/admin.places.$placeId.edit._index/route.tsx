@@ -1,22 +1,21 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import {
 	unstable_composeUploadHandlers,
+	unstable_createFileUploadHandler,
 	unstable_createMemoryUploadHandler,
 } from "@remix-run/node";
 import { unstable_parseMultipartFormData } from "@remix-run/node";
-import { Response } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { createFileUploadHandler } from "@remix-run/node/dist/upload/fileUploadHandler";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 
-export const action = async ({ params, request }: ActionArgs) => {
+export const action = async ({ params, request }: ActionFunctionArgs) => {
 	let imageName = "";
 
 	const uploadHandler = unstable_composeUploadHandlers(
-		createFileUploadHandler({
+		unstable_createFileUploadHandler({
 			directory: "public/images/places",
 			avoidFileConflicts: false,
 			file: ({ filename }) => {
@@ -111,7 +110,7 @@ export const action = async ({ params, request }: ActionArgs) => {
 	return redirect(`/admin/places/${params.placeId}`);
 };
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const place = await db.place.findUnique({
 		where: { id: params.placeId },
 		include: { tags: true },

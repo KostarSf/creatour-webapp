@@ -1,18 +1,16 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import {
 	unstable_composeUploadHandlers,
 	unstable_createMemoryUploadHandler,
 } from "@remix-run/node";
 import { unstable_parseMultipartFormData } from "@remix-run/node";
-import { Response } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { createFileUploadHandler } from "@remix-run/node/dist/upload/fileUploadHandler";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 
-export const action = async ({ params, request }: ActionArgs) => {
+export const action = async ({ params, request }: ActionFunctionArgs) => {
 	const form = await request.formData();
 
 	const name = form.get("name");
@@ -50,7 +48,7 @@ export const action = async ({ params, request }: ActionArgs) => {
 	return redirect(`/admin/tags/${params.tagId}`);
 };
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const tag = await db.tag.findUnique({ where: { id: params.tagId } });
 	if (!tag) {
 		throw new Response("Тег не найден", { status: 404 });

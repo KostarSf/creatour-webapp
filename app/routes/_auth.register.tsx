@@ -1,12 +1,12 @@
-import type { LoaderArgs } from "@remix-run/node";
-import { redirect, type ActionArgs } from "@remix-run/node";
-import type { V2_MetaFunction } from "@remix-run/react";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { type ActionFunctionArgs, redirect } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/react";
 import { Form, useActionData, useSearchParams } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { createUserSession, getUser, register } from "~/utils/session.server";
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
 	{ title: "Регистрация | Креатур" },
 	{
 		name: "description",
@@ -14,7 +14,7 @@ export const meta: V2_MetaFunction = () => [
 	},
 ];
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const url = new URL(request.url);
 	const redirectTo = url.searchParams.get("redirectTo") ?? "/user";
 
@@ -55,7 +55,7 @@ function validatePassword(password: unknown) {
 	}
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
 	const formData = await request.formData();
 
 	const role = formData.get("role");
