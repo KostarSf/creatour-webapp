@@ -1,7 +1,7 @@
 import type { Place, Product, RoutePoint } from "@prisma/client";
-import { Form, Link } from "@remix-run/react";
 import clsx from "clsx";
 import type { ReactNode } from "react";
+import { Form, Link } from "react-router";
 import CardDate from "./CardDate";
 import { NoImageIcon } from "./NoImageIcon";
 

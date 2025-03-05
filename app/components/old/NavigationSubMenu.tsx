@@ -1,5 +1,5 @@
 import type React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 import ChevronDownIcon from "./icons/ChevronDownIcon";
 
 export default function NavigationSubMenu({

@@ -1,12 +1,5 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import {
-	Links,
-	LiveReload,
-	Meta,
-	Outlet,
-	Scripts,
-	ScrollRestoration,
-} from "@remix-run/react";
+import type { LoaderFunctionArgs } from "react-router";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import "~/tailwind.css";
 import { getUser } from "./utils/session.server";
 
@@ -27,7 +20,6 @@ export default function App() {
 				<Outlet />
 				<ScrollRestoration />
 				<Scripts />
-				<LiveReload />
 			</body>
 		</html>
 	);

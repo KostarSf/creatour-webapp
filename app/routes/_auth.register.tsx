@@ -1,7 +1,7 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { type ActionFunctionArgs, redirect } from "@remix-run/node";
-import type { MetaFunction } from "@remix-run/react";
-import { Form, useActionData, useSearchParams } from "@remix-run/react";
+import type { LoaderFunctionArgs } from "react-router";
+import { type ActionFunctionArgs, redirect } from "react-router";
+import type { MetaFunction } from "react-router";
+import { Form, useActionData, useSearchParams } from "react-router";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { createUserSession, getUser, register } from "~/utils/session.server";

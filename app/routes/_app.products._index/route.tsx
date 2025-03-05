@@ -2,9 +2,9 @@ import type {
 	ActionFunctionArgs,
 	LoaderFunctionArgs,
 	MetaFunction,
-} from "@remix-run/node";
-import { data, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+} from "react-router";
+import { data, redirect } from "react-router";
+import { useLoaderData } from "react-router";
 import { ProductCard } from "~/components/ProductCard";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";

@@ -1,6 +1,6 @@
-import type { FormMethod } from "@remix-run/react";
-import { Form } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+import type { FormMethod } from "react-router";
+import { Form } from "react-router";
 import CloseIcon from "./icons/CloseIcon";
 
 export default function FeedbackDialog({

@@ -1,7 +1,7 @@
 import type { User } from "@prisma/client";
-import { useFetcher } from "@remix-run/react";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { useFetcher } from "react-router";
 import type { UploadAvatarAction } from "~/routes/api.upload-avatar";
 import { InfoField } from "./InfoField";
 import { NoImageIcon } from "./NoImageIcon";

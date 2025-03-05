@@ -1,5 +1,5 @@
-import type { MetaFunction } from "@remix-run/react";
-import { Link, useLoaderData } from "@remix-run/react";
+import type { MetaFunction } from "react-router";
+import { Link, useLoaderData } from "react-router";
 import { db } from "~/utils/db.server";
 import { useOptionalUser } from "~/utils/user";
 

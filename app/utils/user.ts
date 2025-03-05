@@ -1,6 +1,6 @@
 import type { User } from "@prisma/client";
-import { useMatches } from "@remix-run/react";
 import { useMemo } from "react";
+import { useMatches } from "react-router";
 
 /**
  * This base hook is used in other hooks to quickly search for specific data

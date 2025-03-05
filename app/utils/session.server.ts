@@ -1,5 +1,5 @@
-import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import bcrypt from "bcryptjs";
+import { createCookieSessionStorage, redirect } from "react-router";
 
 import { db } from "./db.server";
 

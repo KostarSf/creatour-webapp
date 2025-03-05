@@ -1,7 +1,7 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
-import { Link, NavLink, Outlet } from "@remix-run/react";
 import type { CSSProperties } from "react";
+import type { LoaderFunctionArgs } from "react-router";
+import { redirect } from "react-router";
+import { Link, NavLink, Outlet } from "react-router";
 import { db } from "~/utils/db.server";
 import { requireUserId } from "~/utils/session.server";
 
