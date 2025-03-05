@@ -1,5 +1,4 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
@@ -30,12 +29,12 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 		.reduce((prev, cur) => prev + cur, 0);
 	const totalRatimg = Math.round((ratingsSum / ratingsCount) * 100) / 100;
 
-	return json({
+	return {
 		place: place,
 		user: user,
 		rating: totalRatimg,
 		url: request.url,
-	});
+	};
 }
 
 export async function action({ params, request }: ActionFunctionArgs) {
@@ -112,7 +111,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 		},
 	});
 
-	return json({
+	return {
 		fields: {
 			postId: postId,
 			text: "",
@@ -120,7 +119,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 		fieldErrors: {
 			text: null,
 		},
-	});
+	};
 }
 
 export default function PlacePage() {

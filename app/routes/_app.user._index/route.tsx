@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
-import { type LoaderFunctionArgs, json, redirect } from "@remix-run/node";
+import { type LoaderFunctionArgs, data, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
@@ -8,14 +8,14 @@ import NextEventBanner from "./NextEventBanner";
 import UserCard from "./UserCard";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => [
-	{ title: `${data.user.username} | Личный кабинет` },
+	{ title: `${data?.user.username ?? ""} | Личный кабинет` },
 ];
 
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
 	const user = await db.user.findUnique({ where: { id: userId } });
 	if (!user || user.role !== "user") {
-		return json(
+		return data(
 			{
 				error: "Некорректный пользователь",
 			},
@@ -30,7 +30,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		const { city, phone } = Object.fromEntries(formData);
 
 		if (typeof city !== "string" || typeof phone !== "string") {
-			throw json({ error: "Указаны неверные значения" }, { status: 400 });
+			throw data({ error: "Указаны неверные значения" }, { status: 400 });
 		}
 
 		await db.user.update({
@@ -46,9 +46,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		});
 	}
 
-	return json({
+	return {
 		error: null,
-	});
+	};
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

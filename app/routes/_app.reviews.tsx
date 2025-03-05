@@ -7,7 +7,6 @@ import type {
 	User,
 } from "@prisma/client";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import CommentItem from "~/components/CommentItem";
 import RatingBar from "~/components/RatingBar";
@@ -45,15 +44,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	// const [places, products] = await db.$transaction([placesPromise, productsPromise]);
 	const [products] = await db.$transaction([productsPromise]);
 
-	// return json({
+	// return {
 	//   places: places.filter((place) => place.comments.length > 0),
 	//   products: products.filter((product) => product.comments.length > 0),
-	// });
+	// };
 
-	return json({
+	return {
 		// places: places.filter((place) => place.comments.length > 0),
 		products: products.filter((product) => product.comments.length > 0),
-	});
+	};
 };
 
 export default function ReviewsPage() {

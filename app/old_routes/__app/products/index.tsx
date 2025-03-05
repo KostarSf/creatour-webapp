@@ -1,7 +1,6 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import ProductItem from "~/components/ProductItem";
+import ProductItem from "~/components/old/ProductItem";
 import { db } from "~/utils/db.server";
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -9,7 +8,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		include: { rating: true },
 		where: { active: true },
 	});
-	return json({ products });
+	return { products };
 }
 
 export default function AllProducts() {

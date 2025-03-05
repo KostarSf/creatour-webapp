@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import CatalogLayout from "~/components/old/CatalogLayout";
 import { db } from "~/utils/db.server";
@@ -29,7 +29,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		},
 	});
 	if (user) {
-		return json({ user, userData });
+		return { user, userData };
 	}
 	throw redirect("/login");
 }

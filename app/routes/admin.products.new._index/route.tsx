@@ -1,5 +1,4 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
@@ -61,7 +60,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const creators = await db.user.findMany({ where: { role: "creator" } });
-	return json({ creators });
+	return { creators };
 };
 
 export default function NewProduct() {

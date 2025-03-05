@@ -3,12 +3,10 @@ import type {
 	LoaderFunctionArgs,
 	MetaFunction,
 } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import type { ComponentPropsWithRef } from "react";
-import { useEffect } from "react";
-import { forwardRef } from "react";
+import { forwardRef, useEffect } from "react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { requireUserId } from "~/utils/session.server";
@@ -21,7 +19,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
 	const user = await db.user.findUnique({ where: { id: userId } });
 	if (!user || user.role !== "placeowner") {
-		return json(
+		return data(
 			{
 				error: "Некорректный пользователь",
 			},
@@ -73,7 +71,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const user = await db.user.findUnique({ where: { id: userId } });
 	if (!user || user.role !== "placeowner") throw redirect("/");
 
-	return json({ user });
+	return { user };
 };
 
 export default function NewPlacePage() {
@@ -166,7 +164,7 @@ interface InputAreaProps extends ComponentPropsWithRef<"textarea"> {
 	required?: boolean | undefined;
 }
 
-const InputArea = forwardRef<HTMLAreaElement, InputAreaProps>(
+const InputArea = forwardRef<HTMLTextAreaElement, InputAreaProps>(
 	({ label, id, ...other }, forwardedRef) => (
 		<div>
 			<label htmlFor={id}>{label}</label>

@@ -1,12 +1,11 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import {
+	redirect,
 	unstable_composeUploadHandlers,
 	unstable_createFileUploadHandler,
 	unstable_createMemoryUploadHandler,
+	unstable_parseMultipartFormData,
 } from "@remix-run/node";
-import { unstable_parseMultipartFormData } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
@@ -120,7 +119,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	}
 	const placeowners = await db.user.findMany({ where: { role: "placeowner" } });
 	const tags = place.tags.map((tag) => tag.name).join(", ");
-	return json({ place, placeowners, tags });
+	return { place, placeowners, tags };
 };
 
 export default function PlaceEditRoute() {

@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import type { CheckData } from "~/components/CheckTable";
 import CheckTable from "~/components/CheckTable";
@@ -39,7 +39,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 		date: check.createdAt.toJSON(),
 	}));
 
-	return json({ checks });
+	return { checks };
 };
 
 export default function UserChecksPage() {

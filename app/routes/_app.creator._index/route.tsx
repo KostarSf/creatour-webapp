@@ -3,7 +3,7 @@ import type {
 	LoaderFunctionArgs,
 	MetaFunction,
 } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import ActionLinkButton from "~/components/ActionLinkButton";
 import { ServiceProductCard } from "~/components/ProductCard";
@@ -13,14 +13,14 @@ import { badRequest } from "~/utils/request.server";
 import { logout, requireUserId } from "~/utils/session.server";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => [
-	{ title: `${data.user.username} | Личный кабинет` },
+	{ title: `${data?.user.username ?? ""} | Личный кабинет` },
 ];
 
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
 	const user = await db.user.findUnique({ where: { id: userId } });
 	if (!user || user.role !== "creator") {
-		return json(
+		return data(
 			{
 				error: "Некорректный пользователь",
 			},
@@ -42,7 +42,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			typeof inn !== "string" ||
 			typeof address !== "string"
 		) {
-			throw json({ error: "Указаны неверные значения" }, { status: 400 });
+			throw data({ error: "Указаны неверные значения" }, { status: 400 });
 		}
 
 		await db.user.update({
@@ -56,9 +56,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			},
 		});
 
-		return json({
+		return {
 			error: null,
-		});
+		};
 	}
 	if (intent === "product-active-toggle") {
 		const productId = formData.get("productId");
@@ -81,7 +81,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			data: { active: !product.active },
 		});
 
-		return json({ error: null });
+		return { error: null };
 	}
 
 	return badRequest({
@@ -113,7 +113,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 		},
 	});
 
-	return json({ user, product, checks });
+	return { user, product, checks };
 };
 
 export default function CreatorPage() {

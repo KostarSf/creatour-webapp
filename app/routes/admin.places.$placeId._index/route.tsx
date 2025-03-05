@@ -1,6 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 
@@ -49,11 +48,11 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const users = await db.user.findMany({
 		select: { id: true, username: true },
 	});
-	return json({
+	return {
 		place,
 		products,
 		users,
-	});
+	};
 };
 
 export default function PlaceRoute() {
