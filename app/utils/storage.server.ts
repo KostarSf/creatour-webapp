@@ -68,19 +68,19 @@ import { db } from "./db.server";
 //   }
 // }
 
-export const avatarsFileStorage = new LocalFileStorage("./public/avatars");
+export const avatarsFileStorage = new LocalFileStorage("./public/uploads/avatars");
 
-export const mediaFileStorage = new LocalFileStorage("./public/media");
+export const mediaFileStorage = new LocalFileStorage("./public/uploads/media");
 
 export const productsFileStorage = new LocalFileStorage(
-	"./public/images/products",
+	"./public/uploads/products",
 );
 
 export function getProductsStorageKey(productId: string, filename: string) {
 	return `${productId}.${filename.split(".").pop()}`;
 }
 
-export const placesFileStorage = new LocalFileStorage("./public/images/places");
+export const placesFileStorage = new LocalFileStorage("./public/uploads/places");
 
 export function getPlacesStorageKey(placeId: string, filename: string) {
 	return `${placeId}.${filename.split(".").pop()}`;

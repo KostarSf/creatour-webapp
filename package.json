@@ -4,7 +4,7 @@
 	"sideEffects": false,
 	"scripts": {
 		"build": "react-router build",
-		"dev": "react-router dev",
+		"dev": "react-router dev --host",
 		"start": "react-router-serve ./build/server/index.js",
 		"lint": "npx @biomejs/biome lint --write",
 		"format": "npx @biomejs/biome format --write",

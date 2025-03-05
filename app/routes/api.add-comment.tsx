@@ -4,7 +4,7 @@ import type { ActionFunctionArgs } from "react-router";
 import { redirect } from "react-router";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { mediaFileStorage } from "~/utils/storage";
+import { mediaFileStorage } from "~/utils/storage.server";
 
 type Media = {
 	name: string;

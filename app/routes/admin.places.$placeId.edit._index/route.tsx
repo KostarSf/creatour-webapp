@@ -9,7 +9,7 @@ import {
 } from "react-router";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { getPlacesStorageKey, placesFileStorage } from "~/utils/storage";
+import { getPlacesStorageKey, placesFileStorage } from "~/utils/storage.server";
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
 	let imageName = "";
