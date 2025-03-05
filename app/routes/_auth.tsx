@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet, useSearchParams } from "@remix-run/react";
+import { Link, NavLink, Outlet, useSearchParams } from "react-router";
 
 export default function AuthLayout() {
 	const [searchParams] = useSearchParams();

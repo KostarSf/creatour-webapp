@@ -1,6 +1,6 @@
 import type { Product } from "@prisma/client";
-import { Link } from "@remix-run/react";
 import clsx from "clsx";
+import { Link } from "react-router";
 import CardDate from "~/components/CardDate";
 
 type Props = {

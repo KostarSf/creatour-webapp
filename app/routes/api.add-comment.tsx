@@ -1,14 +1,10 @@
+import { type FileUpload, parseFormData } from "@mjackson/form-data-parser";
 import cuid2 from "@paralleldrive/cuid2";
-import type { ActionFunctionArgs } from "@remix-run/node";
-import {
-	unstable_composeUploadHandlers,
-	unstable_createFileUploadHandler,
-	unstable_createMemoryUploadHandler,
-	unstable_parseMultipartFormData,
-} from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import type { ActionFunctionArgs } from "react-router";
+import { redirect } from "react-router";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
+import { mediaFileStorage } from "~/utils/storage";
 
 type Media = {
 	name: string;
@@ -18,22 +14,16 @@ type Media = {
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const mediafiles: Media[] = [];
 
-	const uploadHandler = unstable_composeUploadHandlers(
-		unstable_createFileUploadHandler({
-			directory: "public/media",
-			avoidFileConflicts: true,
-			file: ({ filename }) => {
-				const ext = filename.split(".").pop();
-				const type = ext === "mp4" || ext === "webm" ? "video" : "image";
-				const newName = `${cuid2.createId()}.${ext}`;
-				mediafiles.push({ name: newName, type });
-				return newName;
-			},
-		}),
-		unstable_createMemoryUploadHandler(),
-	);
+	const uploadHandler = async (fileUpload: FileUpload) => {
+		const ext = fileUpload.name.split(".").pop();
+		const type = ext === "mp4" || ext === "webm" ? "video" : "image";
+		const storageKey = `${cuid2.createId()}.${ext}`;
+		await mediaFileStorage.set(storageKey, fileUpload);
+		mediafiles.push({ name: storageKey, type });
+		return mediaFileStorage.get(storageKey);
+	};
 
-	const form = await unstable_parseMultipartFormData(request, uploadHandler);
+	const form = await parseFormData(request, uploadHandler);
 
 	const redirectTo = form.get("redirectTo");
 	const parentType = form.get("parentType");

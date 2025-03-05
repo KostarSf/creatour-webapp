@@ -1,7 +1,7 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { data } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
 import clsx from "clsx";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
+import { data } from "react-router";
+import { Form, useLoaderData } from "react-router";
 import invariant from "tiny-invariant";
 import CardDate from "~/components/CardDate";
 import CommentItem from "~/components/CommentItem";

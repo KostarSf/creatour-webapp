@@ -1,4 +1,5 @@
-import { redirect } from "@remix-run/node";
+import { LocalFileStorage } from "@mjackson/file-storage/local";
+import { redirect } from "react-router";
 import { db } from "./db.server";
 
 // export async function GetAllProducts(): Promise<Product[]> {
@@ -66,3 +67,21 @@ import { db } from "./db.server";
 //       throw redirect("/products");
 //   }
 // }
+
+export const avatarsFileStorage = new LocalFileStorage("./public/avatars");
+
+export const mediaFileStorage = new LocalFileStorage("./public/media");
+
+export const productsFileStorage = new LocalFileStorage(
+	"./public/images/products",
+);
+
+export function getProductsStorageKey(productId: string, filename: string) {
+	return `${productId}.${filename.split(".").pop()}`;
+}
+
+export const placesFileStorage = new LocalFileStorage("./public/images/places");
+
+export function getPlacesStorageKey(placeId: string, filename: string) {
+	return `${placeId}.${filename.split(".").pop()}`;
+}

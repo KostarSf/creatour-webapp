@@ -1,31 +1,30 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { type FileUpload, parseFormData } from "@mjackson/form-data-parser";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import {
+	Form,
+	Link,
 	redirect,
-	unstable_composeUploadHandlers,
-	unstable_createFileUploadHandler,
-	unstable_createMemoryUploadHandler,
-	unstable_parseMultipartFormData,
-} from "@remix-run/node";
-import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
+	useActionData,
+	useLoaderData,
+} from "react-router";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
+import { getProductsStorageKey, placesFileStorage } from "~/utils/storage";
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
 	let imageName = "";
 
-	const uploadHandler = unstable_composeUploadHandlers(
-		unstable_createFileUploadHandler({
-			directory: "public/images/products",
-			avoidFileConflicts: false,
-			file: ({ filename }) => {
-				const productId = params.productId || "file";
-				imageName = `${productId}.${filename.split(".").pop()}` || filename;
-				return imageName;
-			},
-		}),
-		unstable_createMemoryUploadHandler(),
-	);
-	const form = await unstable_parseMultipartFormData(request, uploadHandler);
+	const uploadHandler = async (fileUpload: FileUpload) => {
+		const storageKey = getProductsStorageKey(
+			params.productId as string,
+			fileUpload.name,
+		);
+		await placesFileStorage.set(storageKey, fileUpload);
+		imageName = storageKey;
+		return placesFileStorage.get(storageKey);
+	};
+
+	const form = await parseFormData(request, uploadHandler);
 
 	const name = form.get("name");
 	const type = form.get("type");
