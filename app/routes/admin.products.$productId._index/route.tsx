@@ -1,6 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 
@@ -141,12 +140,12 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	const users = await db.user.findMany({
 		select: { id: true, username: true },
 	});
-	return json({
+	return {
 		product,
 		creator: creator ? { username: creator.username, id: creator.id } : null,
 		places,
 		users,
-	});
+	};
 };
 
 function getLocalDate(date: Date) {

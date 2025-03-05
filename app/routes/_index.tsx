@@ -1,7 +1,5 @@
-import { json } from "@remix-run/node";
 import type { MetaFunction } from "@remix-run/react";
-import { useLoaderData } from "@remix-run/react";
-import { Link } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { useOptionalUser } from "~/utils/user";
 
@@ -27,14 +25,14 @@ export const loader = async () => {
 		take: 3,
 	});
 
-	return json({
+	return {
 		cards: products.map((product) => ({
 			id: product.id,
 			name: product.name,
 			image: `images/products/${product.image}`,
 			link: `/products/${product.id}`,
 		})),
-	});
+	};
 };
 
 export default function LandingPage() {

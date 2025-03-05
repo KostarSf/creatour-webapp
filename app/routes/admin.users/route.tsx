@@ -1,11 +1,10 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const users = await db.user.findMany();
-	return json({ users });
+	return { users };
 };
 
 export default function UsersList() {

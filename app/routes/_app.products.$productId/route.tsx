@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { data } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import clsx from "clsx";
 import invariant from "tiny-invariant";
@@ -58,9 +58,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 		},
 	});
 
-	if (!product) throw json({}, { status: 404 });
+	if (!product) {
+		throw data({}, { status: 404 });
+	}
 
-	return json({ product, user });
+	return { product, user };
 };
 
 export default function ProductPage() {

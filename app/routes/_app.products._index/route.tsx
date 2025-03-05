@@ -3,8 +3,7 @@ import type {
 	LoaderFunctionArgs,
 	MetaFunction,
 } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { data, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { ProductCard } from "~/components/ProductCard";
 import { db } from "~/utils/db.server";
@@ -19,7 +18,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
 	const user = await db.user.findUnique({ where: { id: userId } });
 	if (!user) {
-		return json(
+		return data(
 			{
 				error: "Некорректный пользователь",
 			},
@@ -61,7 +60,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		});
 
 		if (buyed) {
-			return json({});
+			return {};
 		}
 
 		await db.product.update({
@@ -89,9 +88,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	}
 
 	if (!redirectTo || typeof redirectTo !== "string") {
-		return json({
+		return {
 			error: null,
-		});
+		};
 	}
 	return redirect(redirectTo);
 };
@@ -125,7 +124,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 		},
 	});
 
-	return json({ products, user });
+	return { products, user };
 };
 
 export default function ProductsCatalog() {

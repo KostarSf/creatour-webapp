@@ -1,6 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 
@@ -53,7 +52,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	if (!user) {
 		throw new Response("Пользователь не найден", { status: 404 });
 	}
-	return json({ user });
+	return { user };
 };
 
 export default function UserRoute() {

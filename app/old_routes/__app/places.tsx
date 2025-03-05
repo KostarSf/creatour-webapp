@@ -1,13 +1,12 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import CatalogLayout from "~/components/CatalogLayout";
-import PlaceItem from "~/components/PlaceItem";
+import CatalogLayout from "~/components/old/CatalogLayout";
+import PlaceItem from "~/components/old/PlaceItem";
 import { db } from "~/utils/db.server";
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const places = await db.place.findMany({ include: { rating: true } });
-	return json({ places: places });
+	return { places: places };
 }
 
 export default function AllPlaces() {

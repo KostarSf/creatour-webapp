@@ -1,11 +1,10 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const tags = await db.tag.findMany();
-	return json({ tags });
+	return { tags };
 };
 
 export default function TagsList() {

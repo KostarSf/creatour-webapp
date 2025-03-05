@@ -1,11 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import {
-	unstable_composeUploadHandlers,
-	unstable_createMemoryUploadHandler,
-} from "@remix-run/node";
-import { unstable_parseMultipartFormData } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
@@ -53,7 +47,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	if (!tag) {
 		throw new Response("Тег не найден", { status: 404 });
 	}
-	return json({ tag });
+	return { tag };
 };
 
 export default function TagEditRoute() {

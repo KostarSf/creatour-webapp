@@ -1,12 +1,11 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import {
+	redirect,
 	unstable_composeUploadHandlers,
 	unstable_createFileUploadHandler,
 	unstable_createMemoryUploadHandler,
+	unstable_parseMultipartFormData,
 } from "@remix-run/node";
-import { unstable_parseMultipartFormData } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
@@ -148,7 +147,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	}
 	const creators = await db.user.findMany({ where: { role: "creator" } });
 	const tags = product.tags.map((tag) => tag.name).join(", ");
-	return json({
+	return {
 		product: {
 			...product,
 			beginDate: getLocalDate(product.beginDate),
@@ -156,7 +155,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 		},
 		creators,
 		tags,
-	});
+	};
 };
 
 function getLocalDate(date: Date | null) {
