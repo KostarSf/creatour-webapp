@@ -2,6 +2,7 @@ import type { MetaFunction } from "react-router";
 import { Link, useLoaderData } from "react-router";
 import { db } from "~/utils/db.server";
 import { useOptionalUser } from "~/utils/user";
+import { Footer } from "~/widgets/footer";
 
 export const meta: MetaFunction = () => [
 	{ title: "Добро пожаловать | Креатур" },
@@ -252,6 +253,7 @@ export default function LandingPage() {
 					</div>
 				</div>
 			</div>
+			<Footer />
 		</>
 	);
 }

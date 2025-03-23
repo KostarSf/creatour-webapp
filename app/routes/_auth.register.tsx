@@ -1,7 +1,7 @@
-import type { LoaderFunctionArgs } from "react-router";
-import { type ActionFunctionArgs, redirect } from "react-router";
-import type { MetaFunction } from "react-router";
-import { Form, useActionData, useSearchParams } from "react-router";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
+import { type ActionFunctionArgs, Form, redirect, useActionData, useSearchParams } from "react-router";
+import { Checkbox } from "~/components/ui/checkbox";
+import { Label } from "~/components/ui/label";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { createUserSession, getUser, register } from "~/utils/session.server";
@@ -191,6 +191,12 @@ export default function LoginRoute() {
 						{actionData.fieldErrors.password}
 					</p>
 				) : null}
+				<div className="mt-2 flex items-center space-x-2">
+					<Checkbox id="confirm-check" required />
+					<Label htmlFor="confirm-check">
+						Нажимая кнопку, вы даете согласие <br /> на обработку персональных данных
+					</Label>
+				</div>
 				<div className="mt-4 text-center md:mt-12 md:text-left">
 					<button
 						type="submit"
