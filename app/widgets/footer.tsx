@@ -13,7 +13,7 @@ export function Footer() {
 							to="/"
 							className={cn(
 								buttonVariants({ variant: "link" }),
-								"h-auto p-0 font-serif text-5xl sm:pb-6",
+								"h-auto p-0 font-serif text-5xl text-foreground sm:pb-6",
 							)}
 						>
 							Креатур
@@ -28,7 +28,7 @@ export function Footer() {
 									to="tel:+77775554265"
 									className={cn(
 										buttonVariants({ variant: "link" }),
-										"h-auto justify-start p-0",
+										"h-auto justify-start p-0 text-foreground",
 									)}
 								>
 									+7 (777) 555-42-65
@@ -39,7 +39,7 @@ export function Footer() {
 									to="mailto:hello@creatur.com"
 									className={cn(
 										buttonVariants({ variant: "link" }),
-										"h-auto justify-start p-0",
+										"h-auto justify-start p-0 text-foreground",
 									)}
 								>
 									hello@creatur.com
@@ -51,25 +51,37 @@ export function Footer() {
 						<p className="font-serif text-3xl sm:pb-3">Каталог</p>
 						<Link
 							to="#"
-							className={cn(buttonVariants({ variant: "link" }), "h-auto justify-start p-0")}
+							className={cn(
+								buttonVariants({ variant: "link" }),
+								"h-auto justify-start p-0 text-foreground",
+							)}
 						>
 							Новинки
 						</Link>
 						<Link
 							to="#"
-							className={cn(buttonVariants({ variant: "link" }), "h-auto justify-start p-0")}
+							className={cn(
+								buttonVariants({ variant: "link" }),
+								"h-auto justify-start p-0 text-foreground",
+							)}
 						>
 							Мастер-классы
 						</Link>
 						<Link
 							to="#"
-							className={cn(buttonVariants({ variant: "link" }), "h-auto justify-start p-0")}
+							className={cn(
+								buttonVariants({ variant: "link" }),
+								"h-auto justify-start p-0 text-foreground",
+							)}
 						>
 							Лекции
 						</Link>
 						<Link
 							to="#"
-							className={cn(buttonVariants({ variant: "link" }), "h-auto justify-start p-0")}
+							className={cn(
+								buttonVariants({ variant: "link" }),
+								"h-auto justify-start p-0 text-foreground",
+							)}
 						>
 							Экскурсии
 						</Link>
@@ -78,25 +90,38 @@ export function Footer() {
 						<p className="font-serif text-3xl sm:pb-3">Клиентам</p>
 						<Link
 							to="#"
-							className={cn(buttonVariants({ variant: "link" }), "h-auto justify-start p-0")}
+							className={cn(
+								buttonVariants({ variant: "link" }),
+								"h-auto justify-start p-0 text-foreground",
+							)}
 						>
 							О бренде
 						</Link>
 						<Link
 							to="#"
-							className={cn(buttonVariants({ variant: "link" }), "h-auto justify-start p-0")}
+							className={cn(
+								buttonVariants({ variant: "link" }),
+								"h-auto justify-start p-0 text-foreground",
+							)}
 						>
 							Оплата
 						</Link>
 						<Link
-							to="#"
-							className={cn(buttonVariants({ variant: "link" }), "h-auto justify-start p-0")}
+							to="/object-recognizer/index.html"
+							className={cn(
+								buttonVariants({ variant: "link" }),
+								"h-auto justify-start p-0 text-foreground",
+							)}
+							reloadDocument
 						>
 							Распознавание объекта / <br /> Поиск по фото
 						</Link>
 						<Link
 							to={href("/faq")}
-							className={cn(buttonVariants({ variant: "link" }), "h-auto justify-start p-0")}
+							className={cn(
+								buttonVariants({ variant: "link" }),
+								"h-auto justify-start p-0 text-foreground",
+							)}
 						>
 							FAQs
 						</Link>
@@ -107,7 +132,10 @@ export function Footer() {
 					<div className="sm:col-span-2">
 						<Link
 							to="#"
-							className={cn(buttonVariants({ variant: "link" }), "h-auto justify-start p-0")}
+							className={cn(
+								buttonVariants({ variant: "link" }),
+								"h-auto justify-start p-0 text-foreground",
+							)}
 						>
 							Политика конфиденциальности
 						</Link>
@@ -115,7 +143,10 @@ export function Footer() {
 					<div>
 						<Link
 							to="#"
-							className={cn(buttonVariants({ variant: "link" }), "h-auto justify-start p-0")}
+							className={cn(
+								buttonVariants({ variant: "link" }),
+								"h-auto justify-start p-0 text-foreground",
+							)}
 						>
 							Договор оферта
 						</Link>
@@ -123,7 +154,10 @@ export function Footer() {
 					<div>
 						<Link
 							to="#"
-							className={cn(buttonVariants({ variant: "link" }), "h-auto justify-start p-0")}
+							className={cn(
+								buttonVariants({ variant: "link" }),
+								"h-auto justify-start p-0 text-foreground",
+							)}
 						>
 							Атор сайта
 						</Link>

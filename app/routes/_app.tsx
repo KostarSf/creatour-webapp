@@ -7,8 +7,8 @@ export default function AppLayout() {
 
 	return (
 		<>
-			<div className="m-auto flex min-h-screen flex-col items-stretch px-6 pt-3 pb-24 md:px-16 md:pt-6 lg:px-32">
-				<header className="mb-6 w-full md:mb-12">
+			<div className="m-auto flex min-h-screen flex-col items-stretch pt-3 pb-24 md:pt-6">
+				<header className="z-10 mx-auto mb-6 w-full max-w-6xl px-5 md:mb-12 md:px-10">
 					<div className="flex items-baseline justify-between">
 						<Link
 							to="/"
@@ -22,13 +22,6 @@ export default function AppLayout() {
 							</Link>
 						)}
 						<div className="flex gap-2">
-							<Link
-								to="/object-recognizer/index.html"
-								reloadDocument
-								className="hidden text-blue-500 hover:underline sm:block"
-							>
-								Распознать объект
-							</Link>
 							{user ? (
 								<>
 									<Form method="POST" action="/logout">
@@ -44,17 +37,8 @@ export default function AppLayout() {
 							)}
 						</div>
 					</div>
-					<div className="">
-						<Link
-							to="/object-recognizer/index.html"
-							reloadDocument
-							className="inline text-blue-500 hover:underline sm:hidden"
-						>
-							Распознать объект
-						</Link>
-					</div>
 				</header>
-				<main className="reative flex-1">
+				<main className="reative flex-1 px-5 md:px-10">
 					<Outlet />
 				</main>
 			</div>

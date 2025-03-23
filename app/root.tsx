@@ -1,6 +1,7 @@
 import type { LoaderFunctionArgs } from "react-router";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import "~/tailwind.css";
+import { Toaster } from "./components/ui/sonner";
 import { getUser } from "./utils/session.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -20,6 +21,7 @@ export default function App() {
 				<Outlet />
 				<ScrollRestoration />
 				<Scripts />
+				<Toaster />
 			</body>
 		</html>
 	);
