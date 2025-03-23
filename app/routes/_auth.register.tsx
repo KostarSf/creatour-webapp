@@ -1,7 +1,17 @@
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { type ActionFunctionArgs, Form, redirect, useActionData, useSearchParams } from "react-router";
+import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
+import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "~/components/ui/select";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { createUserSession, getUser, register } from "~/utils/session.server";
@@ -121,89 +131,85 @@ export default function LoginRoute() {
 			</div>
 			<Form method="POST">
 				<input type="hidden" name="redirectTo" value={searchParams.get("redirectTo") ?? undefined} />
-				<div className="group relative w-full overflow-hidden rounded-md border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
-					<select
-						className="w-full bg-white px-4 py-3 outline-hidden"
-						name="role"
-						required
-						defaultValue={actionData?.fields?.role}
-						aria-invalid={Boolean(actionData?.fieldErrors?.role)}
-						aria-errormessage={actionData?.fieldErrors?.role ? "role-error" : undefined}
-					>
-						<option value="user">Пользователь</option>
-						<option value="placeowner">Владелец ресурсов</option>
-						<option value="creator">Создатель турпродуктов</option>
-					</select>
-				</div>
+				<Select
+					name="role"
+					required
+					defaultValue={actionData?.fields?.role ?? "user"}
+					aria-invalid={Boolean(actionData?.fieldErrors?.role)}
+					aria-errormessage={actionData?.fieldErrors?.role ? "role-error" : undefined}
+				>
+					<SelectTrigger className="sm:w-80 lg:w-96">
+						<SelectValue placeholder="Выберите роль" />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value="user">Пользователь</SelectItem>
+						<SelectItem value="placeowner">Владелец ресурсов</SelectItem>
+						<SelectItem value="creator">Создатель турпродуктов</SelectItem>
+					</SelectContent>
+				</Select>
 				{actionData?.fieldErrors?.role ? (
 					<p id="role-error" className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm">
 						{actionData.fieldErrors.role}
 					</p>
 				) : null}
-				<div className="group relative mt-2 w-full overflow-hidden rounded-md border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
-					<input
-						type="text"
-						name="username"
-						className="w-full px-4 py-3 outline-hidden"
-						placeholder="Имя"
-						required
-						defaultValue={actionData?.fields?.username}
-						aria-invalid={Boolean(actionData?.fieldErrors?.username)}
-						aria-errormessage={actionData?.fieldErrors?.username ? "username-error" : undefined}
-					/>
-				</div>
+				<Input
+					type="text"
+					name="username"
+					autoComplete="name"
+					placeholder="Имя"
+					required
+					className="mt-2 sm:w-80 lg:w-96"
+					defaultValue={actionData?.fields?.username}
+					aria-invalid={Boolean(actionData?.fieldErrors?.username)}
+					aria-errormessage={actionData?.fieldErrors?.username ? "username-error" : undefined}
+				/>
 				{actionData?.fieldErrors?.username ? (
 					<p id="username-error" className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm">
 						{actionData.fieldErrors.username}
 					</p>
 				) : null}
-				<div className="group relative mt-2 w-full overflow-hidden rounded-md border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
-					<input
-						type="email"
-						name="email"
-						className="w-full px-4 py-3 outline-hidden"
-						placeholder="Email"
-						required
-						defaultValue={actionData?.fields?.email}
-						aria-invalid={Boolean(actionData?.fieldErrors?.email)}
-						aria-errormessage={actionData?.fieldErrors?.email ? "email-error" : undefined}
-					/>
-				</div>
+				<Input
+					type="email"
+					name="email"
+					inputMode="email"
+					autoComplete="email"
+					placeholder="Email"
+					required
+					className="mt-2 sm:w-80 lg:w-96"
+					defaultValue={actionData?.fields?.email}
+					aria-invalid={Boolean(actionData?.fieldErrors?.email)}
+					aria-errormessage={actionData?.fieldErrors?.email ? "email-error" : undefined}
+				/>
 				{actionData?.fieldErrors?.email ? (
 					<p id="email-error" className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm">
 						{actionData.fieldErrors.email}
 					</p>
 				) : null}
-				<div className="group relative mt-2 w-full overflow-hidden rounded-md border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
-					<input
-						type="password"
-						name="password"
-						className="w-full px-4 py-3 outline-hidden"
-						placeholder="Пароль"
-						required
-						defaultValue={actionData?.fields?.password}
-						aria-invalid={Boolean(actionData?.fieldErrors?.password)}
-						aria-errormessage={actionData?.fieldErrors?.password ? "password-error" : undefined}
-					/>
-				</div>
+				<Input
+					type="password"
+					name="password"
+					className="mt-2 sm:w-80 lg:w-96"
+					placeholder="Пароль"
+					required
+					defaultValue={actionData?.fields?.password}
+					aria-invalid={Boolean(actionData?.fieldErrors?.password)}
+					aria-errormessage={actionData?.fieldErrors?.password ? "password-error" : undefined}
+				/>
 				{actionData?.fieldErrors?.password ? (
 					<p id="password-error" className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm">
 						{actionData.fieldErrors.password}
 					</p>
 				) : null}
-				<div className="mt-2 flex items-center space-x-2">
+				<div className="mt-2 flex items-center space-x-2 sm:w-80 lg:w-96">
 					<Checkbox id="confirm-check" required />
 					<Label htmlFor="confirm-check">
-						Нажимая кнопку, вы даете согласие <br /> на обработку персональных данных
+						Нажимая кнопку, вы даете согласие на обработку персональных данных
 					</Label>
 				</div>
-				<div className="mt-4 text-center md:mt-12 md:text-left">
-					<button
-						type="submit"
-						className="w-full rounded-md bg-blue-500 px-14 py-3 font-medium text-white transition-colors hover:bg-blue-600 md:w-auto"
-					>
+				<div className="mt-12 text-center md:text-left">
+					<Button type="submit" className="w-full md:w-auto" size="lg">
 						Зарегистрироваться
-					</button>
+					</Button>
 					{actionData?.formError ? (
 						<p className="mt-2 font-semibold text-red-700 text-sm" role="alert">
 							{actionData.formError}

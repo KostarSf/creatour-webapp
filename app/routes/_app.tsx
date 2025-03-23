@@ -38,7 +38,7 @@ export default function AppLayout() {
 						</div>
 					</div>
 				</header>
-				<main className="reative flex-1 px-5 md:px-10">
+				<main className="reative flex-1">
 					<Outlet />
 				</main>
 			</div>

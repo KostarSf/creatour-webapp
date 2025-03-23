@@ -1,9 +1,11 @@
 import type { Place, Product, RoutePoint } from "@prisma/client";
 import clsx from "clsx";
+import { HeartIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Form, Link } from "react-router";
 import CardDate from "./CardDate";
 import { NoImageIcon } from "./NoImageIcon";
+import { Button } from "./ui/button";
 
 export function ProductCard<TType extends CardType>({
 	type,
@@ -21,7 +23,12 @@ export function ProductCard<TType extends CardType>({
 			footer={
 				type === "product" ? (
 					<>
-						<div />
+						<div className="flex-1" />
+						{userId ? (
+							<Button size="icon" variant="ghost">
+								<HeartIcon />
+							</Button>
+						) : null}
 						{userId ? (
 							<Form
 								method="POST"
@@ -39,7 +46,21 @@ export function ProductCard<TType extends CardType>({
 							>
 								<input type="hidden" name="userId" value={userId} />
 								<input type="hidden" name="productId" value={object.id} />
-								<button
+								<Button
+									type="submit"
+									name="intent"
+									value="activate-product"
+									disabled={buyed || !canBuy}
+									variant={buyed ? "default" : "outline"}
+									className={clsx(buyed && "disabled:opacity-100")}
+								>
+									{buyed
+										? "Приобретено"
+										: object.price === 0
+											? "Бесплатно"
+											: `${object.price.toLocaleString("ru")} ₽`}
+								</Button>
+								{/* <button
 									type="submit"
 									name="intent"
 									value="activate-product"
@@ -58,7 +79,7 @@ export function ProductCard<TType extends CardType>({
 										: object.price === 0
 											? "Бесплатно"
 											: `${object.price} ₽`}
-								</button>
+								</button> */}
 							</Form>
 						) : null}
 					</>

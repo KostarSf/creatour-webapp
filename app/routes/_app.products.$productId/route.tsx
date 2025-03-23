@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { HeartIcon } from "lucide-react";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { data } from "react-router";
 import { Form, useLoaderData } from "react-router";
@@ -6,6 +7,10 @@ import invariant from "tiny-invariant";
 import CardDate from "~/components/CardDate";
 import CommentItem from "~/components/CommentItem";
 import RatingBar from "~/components/RatingBar";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { Textarea } from "~/components/ui/textarea";
 import { db } from "~/utils/db.server";
 import { getUserId } from "~/utils/session.server";
 
@@ -74,55 +79,65 @@ export default function ProductPage() {
 
 	return (
 		<>
-			<div className="my-6 md:my-12">
-				<h1 className="font-bold font-serif text-2xl">{product.name}</h1>
-				<p className="mt-2">{product.short}</p>
-				<div className="mt-6 flex items-center">
-					<div className="flex-1 md:mr-12 md:grow-0">
-						<RatingBar ratings={product.rating} />
-						<p className="text-slate-500">{product.rating.length} оценок</p>
+			<div className="mx-auto max-w-6xl px-5 md:px-10">
+				<div className="my-6 md:my-12">
+					<div className="flex justify-between gap-2 md:justify-start">
+						<h1 className="font-bold font-serif text-2xl">{product.name}</h1>
+						{user ? (
+							<Button size="icon" variant="ghost">
+								<HeartIcon />
+							</Button>
+						) : null}
 					</div>
-					{product.beginDate && <CardDate date={product.beginDate} className="text-right" />}
+					<p className="mt-2">{product.short}</p>
+					<div className="mt-6 flex items-center">
+						<div className="flex-1 md:mr-12 md:grow-0">
+							<RatingBar ratings={product.rating} />
+							<p className="text-slate-500">{product.rating.length} оценок</p>
+						</div>
+						{product.beginDate && <CardDate date={product.beginDate} className="text-right" />}
+					</div>
 				</div>
+
+				<Form
+					method="POST"
+					action="/products?index"
+					onSubmit={(e) => {
+						if (
+							!confirm(
+								product.price > 0
+									? `Приобрести за ${product.price} ₽?`
+									: "Записаться бесплатно?",
+							)
+						) {
+							e.preventDefault();
+						}
+					}}
+					className="my-12"
+					preventScrollReset
+				>
+					<input type="hidden" name="userId" value={user?.id} />
+					<input type="hidden" name="productId" value={product.id} />
+					<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
+					<Button
+						type="submit"
+						name="intent"
+						value="activate-product"
+						disabled={buyed || !canBuy}
+						variant={buyed ? "default" : "outline"}
+						className={clsx(buyed && "disabled:opacity-100")}
+					>
+						{buyed
+							? "Приобретено"
+							: product.price === 0
+								? "Бесплатно"
+								: `Приобрести за ${product.price.toLocaleString("ru")} ₽`}
+					</Button>
+				</Form>
+
+				<p className="font-semibold font-serif text-xl">Галерея изображений</p>
 			</div>
 
-			<Form
-				method="POST"
-				action="/products?index"
-				onSubmit={(e) => {
-					if (
-						!confirm(
-							product.price > 0 ? `Приобрести за ${product.price} ₽?` : "Записаться бесплатно?",
-						)
-					) {
-						e.preventDefault();
-					}
-				}}
-				className="my-12"
-				preventScrollReset
-			>
-				<input type="hidden" name="userId" value={user?.id} />
-				<input type="hidden" name="productId" value={product.id} />
-				<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
-				<button
-					type="submit"
-					name="intent"
-					value="activate-product"
-					disabled={buyed || !canBuy}
-					className={clsx(
-						"rounded-sm px-6 py-2 font-medium uppercase transition-colors",
-						canBuy
-							? !buyed
-								? "bg-blue-100 text-blue-600 hover:bg-blue-200"
-								: "bg-green-100 text-green-600"
-							: "border border-blue-100 text-blue-600",
-					)}
-				>
-					{buyed ? "Приобретено" : product.price === 0 ? "Бесплатно" : `${product.price} ₽`}
-				</button>
-			</Form>
-
-			<p className="font-semibold font-serif text-xl">Галерея изображений</p>
 			<div className="-mx-6 md:-mx-12 my-6 md:my-12">
 				<div className="flex snap-x scroll-p-6 gap-6 overflow-x-auto px-6">
 					{product.image && <AlbumImage link={`/images/products/${product.image}`} />}
@@ -132,88 +147,87 @@ export default function ProductPage() {
 				</div>
 			</div>
 
-			{product.route.length > 0 && (
-				<>
-					<p className="mt-24 font-semibold font-serif text-xl">Места мероприятия</p>
-					<div className="my-3">
-						{product.route.map((point) => (
-							<div key={point.id} className="flex items-center gap-3">
-								<div className="h-12 w-16 overflow-hidden rounded-lg bg-slate-300">
-									{point.place.image && (
-										<img
-											src={`/images/places/${point.place.image}`}
-											className="aspect-square w-24 rounded-md object-cover"
-											alt={point.place.image}
-										/>
-									)}
+			<div className="mx-auto max-w-6xl px-5 md:px-10">
+				{product.route.length > 0 && (
+					<>
+						<p className="mt-24 font-semibold font-serif text-xl">Места мероприятия</p>
+						<div className="my-3">
+							{product.route.map((point) => (
+								<div key={point.id} className="flex items-center gap-3">
+									<div className="h-12 w-16 overflow-hidden rounded-lg bg-slate-300">
+										{point.place.image && (
+											<img
+												src={`/images/places/${point.place.image}`}
+												className="aspect-square w-24 rounded-md object-cover"
+												alt={point.place.image}
+											/>
+										)}
+									</div>
+
+									<div>
+										<p className="font-medium text-blue-500 text-lg/normal">
+											{point.place.name}
+										</p>
+										<p className="text-slate-600">{point.place.short}</p>
+									</div>
 								</div>
+							))}
+						</div>
+					</>
+				)}
 
-								<div>
-									<p className="font-medium text-blue-500 text-lg/normal">
-										{point.place.name}
-									</p>
-									<p className="text-slate-600">{point.place.short}</p>
-								</div>
-							</div>
-						))}
-					</div>
-				</>
-			)}
+				{product.description && (
+					<>
+						<p className="mt-24 font-semibold font-serif text-xl">Описание</p>
+						<p>{product.description}</p>
+					</>
+				)}
 
-			{product.description && (
-				<>
-					<p className="mt-24 font-semibold font-serif text-xl">Описание</p>
-					<p>{product.description}</p>
-				</>
-			)}
-
-			<p className="mt-24 mb-6 font-semibold font-serif text-xl">Комментарии</p>
-			<div className="space-y-6">
-				{product.comments.map((comment) => (
-					<CommentItem key={comment.id} comment={comment} rating={product.rating} />
-				))}
-			</div>
-			<div className="mt-24 mb-12">
-				{user ? (
-					<Form
-						method="POST"
-						action="/api/add-comment"
-						encType="multipart/form-data"
-						preventScrollReset
-						className=" max-w-3xl"
-					>
-						<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
-						<input type="hidden" name="parentType" value="product" />
-						<input type="hidden" name="parentId" value={product.id} />
-						<input type="hidden" name="userId" value={user.id} />
-						<textarea
-							name="text"
-							className="min-h-[5rem] w-full rounded-sm border px-2 py-1"
-							placeholder="Напишите свой отзыв!"
-						/>
-						<div className="mt-2 flex items-baseline justify-between gap-2">
-							{/* <div className="flex-1"></div> */}
-							<input
-								type="file"
-								name="media"
-								id="media-picker"
-								accept=".png,.jpg,.jpeg,.webp"
-								multiple
-							/>
-							{/* <label htmlFor='media-picker' className="cursor-pointer hover:bg-gray-200 transition-colors rounded-sm text-gray-500 p-2">
+				<p className="mt-24 mb-6 font-semibold font-serif text-xl">Комментарии</p>
+				<div className="space-y-6">
+					{product.comments.map((comment) => (
+						<CommentItem key={comment.id} comment={comment} rating={product.rating} />
+					))}
+				</div>
+				<div className="mt-24 mb-12">
+					{user ? (
+						<Form
+							method="POST"
+							action="/api/add-comment"
+							encType="multipart/form-data"
+							preventScrollReset
+							className=" max-w-3xl"
+						>
+							<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
+							<input type="hidden" name="parentType" value="product" />
+							<input type="hidden" name="parentId" value={product.id} />
+							<input type="hidden" name="userId" value={user.id} />
+							<Textarea name="text" placeholder="Напишите свой отзыв!" required />
+							<div className="mt-2 flex items-baseline justify-between gap-2">
+								{/* <div className="flex-1"></div> */}
+								<Label className="whitespace-nowrap" htmlFor="media-picker">
+									Прекрепить файл:
+								</Label>
+								<Input
+									type="file"
+									name="media"
+									id="media-picker"
+									accept=".png,.jpg,.jpeg,.webp"
+									multiple
+									className="border-0 shadow-none"
+								/>
+								{/* <label htmlFor='media-picker' className="cursor-pointer hover:bg-gray-200 transition-colors rounded-sm text-gray-500 p-2">
                 <PaperClipIcon/>
               </label> */}
-							<button
-								type="submit"
-								className="rounded-sm bg-blue-100 px-4 py-2 font-medium text-blue-600 uppercase transition-colors hover:bg-blue-200"
-							>
-								Отправить
-							</button>
-						</div>
-					</Form>
-				) : (
-					<p className="text-center text-slate-500">Войдите, чтобы оставить комментарий</p>
-				)}
+								<Button type="submit" variant="secondary">
+									Отправить
+								</Button>
+							</div>
+						</Form>
+					) : (
+						<p className="text-center text-slate-500">Войдите, чтобы оставить комментарий</p>
+					)}
+				</div>
 			</div>
 		</>
 	);

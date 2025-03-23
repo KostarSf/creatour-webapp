@@ -25,8 +25,8 @@ export default function FAQPage() {
 			<div className="pointer-events-none absolute top-0 right-0 left-0 h-screen">
 				<img src="/images/figures.svg" className="h-full w-full object-cover blur-md" aria-hidden />
 			</div>
-			<div className="pt-12 md:absolute md:top-0 md:right-0 md:left-0 md:h-screen md:md:p-0">
-				<div className="mx-auto flex h-full max-w-6xl flex-col items-stretch justify-center gap-12 md:p-10">
+			<div className="mx-auto max-w-6xl px-5 pt-12 md:absolute md:top-0 md:right-0 md:left-0 md:h-screen md:p-0 md:px-10">
+				<div className="mx-auto flex h-full max-w-6xl flex-col items-stretch justify-center gap-12">
 					<div className="flex flex-col gap-12 md:flex-row md:items-center">
 						<div>
 							<p className="font-serif text-4xl/8 text-blue-500 lg:text-6xl/12">

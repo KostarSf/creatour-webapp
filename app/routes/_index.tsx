@@ -1,5 +1,7 @@
 import type { MetaFunction } from "react-router";
 import { Link, useLoaderData } from "react-router";
+import { buttonVariants } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 import { db } from "~/utils/db.server";
 import { useOptionalUser } from "~/utils/user";
 import { Footer } from "~/widgets/footer";
@@ -59,7 +61,7 @@ export default function LandingPage() {
 						{/** Если это редактор, посылаем его в /users, где его перенаправит на нужный кабинет */}
 						<Link
 							to={user ? (user.role !== "user" ? "/user" : "/products") : "/register"}
-							className="inline-block w-full rounded-full bg-blue-500 px-12 py-3 text-center font-medium text-lg text-white transition-colors hover:bg-blue-600 sm:w-auto md:text-left"
+							className={cn(buttonVariants({ size: "lg" }), "max-w-96 text-base max-md:w-full")}
 						>
 							{user
 								? user.role !== "user"
@@ -203,10 +205,7 @@ export default function LandingPage() {
 							Бескрайние просторы тайги, огромные реки, золотые степи и венцы человеческого
 							творения - архитектурные памятники - это и делает нашу страну такой уникальной.
 						</p>
-						<Link
-							to="/products"
-							className="inline-block rounded-full border-2 border-blue-500 px-12 py-2 font-bold text-blue-500 text-lg transition-colors hover:bg-blue-500 hover:text-white"
-						>
+						<Link to="/products" className={buttonVariants({ variant: "outline", size: "lg" })}>
 							Смотреть все
 						</Link>
 					</div>
@@ -244,10 +243,7 @@ export default function LandingPage() {
 							87% участников приходят по личной рекомендации от друзей. Каждый 4-ый проводит
 							досуг с нами больше 2-ух раз!
 						</p>
-						<Link
-							to="/reviews"
-							className="inline-block rounded-full border-2 border-blue-500 px-12 py-2 font-bold text-blue-500 text-lg transition-colors hover:bg-blue-500 hover:text-white"
-						>
+						<Link to="/reviews" className={buttonVariants({ variant: "outline", size: "lg" })}>
 							Читать отзывы
 						</Link>
 					</div>

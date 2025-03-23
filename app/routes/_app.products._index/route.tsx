@@ -126,16 +126,16 @@ export default function ProductsCatalog() {
 
 	return (
 		<>
-			<div className="my-6 md:my-12">
+			<div className="mx-auto my-6 max-w-6xl px-5 md:my-12 md:px-10">
 				<h1 className="font-medium text-xl">Календарь мероприятий</h1>
 			</div>
-			<div className="my-6 md:my-12">
+			<div className="mx-auto my-6 max-w-6xl px-5 md:my-12 md:px-10">
 				{products.length === 0 ? (
 					<p className="mt-24 text-center text-slate-400 text-xl">
 						Каталог пока что пуст! Зайдите позже
 					</p>
 				) : (
-					<div className="-mx-6 mt-6 max-w-7xl space-y-6 md:mx-auto md:mt-12">
+					<div className="mt-6 space-y-6 md:mt-12">
 						{products.map((product) => (
 							<ProductCard
 								type="product"
