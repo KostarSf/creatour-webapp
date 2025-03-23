@@ -1,9 +1,7 @@
 import clsx from "clsx";
 import { HeartIcon } from "lucide-react";
-import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { data } from "react-router";
 import { Form, useLoaderData } from "react-router";
-import invariant from "tiny-invariant";
 import CardDate from "~/components/CardDate";
 import CommentItem from "~/components/CommentItem";
 import RatingBar from "~/components/RatingBar";
@@ -12,31 +10,12 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { db } from "~/utils/db.server";
-import { getUserId } from "~/utils/session.server";
+import { useOptionalUser } from "~/utils/user";
+import type { Route } from "./+types/route";
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => [
-	{ title: `${data?.product.name ?? ""} | Креатур` },
-];
+export const meta: Route.MetaFunction = ({ data }) => [{ title: `${data?.product.name ?? ""} | Креатур` }];
 
-export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-	invariant(params.productId, "productId must be set");
-
-	const userId = await getUserId(request);
-	const user = userId
-		? await db.user.findUnique({
-				where: { id: userId },
-				select: {
-					id: true,
-					role: true,
-					activeProducts: {
-						select: {
-							id: true,
-						},
-					},
-				},
-			})
-		: null;
-
+export const loader = async ({ params }: Route.LoaderArgs) => {
 	const product = await db.product.findUnique({
 		where: { id: params.productId },
 		include: {
@@ -67,14 +46,14 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 		throw data({}, { status: 404 });
 	}
 
-	return { product, user };
+	return { product };
 };
 
 export default function ProductPage() {
-	const { product, user } = useLoaderData<typeof loader>();
+	const { product } = useLoaderData<typeof loader>();
+	const user = useOptionalUser();
 
 	const buyed = user?.activeProducts.findIndex((p) => p.id === product.id) !== -1;
-
 	const canBuy = user?.role === "user" || false;
 
 	return (

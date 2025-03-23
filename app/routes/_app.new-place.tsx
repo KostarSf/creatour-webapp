@@ -5,7 +5,8 @@ import { data, redirect } from "react-router";
 import { Form, useActionData, useLoaderData } from "react-router";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { requireUserId } from "~/utils/session.server";
+import { requireRoleSession, requireUserId } from "~/utils/session.server";
+import { useUser } from "~/utils/user";
 
 export const meta: MetaFunction = () => [{ title: "Добавление нового места | Креатур" }];
 
@@ -59,16 +60,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-	const userId = await requireUserId(request);
-
-	const user = await db.user.findUnique({ where: { id: userId } });
-	if (!user || user.role !== "placeowner") throw redirect("/");
-
-	return { user };
+	await requireRoleSession(request, "placeowner");
+	return {};
 };
 
 export default function NewPlacePage() {
-	const { user } = useLoaderData<typeof loader>();
+	const user = useUser();
 	const data = useActionData<typeof action>();
 
 	useEffect(() => {

@@ -1,24 +1,19 @@
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
-import { redirect } from "react-router";
 import { useLoaderData } from "react-router";
 import type { CheckData } from "~/components/CheckTable";
 import CheckTable from "~/components/CheckTable";
 import { db } from "~/utils/db.server";
-import { getUserId } from "~/utils/session.server";
+import { requireRoleSession } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => [{ title: "Продажи ваших турпродуктов | Креатур" }];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-	const userId = await getUserId(request);
-	if (!userId) throw redirect("/");
-
-	const user = await db.user.findUnique({ where: { id: userId } });
-	if (!user) throw redirect("/");
+	const user = await requireRoleSession(request, "creator", "/user");
 
 	const checksList = await db.check.findMany({
 		where: {
 			product: {
-				creatorId: userId,
+				creatorId: user.id,
 			},
 		},
 		include: {

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { CheckCircle, CheckCircle2Icon, CircleAlertIcon, InfoIcon, LoaderCircleIcon } from "lucide-react";
+import { CheckCircle2Icon, CircleAlertIcon, LoaderCircleIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, href, useFetcher } from "react-router";
 import { toast } from "sonner";
@@ -34,47 +34,7 @@ export default function FAQPage() {
 							</p>
 						</div>
 						<div className="flex-1">
-							<Accordion type="single" collapsible className="rounded-md">
-								<AccordionItem value="item-1">
-									<AccordionTrigger>Забыл пароль, что делать?</AccordionTrigger>
-									<AccordionContent>
-										<div className="space-y-3 pt-3">
-											<p>Посмотрите сохранённые пароли в настройках браузера.</p>
-											<p>
-												Нажать кнопку «Забыли пароль?» на сайте. Следуя инструкциям,
-												можно восстановить пароль.
-											</p>
-											<p>
-												Если не удаётся восстановить пароль самостоятельно,
-												рекомендуется обратиться по горячей линию{" "}
-												<Link
-													to="tel:+77775554265"
-													className="whitespace-nowrap text-blue-500 hover:underline"
-												>
-													+7 (777) 555-42-65
-												</Link>{" "}
-												или в службу техподдержки.
-											</p>
-										</div>
-									</AccordionContent>
-								</AccordionItem>
-								<AccordionItem value="item-2">
-									<AccordionTrigger>
-										Могу ли я быть одновременно и клиентом и продавцом?
-									</AccordionTrigger>
-									<AccordionContent>[текст]</AccordionContent>
-								</AccordionItem>
-								<AccordionItem value="item-3">
-									<AccordionTrigger>
-										Есть ли ограничения на публикацию турпродуктов?
-									</AccordionTrigger>
-									<AccordionContent>[текст]</AccordionContent>
-								</AccordionItem>
-								<AccordionItem value="item-4">
-									<AccordionTrigger>Как начать создавать турпродукты?</AccordionTrigger>
-									<AccordionContent>[текст]</AccordionContent>
-								</AccordionItem>
-							</Accordion>
+							<FaqAccordion />
 						</div>
 					</div>
 					<div className="flex w-full justify-end">
@@ -83,6 +43,48 @@ export default function FAQPage() {
 				</div>
 			</div>
 		</>
+	);
+}
+
+function FaqAccordion() {
+	return (
+		<Accordion type="single" collapsible>
+			<AccordionItem value="item-1">
+				<AccordionTrigger>Забыл пароль, что делать?</AccordionTrigger>
+				<AccordionContent>
+					<div className="space-y-3 pt-3">
+						<p>Посмотрите сохранённые пароли в настройках браузера.</p>
+						<p>
+							Нажать кнопку «Забыли пароль?» на сайте. Следуя инструкциям, можно восстановить
+							пароль.
+						</p>
+						<p>
+							Если не удаётся восстановить пароль самостоятельно, рекомендуется обратиться по
+							горячей линию{" "}
+							<Link
+								to="tel:+77775554265"
+								className="whitespace-nowrap text-blue-500 hover:underline"
+							>
+								+7 (777) 555-42-65
+							</Link>{" "}
+							или в службу техподдержки.
+						</p>
+					</div>
+				</AccordionContent>
+			</AccordionItem>
+			<AccordionItem value="item-2">
+				<AccordionTrigger>Могу ли я быть одновременно и клиентом и продавцом?</AccordionTrigger>
+				<AccordionContent>[текст]</AccordionContent>
+			</AccordionItem>
+			<AccordionItem value="item-3">
+				<AccordionTrigger>Есть ли ограничения на публикацию турпродуктов?</AccordionTrigger>
+				<AccordionContent>[текст]</AccordionContent>
+			</AccordionItem>
+			<AccordionItem value="item-4">
+				<AccordionTrigger>Как начать создавать турпродукты?</AccordionTrigger>
+				<AccordionContent>[текст]</AccordionContent>
+			</AccordionItem>
+		</Accordion>
 	);
 }
 

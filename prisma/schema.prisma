@@ -29,9 +29,10 @@ model User {
 
   ratings       Rating[]
 
-  comments        Comment[]
-  activeProducts  Product[] @relation(name: "UserActiveProducts")
-  checks          Check[]
+  comments         Comment[]
+  activeProducts   Product[] @relation(name: "UserActiveProducts")
+  favoriteProducts Product[] @relation(name: "UserFavoriteProducts")
+  checks           Check[]
 
   createdProducts Product[] // Разработчик турпродуктов
   createdPlaces   Place[]   // Владелец ресурса
@@ -78,6 +79,7 @@ model Product {
   creatorId   String
   creator     User      @relation(fields: [creatorId], references: [id])
   buyers      User[]    @relation(name: "UserActiveProducts")
+  favors      User[]    @relation(name: "UserFavoriteProducts")
 
   name        String
   short       String?

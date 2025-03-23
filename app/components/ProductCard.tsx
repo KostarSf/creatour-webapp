@@ -3,33 +3,28 @@ import clsx from "clsx";
 import { HeartIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Form, Link } from "react-router";
+import { useOptionalUser } from "~/utils/user";
 import CardDate from "./CardDate";
 import { NoImageIcon } from "./NoImageIcon";
 import { Button } from "./ui/button";
 
-export function ProductCard<TType extends CardType>({
-	type,
-	object,
-	buyed,
-	userId,
-	canBuy,
-}: CardProps<TType> & {
-	buyed?: boolean;
-	userId?: string;
-	canBuy: boolean;
-}) {
+export function ProductCard<TType extends CardType>({ type, object }: CardProps<TType>) {
+	const user = useOptionalUser();
+	const buyed = user ? user.activeProducts.findIndex((p) => p.id === object.id) !== -1 : false;
+	const canBuy = user ? user.role === "user" : false;
+
 	return (
 		<ProductCardBase
 			footer={
 				type === "product" ? (
 					<>
 						<div className="flex-1" />
-						{userId ? (
+						{user ? (
 							<Button size="icon" variant="ghost">
 								<HeartIcon />
 							</Button>
 						) : null}
-						{userId ? (
+						{user ? (
 							<Form
 								method="POST"
 								onSubmit={(e) => {
@@ -44,7 +39,7 @@ export function ProductCard<TType extends CardType>({
 									}
 								}}
 							>
-								<input type="hidden" name="userId" value={userId} />
+								<input type="hidden" name="userId" value={user.id} />
 								<input type="hidden" name="productId" value={object.id} />
 								<Button
 									type="submit"

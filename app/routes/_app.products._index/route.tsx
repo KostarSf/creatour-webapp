@@ -1,10 +1,9 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "react-router";
-import { data, redirect } from "react-router";
-import { useLoaderData } from "react-router";
+import type { ActionFunctionArgs, MetaFunction } from "react-router";
+import { data, redirect, useLoaderData } from "react-router";
 import { ProductCard } from "~/components/ProductCard";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { getUserId, requireUserId } from "~/utils/session.server";
+import { requireUserId } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => [{ title: "Календарь мероприятий | Креатур" }];
 
@@ -89,23 +88,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	return redirect(redirectTo);
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-	const userId = await getUserId(request);
-	const user = userId
-		? await db.user.findUnique({
-				where: { id: userId },
-				select: {
-					id: true,
-					role: true,
-					activeProducts: {
-						select: {
-							id: true,
-						},
-					},
-				},
-			})
-		: null;
-
+export const loader = async () => {
 	const products = await db.product.findMany({
 		where: {
 			active: true,
@@ -118,11 +101,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 		},
 	});
 
-	return { products, user };
+	return { products };
 };
 
 export default function ProductsCatalog() {
-	const { products, user } = useLoaderData<typeof loader>();
+	const { products } = useLoaderData<typeof loader>();
 
 	return (
 		<>
@@ -137,14 +120,7 @@ export default function ProductsCatalog() {
 				) : (
 					<div className="mt-6 space-y-6 md:mt-12">
 						{products.map((product) => (
-							<ProductCard
-								type="product"
-								object={product}
-								key={product.id}
-								canBuy={user?.role === "user" || false}
-								buyed={user?.activeProducts.findIndex((p) => p.id === product.id) !== -1}
-								userId={user?.id}
-							/>
+							<ProductCard key={product.id} type="product" object={product} />
 						))}
 					</div>
 				)}

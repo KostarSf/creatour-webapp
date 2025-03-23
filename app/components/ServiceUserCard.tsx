@@ -1,16 +1,12 @@
-import type { User } from "@prisma/client";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useFetcher } from "react-router";
+import type { CurrentUser } from "~/models/users";
 import type { UploadAvatarAction } from "~/routes/api.upload-avatar";
 import { InfoField } from "./InfoField";
 import { NoImageIcon } from "./NoImageIcon";
 
-type Props = {
-	user: User;
-};
-
-export default function ServiceUserCard({ user }: Props) {
+export default function ServiceUserCard({ user }: { user: CurrentUser }) {
 	const [changingInfo, setChangingInfo] = useState(false);
 
 	const fetcher = useFetcher<UploadAvatarAction>();

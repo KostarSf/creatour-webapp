@@ -75,10 +75,7 @@ export default function ReviewsPage() {
 	);
 }
 
-const CommentSection = ({
-	name,
-	parent,
-}: {
+interface CommentSectionProps {
 	name: "place" | "product";
 	parent: (Product | Place) & {
 		rating: Rating[];
@@ -87,7 +84,8 @@ const CommentSection = ({
 			media: Media[];
 		})[];
 	};
-}) => {
+}
+const CommentSection = ({ name, parent }: CommentSectionProps) => {
 	return (
 		<div>
 			<Link

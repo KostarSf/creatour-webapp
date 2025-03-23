@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs";
 import { createCookieSessionStorage, redirect } from "react-router";
 
+import type { User } from "@prisma/client";
+import { type CurrentUser, getCurrentUser } from "~/models/users";
 import { db } from "./db.server";
 
 type LoginForm = {
@@ -13,15 +15,20 @@ type RegisterForm = LoginForm & {
 	role: string;
 };
 
-export async function register({ email, password, username, role }: RegisterForm) {
+export async function register({
+	email,
+	password,
+	username,
+	role,
+}: RegisterForm): Promise<UserSessionPayload> {
 	const passwordHash = await bcrypt.hash(password, 10);
 	const user = await db.user.create({
 		data: { username, passwordHash, email, role },
 	});
-	return { id: user.id, username, email, role };
+	return { id: user.id, role };
 }
 
-export async function login({ email, password }: LoginForm) {
+export async function login({ email, password }: LoginForm): Promise<UserSessionPayload | null> {
 	const user = await db.user.findUnique({
 		where: { email },
 	});
@@ -30,11 +37,11 @@ export async function login({ email, password }: LoginForm) {
 	if (!isCorrectPassword) return null;
 	return {
 		id: user.id,
-		username: user.username,
-		email: user.email,
 		role: user.role,
 	};
 }
+
+export type UserSessionPayload = Pick<User, "id" | "role">;
 
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
@@ -66,6 +73,16 @@ export async function getUserId(request: Request) {
 	return userId;
 }
 
+export async function getUserSessionPayload(request: Request): Promise<UserSessionPayload | null> {
+	const session = await getUserSession(request);
+	const userId = session.get("userId");
+	const userRole = session.get("userRole");
+	if (!userId || typeof userId !== "string" || !userRole || typeof userRole !== "string") {
+		return null;
+	}
+	return { id: userId, role: userRole };
+}
+
 export async function requireUserId(request: Request, redirectTo: string = new URL(request.url).pathname) {
 	const userId = await getUserId(request);
 	if (!userId || typeof userId !== "string") {
@@ -73,6 +90,28 @@ export async function requireUserId(request: Request, redirectTo: string = new U
 		throw redirect(`/login?${searchParams}`);
 	}
 	return userId;
+}
+
+export async function requireSession(request: Request, redirectTo: string = new URL(request.url).pathname) {
+	const sessionPayload = await getUserSessionPayload(request);
+	if (!sessionPayload) {
+		const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+		throw redirect(`/login?${searchParams}`);
+	}
+	return sessionPayload;
+}
+
+export async function requireRoleSession(
+	request: Request,
+	role: string,
+	redirectTo: string = new URL(request.url).pathname,
+) {
+	const sessionPayload = await getUserSessionPayload(request);
+	if (!sessionPayload || sessionPayload.role !== role) {
+		const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
+		throw redirect(`/login?${searchParams}`);
+	}
+	return sessionPayload;
 }
 
 export async function getUser(request: Request) {
@@ -92,6 +131,20 @@ export async function getUser(request: Request) {
 	}
 }
 
+export async function getCurrentUserFromRequst(request: Request): Promise<CurrentUser | null> {
+	const userId = await getUserId(request);
+	if (typeof userId !== "string") {
+		return null;
+	}
+
+	try {
+		const user = await getCurrentUser(userId);
+		return user;
+	} catch {
+		throw logout(request);
+	}
+}
+
 export async function logout(request: Request) {
 	const session = await getUserSession(request);
 	return redirect("/", {
@@ -101,9 +154,10 @@ export async function logout(request: Request) {
 	});
 }
 
-export async function createUserSession(userId: string, remember: boolean, redirectTo: string) {
+export async function createUserSession(user: UserSessionPayload, remember: boolean, redirectTo: string) {
 	const session = await storage.getSession();
-	session.set("userId", userId);
+	session.set("userId", user.id);
+	session.set("userRole", user.role);
 	return redirect(redirectTo, {
 		headers: {
 			"Set-Cookie": await storage.commitSession(session, {

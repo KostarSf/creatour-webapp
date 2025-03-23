@@ -1,15 +1,16 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "react-router";
-import { data, redirect } from "react-router";
-import { useLoaderData } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { data, useLoaderData } from "react-router";
 import ActionLinkButton from "~/components/ActionLinkButton";
 import { ServiceProductCard } from "~/components/ProductCard";
 import ServiceUserCard from "~/components/ServiceUserCard";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { logout, requireUserId } from "~/utils/session.server";
+import { requireRoleSession, requireUserId } from "~/utils/session.server";
+import { useUser } from "~/utils/user";
+import type { Route } from "./+types/route";
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => [
-	{ title: `${data?.user.username ?? ""} | Личный кабинет` },
+export const meta: Route.MetaFunction = ({ matches }) => [
+	{ title: `${matches[0].data.user?.username ?? ""} | Личный кабинет` },
 ];
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -85,11 +86,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-	const userId = await requireUserId(request);
-	const user = await db.user.findUnique({ where: { id: userId } });
-
-	if (!user) throw logout(request);
-	if (user.role !== "placeowner") throw redirect("/user");
+	const user = await requireRoleSession(request, "placeowner", "/user");
 
 	const places = await db.place.findMany({
 		where: {
@@ -105,11 +102,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 		orderBy: { createdAt: "desc" },
 	});
 
-	return { user, places };
+	return { places };
 };
 
 export default function PlaceownerPage() {
-	const { user, places } = useLoaderData<typeof loader>();
+	const { places } = useLoaderData<typeof loader>();
+	const user = useUser();
 
 	return (
 		<>

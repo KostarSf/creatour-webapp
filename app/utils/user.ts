@@ -1,6 +1,6 @@
-import type { User } from "@prisma/client";
 import { useMemo } from "react";
 import { useMatches } from "react-router";
+import type { CurrentUser } from "~/models/users";
 
 /**
  * This base hook is used in other hooks to quickly search for specific data
@@ -14,11 +14,11 @@ export function useMatchesData(id: string): Record<string, unknown> | undefined 
 	return route?.data as Record<string, unknown> | undefined;
 }
 
-function isUser(user: unknown): user is User {
+function isUser(user: unknown): user is CurrentUser {
 	return !!user && typeof user === "object" && "email" in user && typeof user.email === "string";
 }
 
-export function useOptionalUser(): User | undefined {
+export function useOptionalUser(): CurrentUser | undefined {
 	const data = useMatchesData("root");
 	if (!data || !isUser(data.user)) {
 		return undefined;
@@ -26,7 +26,7 @@ export function useOptionalUser(): User | undefined {
 	return data.user;
 }
 
-export function useUser(): User {
+export function useUser(): CurrentUser {
 	const maybeUser = useOptionalUser();
 	if (!maybeUser) {
 		throw new Error(

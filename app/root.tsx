@@ -2,10 +2,10 @@ import type { LoaderFunctionArgs } from "react-router";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import "~/tailwind.css";
 import { Toaster } from "./components/ui/sonner";
-import { getUser } from "./utils/session.server";
+import { getCurrentUserFromRequst } from "./utils/session.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-	return { user: await getUser(request) };
+	return { user: await getCurrentUserFromRequst(request) };
 };
 
 export default function App() {

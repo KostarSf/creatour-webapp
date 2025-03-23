@@ -4,17 +4,10 @@ import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "~/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { createUserSession, getUser, register } from "~/utils/session.server";
+import { createUserSession, getUserSessionPayload, register } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => [
 	{ title: "Регистрация | Креатур" },
@@ -28,7 +21,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const url = new URL(request.url);
 	const redirectTo = url.searchParams.get("redirectTo") ?? "/user";
 
-	const userData = await getUser(request);
+	const userData = await getUserSessionPayload(request);
 	if (userData) {
 		throw redirect(redirectTo);
 	}
@@ -114,7 +107,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			formError: "Что-то пошло не так при создании пользователя.",
 		});
 	}
-	return createUserSession(user.id, true, redirectTo);
+	return createUserSession(user, true, redirectTo);
 };
 
 export default function LoginRoute() {

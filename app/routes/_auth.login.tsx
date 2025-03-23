@@ -1,12 +1,18 @@
-import { type ActionFunctionArgs, type LoaderFunctionArgs, redirect } from "react-router";
 import type { MetaFunction } from "react-router";
-import { Form, Link, useActionData, useSearchParams } from "react-router";
+import {
+	type ActionFunctionArgs,
+	Form,
+	type LoaderFunctionArgs,
+	redirect,
+	useActionData,
+	useSearchParams,
+} from "react-router";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { badRequest } from "~/utils/request.server";
-import { createUserSession, getUser, login } from "~/utils/session.server";
+import { createUserSession, getUserSessionPayload, login } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => [
 	{ title: "Вход | Креатур" },
@@ -20,7 +26,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const url = new URL(request.url);
 	const redirectTo = url.searchParams.get("redirectTo") ?? "/user";
 
-	const userData = await getUser(request);
+	const userData = await getUserSessionPayload(request);
 	if (userData) {
 		throw redirect(redirectTo);
 	}
@@ -58,7 +64,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		});
 	}
 
-	return createUserSession(user.id, remember, redirectTo);
+	return createUserSession(user, remember, redirectTo);
 };
 
 export default function LoginRoute() {

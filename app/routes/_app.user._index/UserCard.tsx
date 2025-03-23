@@ -1,14 +1,14 @@
-import type { User } from "@prisma/client";
 import clsx from "clsx";
 import type { PropsWithChildren } from "react";
 import { useEffect, useState } from "react";
 import { Link, useFetcher } from "react-router";
 import { InfoField } from "~/components/InfoField";
 import { NoImageIcon } from "~/components/NoImageIcon";
+import type { CurrentUser } from "~/models/users";
 import type { UploadAvatarAction } from "../api.upload-avatar";
 
 type Props = {
-	user: User;
+	user: CurrentUser;
 	checksCount: number;
 };
 

@@ -1,14 +1,15 @@
-import type { ActionFunctionArgs, MetaFunction } from "react-router";
-import { type LoaderFunctionArgs, data, redirect } from "react-router";
-import { useLoaderData } from "react-router";
+import type { ActionFunctionArgs } from "react-router";
+import { type LoaderFunctionArgs, data, redirect, useLoaderData } from "react-router";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { logout, requireUserId } from "~/utils/session.server";
+import { getUserSessionPayload, logout, requireUserId } from "~/utils/session.server";
+import { useUser } from "~/utils/user";
+import type { Route } from "./+types/route";
 import NextEventBanner from "./NextEventBanner";
 import UserCard from "./UserCard";
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => [
-	{ title: `${data?.user.username ?? ""} | Личный кабинет` },
+export const meta: Route.MetaFunction = ({ matches }) => [
+	{ title: `${matches[0].data.user?.username ?? ""} | Личный кабинет` },
 ];
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -52,8 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-	const userId = await requireUserId(request);
-	const user = await db.user.findUnique({ where: { id: userId } });
+	const user = await getUserSessionPayload(request);
 
 	if (!user) throw logout(request);
 	if (user.role === "placeowner") throw redirect("/placeowner");
@@ -77,11 +77,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 	const [checksCount, nextEvent] = await db.$transaction([checksCountPromise, nextEventPromise]);
 
-	return { user, checksCount, nextEvent };
+	return { checksCount, nextEvent };
 };
 
 export default function UserPage() {
-	const { user, checksCount, nextEvent } = useLoaderData<typeof loader>();
+	const { checksCount, nextEvent } = useLoaderData<typeof loader>();
+	const user = useUser();
 
 	return (
 		<div>
