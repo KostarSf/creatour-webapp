@@ -75,9 +75,7 @@ export default function UserCard({ user, checksCount }: Props) {
 									</div>
 								</div>
 								<div>
-									<p className="font-bold font-serif text-xl/none">
-										{user.username}
-									</p>
+									<p className="font-bold font-serif text-xl/none">{user.username}</p>
 									<p>ID {user.id.split("-")[0].toUpperCase()}</p>
 								</div>
 							</div>
@@ -133,14 +131,10 @@ export default function UserCard({ user, checksCount }: Props) {
 			</div>
 			<div className="flex flex-col gap-6 xl:flex-1">
 				<CardContainer>
-					<p className="mb-4 font-bold font-serif text-xl/none">
-						Способы оплаты
-					</p>
+					<p className="mb-4 font-bold font-serif text-xl/none">Способы оплаты</p>
 					<div className="flex flex-wrap items-baseline justify-between gap-4">
 						<p className="font-mono">**** 1234 01/23</p>
-						<p className="cursor-default font-medium text-gray-500 uppercase">
-							Сменить
-						</p>
+						<p className="cursor-default font-medium text-gray-500 uppercase">Сменить</p>
 					</div>
 				</CardContainer>
 				<CardContainer>
@@ -163,7 +157,5 @@ export default function UserCard({ user, checksCount }: Props) {
 }
 
 const CardContainer = ({ children }: PropsWithChildren) => (
-	<div className="-mx-6 border p-6 shadow-blue-900/5 shadow-lg md:mx-0 md:rounded-lg">
-		{children}
-	</div>
+	<div className="-mx-6 border p-6 shadow-blue-900/5 shadow-lg md:mx-0 md:rounded-lg">{children}</div>
 );

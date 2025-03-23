@@ -13,12 +13,7 @@ type RegisterForm = LoginForm & {
 	role: string;
 };
 
-export async function register({
-	email,
-	password,
-	username,
-	role,
-}: RegisterForm) {
+export async function register({ email, password, username, role }: RegisterForm) {
 	const passwordHash = await bcrypt.hash(password, 10);
 	const user = await db.user.create({
 		data: { username, passwordHash, email, role },
@@ -71,10 +66,7 @@ export async function getUserId(request: Request) {
 	return userId;
 }
 
-export async function requireUserId(
-	request: Request,
-	redirectTo: string = new URL(request.url).pathname,
-) {
+export async function requireUserId(request: Request, redirectTo: string = new URL(request.url).pathname) {
 	const userId = await getUserId(request);
 	if (!userId || typeof userId !== "string") {
 		const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
@@ -109,11 +101,7 @@ export async function logout(request: Request) {
 	});
 }
 
-export async function createUserSession(
-	userId: string,
-	remember: boolean,
-	redirectTo: string,
-) {
+export async function createUserSession(userId: string, remember: boolean, redirectTo: string) {
 	const session = await storage.getSession();
 	session.set("userId", userId);
 	return redirect(redirectTo, {

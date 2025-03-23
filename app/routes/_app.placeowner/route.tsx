@@ -1,8 +1,4 @@
-import type {
-	ActionFunctionArgs,
-	LoaderFunctionArgs,
-	MetaFunction,
-} from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "react-router";
 import { data, redirect } from "react-router";
 import { useLoaderData } from "react-router";
 import ActionLinkButton from "~/components/ActionLinkButton";
@@ -32,8 +28,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	const intent = formData.get("intent");
 
 	if (intent === "change-info") {
-		const { city, phone, legalName, inn, address } =
-			Object.fromEntries(formData);
+		const { city, phone, legalName, inn, address } = Object.fromEntries(formData);
 
 		if (
 			typeof city !== "string" ||
@@ -130,9 +125,7 @@ export default function PlaceownerPage() {
 					<ActionLinkButton to="/new-place">Новый объект</ActionLinkButton>
 				</div>
 				{places.length === 0 ? (
-					<p className="mt-24 text-center text-slate-400 text-xl">
-						У вас пока нет объектов
-					</p>
+					<p className="mt-24 text-center text-slate-400 text-xl">У вас пока нет объектов</p>
 				) : (
 					<div className="-mx-6 mt-6 max-w-7xl space-y-6 md:mx-auto md:mt-12">
 						{places.map((place) => (

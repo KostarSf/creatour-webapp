@@ -1,8 +1,4 @@
-import type {
-	ActionFunctionArgs,
-	LoaderFunctionArgs,
-	MetaFunction,
-} from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "react-router";
 import { data, redirect } from "react-router";
 import { useLoaderData } from "react-router";
 import { ProductCard } from "~/components/ProductCard";
@@ -10,9 +6,7 @@ import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { getUserId, requireUserId } from "~/utils/session.server";
 
-export const meta: MetaFunction = () => [
-	{ title: "Календарь мероприятий | Креатур" },
-];
+export const meta: MetaFunction = () => [{ title: "Календарь мероприятий | Креатур" }];
 
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
@@ -148,10 +142,7 @@ export default function ProductsCatalog() {
 								object={product}
 								key={product.id}
 								canBuy={user?.role === "user" || false}
-								buyed={
-									user?.activeProducts.findIndex((p) => p.id === product.id) !==
-									-1
-								}
+								buyed={user?.activeProducts.findIndex((p) => p.id === product.id) !== -1}
 								userId={user?.id}
 							/>
 						))}

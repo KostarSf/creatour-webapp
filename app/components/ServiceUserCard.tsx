@@ -47,10 +47,7 @@ export default function ServiceUserCard({ user }: Props) {
 			<div className="flex items-start justify-between">
 				<div className="flex items-center gap-4">
 					<div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-slate-400 transition-colors hover:bg-slate-300">
-						<label
-							htmlFor="avatar-input"
-							className="block h-full w-full cursor-pointer"
-						>
+						<label htmlFor="avatar-input" className="block h-full w-full cursor-pointer">
 							<input
 								type="file"
 								name="avatar"
@@ -62,11 +59,7 @@ export default function ServiceUserCard({ user }: Props) {
 						</label>
 						<div className="pointer-events-none absolute inset-0 grid place-items-center">
 							{user.avatar ? (
-								<img
-									src={user.avatar}
-									alt="avatar"
-									className="h-full w-full object-cover"
-								/>
+								<img src={user.avatar} alt="avatar" className="h-full w-full object-cover" />
 							) : (
 								<NoImageIcon className="h-8 w-8 text-slate-100" />
 							)}

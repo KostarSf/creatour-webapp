@@ -21,9 +21,7 @@ export default function AuthLayout() {
 							}}
 							className={({ isActive, isPending }) =>
 								`${
-									isActive || isPending
-										? "border-blue-500 border-b-2"
-										: "text-gray-500"
+									isActive || isPending ? "border-blue-500 border-b-2" : "text-gray-500"
 								} px-1 py-0.5 transition-colors hover:text-black`
 							}
 						>
@@ -36,9 +34,7 @@ export default function AuthLayout() {
 							}}
 							className={({ isActive, isPending }) =>
 								`${
-									isActive || isPending
-										? "border-blue-500 border-b-2"
-										: "text-gray-500"
+									isActive || isPending ? "border-blue-500 border-b-2" : "text-gray-500"
 								} px-1 py-0.5 transition-colors hover:text-black`
 							}
 						>

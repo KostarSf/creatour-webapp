@@ -36,11 +36,7 @@ export default function CommentItem({
 						</p>
 					</div>
 					<div>
-						<RatingBar
-							ratings={rating.filter(
-								(rating) => rating.userId === comment.userId,
-							)}
-						/>
+						<RatingBar ratings={rating.filter((rating) => rating.userId === comment.userId)} />
 					</div>
 					<p>{comment.text}</p>
 					<div className="flex flex-wrap gap-2">

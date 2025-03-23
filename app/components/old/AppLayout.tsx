@@ -20,10 +20,7 @@ function Header() {
 			<div className="mx-auto max-w-7xl px-4">
 				<div className="items-center gap-4 md:flex md:justify-between">
 					<div className="flex h-14 items-center justify-between lg:h-16">
-						<Link
-							to="/"
-							className="flex items-center font-medium hover:text-blue-600"
-						>
+						<Link to="/" className="flex items-center font-medium hover:text-blue-600">
 							<h1 className="text-md lg:text-xl">
 								<span className="block">Креатур</span>
 							</h1>
@@ -55,9 +52,7 @@ function Main({ children }: React.PropsWithChildren) {
 function Footer() {
 	return (
 		<footer className="mt-8 px-2 py-8 md:pb-2">
-			<div className="text-center text-slate-500 text-sm">
-				© 2022-2023 | ООО Креатур
-			</div>
+			<div className="text-center text-slate-500 text-sm">© 2022-2023 | ООО Креатур</div>
 		</footer>
 	);
 }

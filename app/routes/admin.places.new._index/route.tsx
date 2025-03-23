@@ -104,15 +104,10 @@ export default function NewPlace() {
 						))}
 					</select>
 				</label>
-				<button
-					type="submit"
-					className="mt-8 block bg-blue-600 px-4 py-2 text-white"
-				>
+				<button type="submit" className="mt-8 block bg-blue-600 px-4 py-2 text-white">
 					Создать
 				</button>
-				<div>
-					{actionData?.formError ? <p>{actionData.formError}</p> : null}
-				</div>
+				<div>{actionData?.formError ? <p>{actionData.formError}</p> : null}</div>
 			</form>
 		</div>
 	);

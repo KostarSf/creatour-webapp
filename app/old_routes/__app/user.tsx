@@ -39,9 +39,7 @@ export default function UserPage() {
 	const user = data.user;
 
 	return (
-		<CatalogLayout
-			sideBlock={<SideBlockUser user={{ ...data.userData, role: user.role }} />}
-		>
+		<CatalogLayout sideBlock={<SideBlockUser user={{ ...data.userData, role: user.role }} />}>
 			<div>
 				<p>Активные турпродукты:</p>
 				<div>
@@ -129,10 +127,7 @@ function SideBlockUser({
 			{user.role !== "user" ? (
 				<p className="mb-2">
 					Посетить{" "}
-					<Link
-						to={"/admin"}
-						className="font-semibold text-blue-600 hover:underline"
-					>
+					<Link to={"/admin"} className="font-semibold text-blue-600 hover:underline">
 						Админпанель
 					</Link>
 				</p>

@@ -72,9 +72,7 @@ export const avatarsFileStorage = new LocalFileStorage("./public/uploads/avatars
 
 export const mediaFileStorage = new LocalFileStorage("./public/uploads/media");
 
-export const productsFileStorage = new LocalFileStorage(
-	"./public/uploads/products",
-);
+export const productsFileStorage = new LocalFileStorage("./public/uploads/products");
 
 export function getProductsStorageKey(productId: string, filename: string) {
 	return `${productId}.${filename.split(".").pop()}`;

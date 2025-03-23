@@ -4,8 +4,7 @@ type Props = {
 };
 
 export default function CardDate(props: Props) {
-	const date =
-		typeof props.date === "string" ? new Date(props.date) : props.date;
+	const date = typeof props.date === "string" ? new Date(props.date) : props.date;
 
 	return (
 		<div className={props.className}>

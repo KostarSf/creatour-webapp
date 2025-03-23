@@ -21,9 +21,7 @@ export default function PlaceItem({
 				className="block h-14 w-24 shrink-0 rounded-sm object-cover md:h-28 md:w-48"
 			/>
 			<div>
-				<h2 className="font-semibold text-2xl leading-none hover:text-blue-600 md:mb-3">
-					{name}
-				</h2>
+				<h2 className="font-semibold text-2xl leading-none hover:text-blue-600 md:mb-3">{name}</h2>
 				<p className="md:mb-2">{short}</p>
 				<p className="font-semibold text-sm">Рейтинг: {rating}</p>
 			</div>

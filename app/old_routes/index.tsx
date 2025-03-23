@@ -91,10 +91,7 @@ export default function LandingPage() {
 								<p className="text-white text-xl drop-shadow-sm">
 									Мало-Коннюшенный мост <br /> в Санкт-Петербурге
 								</p>
-								<img
-									src="/images/landing/arrow_right.svg"
-									alt="arrow_right.svg"
-								/>
+								<img src="/images/landing/arrow_right.svg" alt="arrow_right.svg" />
 							</div>
 						</Link>
 						<div className="py-10">
@@ -102,9 +99,9 @@ export default function LandingPage() {
 								Посмотрите все направления туров
 							</h2>
 							<p className="mb-10 text-lg">
-								Бескрайние просторы тайги, огромные реки, золотые степи и венцы
-								человеческого творения - архитектурные памятники - это и делает
-								нашу страну такой уникальной.
+								Бескрайние просторы тайги, огромные реки, золотые степи и венцы человеческого
+								творения - архитектурные памятники - это и делает нашу страну такой
+								уникальной.
 							</p>
 							<Link
 								to="/places"
@@ -130,19 +127,14 @@ export default function LandingPage() {
 								}}
 							/>
 							<div className="z-10 drop-shadow-sm">
-								<p className="font-semibold font-serif text-white text-xl">
-									Отзыв
-								</p>
+								<p className="font-semibold font-serif text-white text-xl">Отзыв</p>
 								<p className="text-lg text-white">Елена Ивановна</p>
 							</div>
 							<div className="z-10 flex items-end justify-between">
 								<p className="text-white text-xl drop-shadow-sm">
 									Пожалуй, это был лучший <br /> гастрономический тур на Юге
 								</p>
-								<img
-									src="/images/landing/arrow_right.svg"
-									alt="arrow_right.svg"
-								/>
+								<img src="/images/landing/arrow_right.svg" alt="arrow_right.svg" />
 							</div>
 						</Link>
 						<div className="py-10">
@@ -150,8 +142,8 @@ export default function LandingPage() {
 								Что пишут участники наших турпрограмм
 							</h2>
 							<p className="mb-10 text-lg">
-								87% участников приходят по личной рекомендации от друзей. Каждый
-								4-ый проводит досуг с нами больше 2-ух раз!
+								87% участников приходят по личной рекомендации от друзей. Каждый 4-ый проводит
+								досуг с нами больше 2-ух раз!
 							</p>
 							<Link
 								to="#"
@@ -172,9 +164,7 @@ export default function LandingPage() {
 								className="h-28 w-28 rounded-xl object-cover lg:h-36 lg:w-36"
 							/>
 							<div className="my-2 ml-10">
-								<p className="mb-2 font-medium text-2xl lg:text-3xl">
-									Дарья Середа
-								</p>
+								<p className="mb-2 font-medium text-2xl lg:text-3xl">Дарья Середа</p>
 								<p className="font-mono text-md text-slate-700 leading-5">
 									Продакт-менеджер <br /> Дизайнер
 								</p>
@@ -187,12 +177,8 @@ export default function LandingPage() {
 								className="h-28 w-28 rounded-xl object-cover lg:h-36 lg:w-36"
 							/>
 							<div className="my-2 ml-10">
-								<p className="mb-2 font-medium text-2xl lg:text-3xl">
-									Максим Песков
-								</p>
-								<p className="font-mono text-md text-slate-700 leading-5">
-									Программист
-								</p>
+								<p className="mb-2 font-medium text-2xl lg:text-3xl">Максим Песков</p>
+								<p className="font-mono text-md text-slate-700 leading-5">Программист</p>
 							</div>
 						</div>
 					</div>

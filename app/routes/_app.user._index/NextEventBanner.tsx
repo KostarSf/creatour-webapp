@@ -9,11 +9,7 @@ type Props = {
 	className?: string;
 };
 
-export default function NextEventBanner({
-	product,
-	username,
-	className,
-}: Props) {
+export default function NextEventBanner({ product, username, className }: Props) {
 	return (
 		<Link
 			to={`/products/${product.id}`}
@@ -30,16 +26,10 @@ export default function NextEventBanner({
 
 			<div className="absolute inset-0 flex flex-col justify-between py-3 text-white">
 				<div className="flex justify-between">
-					<p className="font-medium">
-						{username.split(" ").shift()}, ваше ближайшее событие
-					</p>
-					{product.beginDate && (
-						<CardDate date={product.beginDate} className="text-right" />
-					)}
+					<p className="font-medium">{username.split(" ").shift()}, ваше ближайшее событие</p>
+					{product.beginDate && <CardDate date={product.beginDate} className="text-right" />}
 				</div>
-				<p className="text-center font-semibold font-serif text-2xl lg:text-3xl">
-					{product.name}
-				</p>
+				<p className="text-center font-semibold font-serif text-2xl lg:text-3xl">{product.name}</p>
 				<p>{product.address}</p>
 			</div>
 		</Link>

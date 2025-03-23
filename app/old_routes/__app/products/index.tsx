@@ -19,11 +19,8 @@ export default function AllProducts() {
 			{params.products.length ? (
 				params.products.map((p) => {
 					const ratingsCount = p.rating.length;
-					const ratingsSum = p.rating
-						.map((r) => r.value)
-						.reduce((prev, cur) => prev + cur, 0);
-					const totalRatimg =
-						Math.round((ratingsSum / ratingsCount) * 100) / 100;
+					const ratingsSum = p.rating.map((r) => r.value).reduce((prev, cur) => prev + cur, 0);
+					const totalRatimg = Math.round((ratingsSum / ratingsCount) * 100) / 100;
 
 					return (
 						<ProductItem

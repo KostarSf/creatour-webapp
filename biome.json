@@ -9,5 +9,9 @@
 	},
 	"files": {
 		"ignore": [".react-router", ".temp", "build", "node_modules", "public"]
+	},
+	"formatter": {
+		"indentWidth": 4,
+		"lineWidth": 110
 	}
 }

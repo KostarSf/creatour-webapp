@@ -6,9 +6,7 @@ import CheckTable from "~/components/CheckTable";
 import { db } from "~/utils/db.server";
 import { getUserId } from "~/utils/session.server";
 
-export const meta: MetaFunction = () => [
-	{ title: "Продажи ваших турпродуктов | Креатур" },
-];
+export const meta: MetaFunction = () => [{ title: "Продажи ваших турпродуктов | Креатур" }];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const userId = await getUserId(request);

@@ -1,11 +1,4 @@
-import type {
-	Comment,
-	Media,
-	Place,
-	Product,
-	Rating,
-	User,
-} from "@prisma/client";
+import type { Comment, Media, Place, Product, Rating, User } from "@prisma/client";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { Link, useLoaderData } from "react-router";
 import CommentItem from "~/components/CommentItem";
@@ -128,20 +121,14 @@ const CommentSection = ({
 					<p className="font-bold font-serif text-xl">{parent.name}</p>
 					<p className="text-slate-800 md:order-1">{parent.short}</p>
 					<div className="mt-3 flex items-center justify-between md:mt-0 md:mb-3 md:justify-start md:gap-12">
-						<p className="text-slate-500 text-sm md:order-1">
-							{parent.comments.length} отзывов
-						</p>
+						<p className="text-slate-500 text-sm md:order-1">{parent.comments.length} отзывов</p>
 						<RatingBar ratings={parent.rating} />
 					</div>
 				</div>
 			</Link>
 			<div className="space-y-6">
 				{parent.comments.map((comment) => (
-					<CommentItem
-						key={comment.id}
-						comment={comment}
-						rating={parent.rating}
-					/>
+					<CommentItem key={comment.id} comment={comment} rating={parent.rating} />
 				))}
 			</div>
 		</div>

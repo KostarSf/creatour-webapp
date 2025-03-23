@@ -1,8 +1,4 @@
-import {
-	type ActionFunctionArgs,
-	type LoaderFunctionArgs,
-	redirect,
-} from "react-router";
+import { type ActionFunctionArgs, type LoaderFunctionArgs, redirect } from "react-router";
 import type { MetaFunction } from "react-router";
 import { Form, Link, useActionData, useSearchParams } from "react-router";
 import { badRequest } from "~/utils/request.server";
@@ -12,8 +8,7 @@ export const meta: MetaFunction = () => [
 	{ title: "Вход | Креатур" },
 	{
 		name: "description",
-		content:
-			"Войдите в систему, чтобы иметь возможность приобретать турпродукты!",
+		content: "Войдите в систему, чтобы иметь возможность приобретать турпродукты!",
 	},
 ];
 
@@ -72,16 +67,10 @@ export default function LoginRoute() {
 				<p className="font-medium text-3xl/relaxed tracking-widest md:text-4xl/relaxed">
 					Мы скучали!
 				</p>
-				<p className="text-gray-800 leading-relaxed md:text-lg">
-					Войдите, чтобы продолжить
-				</p>
+				<p className="text-gray-800 leading-relaxed md:text-lg">Войдите, чтобы продолжить</p>
 			</div>
 			<Form method="POST">
-				<input
-					type="hidden"
-					name="redirectTo"
-					value={searchParams.get("redirectTo") ?? undefined}
-				/>
+				<input type="hidden" name="redirectTo" value={searchParams.get("redirectTo") ?? undefined} />
 				<div className="group relative w-full overflow-hidden rounded-md border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
 					<input
 						type="text"

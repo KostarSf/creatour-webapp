@@ -57,13 +57,7 @@ export default function LandingPage() {
 						{/** Если вход выполнен и это обычный пользователь, посылаем его в каталог */}
 						{/** Если это редактор, посылаем его в /users, где его перенаправит на нужный кабинет */}
 						<Link
-							to={
-								user
-									? user.role !== "user"
-										? "/user"
-										: "/products"
-									: "/register"
-							}
+							to={user ? (user.role !== "user" ? "/user" : "/products") : "/register"}
 							className="inline-block w-full rounded-full bg-blue-500 px-12 py-3 text-center font-medium text-lg text-white transition-colors hover:bg-blue-600 sm:w-auto md:text-left"
 						>
 							{user
@@ -76,9 +70,7 @@ export default function LandingPage() {
 
 					<div className="mt-32 flex flex-col-reverse justify-between gap-4 md:mt-16 xl:flex-row xl:items-end">
 						<div className="my-12 flex flex-col items-center md:my-0 md:items-start">
-							<p className="text-lg md:text-white md:drop-shadow-sm">
-								Креатур в соцсетях
-							</p>
+							<p className="text-lg md:text-white md:drop-shadow-sm">Креатур в соцсетях</p>
 							<div className="mt-2 flex gap-6">
 								{/* biome-ignore lint/a11y/useValidAnchor: <explanation> */}
 								<a href="#" className="cursor-pointer text-black md:text-white">
@@ -171,12 +163,10 @@ export default function LandingPage() {
 				<div className="my-48">
 					<p className="mb-10 text-center text-4xl">***</p>
 					<p className="text-center font-light text-xl leading-normal tracking-widest md:text-3xl xl:text-4xl">
-						<span className="font-bold font-serif text-2xl md:text-3xl xl:text-5xl">
-							Креатур
-						</span>{" "}
-						- это творческое объединение разнообразных компаний туристической
-						сферы, разработчиков креативных туристических программ, владельцев
-						инфраструктуры и любителей пробовать что-то новое.
+						<span className="font-bold font-serif text-2xl md:text-3xl xl:text-5xl">Креатур</span>{" "}
+						- это творческое объединение разнообразных компаний туристической сферы, разработчиков
+						креативных туристических программ, владельцев инфраструктуры и любителей пробовать
+						что-то новое.
 					</p>
 				</div>
 
@@ -192,8 +182,8 @@ export default function LandingPage() {
 							</div>
 							<div className="flex items-center justify-between">
 								<p className="font-medium sm:text-lg/snug">
-									Мало-Коннюшенный мост{" "}
-									<br className="hidden sm:inline-block" /> в Санкт-Петербурге
+									Мало-Коннюшенный мост <br className="hidden sm:inline-block" /> в
+									Санкт-Петербурге
 								</p>
 								<img
 									src="/images/landing/arrow_right.svg"
@@ -209,9 +199,8 @@ export default function LandingPage() {
 							Посмотрите все направления туров
 						</h2>
 						<p className="text-xl">
-							Бескрайние просторы тайги, огромные реки, золотые степи и венцы
-							человеческого творения - архитектурные памятники - это и делает
-							нашу страну такой уникальной.
+							Бескрайние просторы тайги, огромные реки, золотые степи и венцы человеческого
+							творения - архитектурные памятники - это и делает нашу страну такой уникальной.
 						</p>
 						<Link
 							to="/products"
@@ -234,9 +223,8 @@ export default function LandingPage() {
 							</div>
 							<div className="flex items-center justify-between">
 								<p className="font-medium sm:text-lg/snug">
-									Пожалуй, это был лучший{" "}
-									<br className="hidden sm:inline-block" /> гастрономический тур
-									на Юге
+									Пожалуй, это был лучший <br className="hidden sm:inline-block" />{" "}
+									гастрономический тур на Юге
 								</p>
 								<img
 									src="/images/landing/arrow_right.svg"
@@ -252,8 +240,8 @@ export default function LandingPage() {
 							Что пишут участники наших турпрограмм
 						</h2>
 						<p className="text-xl">
-							87% участников приходят по личной рекомендации от друзей. Каждый
-							4-ый проводит досуг с нами больше 2-ух раз!
+							87% участников приходят по личной рекомендации от друзей. Каждый 4-ый проводит
+							досуг с нами больше 2-ух раз!
 						</p>
 						<Link
 							to="/reviews"
@@ -279,9 +267,7 @@ function PreviewCard({ link, image, displayId, name }: PreviewCardProps) {
 	return (
 		<Link
 			to={link}
-			className={
-				"relative aspect-14/9 w-full overflow-hidden rounded-md md:h-44 md:w-auto"
-			}
+			className={"relative aspect-14/9 w-full overflow-hidden rounded-md md:h-44 md:w-auto"}
 		>
 			<img src={image} alt="" className="h-full w-full" />
 			<div className="absolute inset-0 flex flex-col justify-between p-3">

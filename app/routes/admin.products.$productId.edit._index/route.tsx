@@ -1,12 +1,6 @@
 import { type FileUpload, parseFormData } from "@mjackson/form-data-parser";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import {
-	Form,
-	Link,
-	redirect,
-	useActionData,
-	useLoaderData,
-} from "react-router";
+import { Form, Link, redirect, useActionData, useLoaderData } from "react-router";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { getProductsStorageKey, placesFileStorage } from "~/utils/storage.server";
@@ -15,10 +9,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 	let imageName = "";
 
 	const uploadHandler = async (fileUpload: FileUpload) => {
-		const storageKey = getProductsStorageKey(
-			params.productId as string,
-			fileUpload.name,
-		);
+		const storageKey = getProductsStorageKey(params.productId as string, fileUpload.name);
 		await placesFileStorage.set(storageKey, fileUpload);
 		imageName = storageKey;
 		return placesFileStorage.get(storageKey);
@@ -122,9 +113,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 			beginDate: !Number.isNaN(new Date(beginDate).getTime())
 				? new Date(beginDate).toISOString()
 				: null,
-			endDate: !Number.isNaN(new Date(endDate).getTime())
-				? new Date(endDate).toISOString()
-				: null,
+			endDate: !Number.isNaN(new Date(endDate).getTime()) ? new Date(endDate).toISOString() : null,
 			...(imageName !== "" && { image: imageName }),
 			tags: {
 				set: [],
@@ -186,9 +175,7 @@ export default function ProductEditRoute() {
 					<select
 						name="creatorId"
 						className="border"
-						defaultValue={
-							actionData?.fields?.creatorId || data.product.creatorId
-						}
+						defaultValue={actionData?.fields?.creatorId || data.product.creatorId}
 						required
 					>
 						{data.creators.map((po) => (
@@ -212,9 +199,7 @@ export default function ProductEditRoute() {
 					<textarea
 						name="description"
 						className="border"
-						defaultValue={
-							actionData?.fields?.description || data.product.description || ""
-						}
+						defaultValue={actionData?.fields?.description || data.product.description || ""}
 					/>
 				</label>
 
@@ -240,9 +225,7 @@ export default function ProductEditRoute() {
 						type="string"
 						name="price"
 						className="border"
-						defaultValue={
-							actionData?.fields?.price || data.product.price || "0"
-						}
+						defaultValue={actionData?.fields?.price || data.product.price || "0"}
 					/>
 				</label>
 				<label>
@@ -282,9 +265,7 @@ export default function ProductEditRoute() {
 						type="text"
 						name="address"
 						className="border"
-						defaultValue={
-							actionData?.fields?.address || data.product.address || ""
-						}
+						defaultValue={actionData?.fields?.address || data.product.address || ""}
 					/>
 				</label>
 				<label>
@@ -293,9 +274,7 @@ export default function ProductEditRoute() {
 						type="text"
 						name="coordinates"
 						className="border"
-						defaultValue={
-							actionData?.fields?.coordinates || data.product.coordinates || ""
-						}
+						defaultValue={actionData?.fields?.coordinates || data.product.coordinates || ""}
 					/>
 				</label>
 				<label>
@@ -304,9 +283,7 @@ export default function ProductEditRoute() {
 						type="datetime-local"
 						name="beginDate"
 						className="border"
-						defaultValue={
-							actionData?.fields?.beginDate || data.product.beginDate || ""
-						}
+						defaultValue={actionData?.fields?.beginDate || data.product.beginDate || ""}
 					/>
 				</label>
 				<label>
@@ -315,9 +292,7 @@ export default function ProductEditRoute() {
 						type="datetime-local"
 						name="endDate"
 						className="border"
-						defaultValue={
-							actionData?.fields?.endDate || data.product.endDate || ""
-						}
+						defaultValue={actionData?.fields?.endDate || data.product.endDate || ""}
 					/>
 				</label>
 				<label>
@@ -326,9 +301,7 @@ export default function ProductEditRoute() {
 						type="text"
 						name="assistant"
 						className="border"
-						defaultValue={
-							actionData?.fields?.assistant || data.product.assistant || ""
-						}
+						defaultValue={actionData?.fields?.assistant || data.product.assistant || ""}
 					/>
 				</label>
 
@@ -336,35 +309,18 @@ export default function ProductEditRoute() {
 
 				<label>
 					<p>Изображение</p>
-					<img
-						src={`/images/products/${data.product.image}`}
-						alt="Изображение"
-						className="w-64"
-					/>
-					<input
-						type="file"
-						name="image"
-						accept=".png,.jpg,.jpeg,.webp"
-						className="border"
-					/>
+					<img src={`/images/products/${data.product.image}`} alt="Изображение" className="w-64" />
+					<input type="file" name="image" accept=".png,.jpg,.jpeg,.webp" className="border" />
 				</label>
 				<div>
-					<button
-						type="submit"
-						className="mt-8 block bg-blue-600 px-4 py-2 text-white"
-					>
+					<button type="submit" className="mt-8 block bg-blue-600 px-4 py-2 text-white">
 						Сохранить изменения
 					</button>
-					<Link
-						to={`../${data.product.id}`}
-						className="mt-1 inline-block border px-4 py-2"
-					>
+					<Link to={`../${data.product.id}`} className="mt-1 inline-block border px-4 py-2">
 						Вернуться
 					</Link>
 				</div>
-				<div>
-					{actionData?.formError ? <p>{actionData.formError}</p> : null}
-				</div>
+				<div>{actionData?.formError ? <p>{actionData.formError}</p> : null}</div>
 			</Form>
 		</div>
 	);

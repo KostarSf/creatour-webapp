@@ -31,9 +31,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 	const user = await getUser(request);
 	const ratingsCount = product.rating.length;
-	const ratingsSum = product.rating
-		.map((r) => r.value)
-		.reduce((prev, cur) => prev + cur, 0);
+	const ratingsSum = product.rating.map((r) => r.value).reduce((prev, cur) => prev + cur, 0);
 	const totalRatimg = Math.round((ratingsSum / ratingsCount) * 100) / 100;
 
 	const subscribed =
@@ -95,11 +93,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 		const userId = form.get("userId");
 		const value = form.get("value");
 
-		if (
-			typeof userId !== "string" ||
-			typeof value !== "string" ||
-			Number.isNaN(Number(value))
-		) {
+		if (typeof userId !== "string" || typeof value !== "string" || Number.isNaN(Number(value))) {
 			return badRequest({
 				fieldErrors: null,
 				fields: null,
@@ -186,25 +180,20 @@ export default function TripPage() {
 				src={`/images/products/${product.image}`}
 				alt={product.image || "image"}
 			/>
-			<h2 className="my-3 font-semibold text-2xl leading-none">
-				{product.name}
-			</h2>
+			<h2 className="my-3 font-semibold text-2xl leading-none">{product.name}</h2>
 			<p className="mb-2">{product.description}</p>
 			<p className="font-semibold text-sm">
 				{product.city}, {product.address}
 			</p>
 			<p>
 				Дата проведения:{" "}
-				{product.beginDate
-					? new Date(product.beginDate).toLocaleString()
-					: "не задана"}
+				{product.beginDate ? new Date(product.beginDate).toLocaleString() : "не задана"}
 			</p>
 			<p>
 				Длительность:{" "}
 				{product.beginDate && product.endDate
 					? new Date(
-							new Date(product.endDate).valueOf() -
-								new Date(product.beginDate).valueOf(),
+							new Date(product.endDate).valueOf() - new Date(product.beginDate).valueOf(),
 						).toLocaleTimeString()
 					: "не задана"}
 			</p>
@@ -235,15 +224,9 @@ export default function TripPage() {
 						key={r.id}
 						className="flex gap-2 border-blue-500 border-l-4 pl-2"
 					>
-						<img
-							src={`/images/places/${r.place.image}`}
-							alt=""
-							className="w-12"
-						/>
+						<img src={`/images/places/${r.place.image}`} alt="" className="w-12" />
 						<div>
-							<p className="font-semibold hover:text-blue-600">
-								{r.place.name}
-							</p>
+							<p className="font-semibold hover:text-blue-600">{r.place.name}</p>
 							<p className="text-sm">{r.place.address}</p>
 						</div>
 					</Link>
@@ -306,10 +289,7 @@ export default function TripPage() {
 									<Form action="/remove-comment" method="post">
 										<input type="hidden" name="commentId" value={c.id} />
 										<input type="hidden" name="redirect-to" value={data.url} />
-										<button
-											type="submit"
-											className="text-blue-600 hover:underline"
-										>
+										<button type="submit" className="text-blue-600 hover:underline">
 											Удалить комментарий
 										</button>
 									</Form>

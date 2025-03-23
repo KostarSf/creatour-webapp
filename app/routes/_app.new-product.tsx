@@ -1,19 +1,13 @@
 import type { ComponentPropsWithRef, ReactNode } from "react";
 import { forwardRef, useEffect } from "react";
-import type {
-	ActionFunctionArgs,
-	LoaderFunctionArgs,
-	MetaFunction,
-} from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "react-router";
 import { data, redirect } from "react-router";
 import { Form, useActionData, useLoaderData } from "react-router";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { requireUserId } from "~/utils/session.server";
 
-export const meta: MetaFunction = () => [
-	{ title: "Добавление нового турпродукта | Креатур" },
-];
+export const meta: MetaFunction = () => [{ title: "Добавление нового турпродукта | Креатур" }];
 
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
@@ -28,17 +22,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	}
 
 	const formData = await request.formData();
-	const {
-		name,
-		type,
-		price,
-		short,
-		description,
-		city,
-		address,
-		beginDate,
-		endDate,
-	} = Object.fromEntries(formData);
+	const { name, type, price, short, description, city, address, beginDate, endDate } =
+		Object.fromEntries(formData);
 
 	if (
 		typeof name !== "string" ||
@@ -48,10 +33,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		typeof address !== "string" ||
 		typeof beginDate !== "string" ||
 		typeof endDate !== "string" ||
-		(type !== "excursion" &&
-			type !== "tour" &&
-			type !== "quest" &&
-			type !== "event") ||
+		(type !== "excursion" && type !== "tour" && type !== "quest" && type !== "event") ||
 		typeof price !== "string" ||
 		Number.isNaN(Number(price))
 	) {
@@ -76,10 +58,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			type: type,
 			city: city.trim(),
 			address: address.trim(),
-			beginDate:
-				beginDate.length !== 0 ? new Date(beginDate).toISOString() : undefined,
-			endDate:
-				endDate.length !== 0 ? new Date(endDate).toISOString() : undefined,
+			beginDate: beginDate.length !== 0 ? new Date(beginDate).toISOString() : undefined,
+			endDate: endDate.length !== 0 ? new Date(endDate).toISOString() : undefined,
 		},
 	});
 
@@ -116,31 +96,10 @@ export default function NewProductPage() {
 						<option value="quest">Мероприятие</option>
 						<option value="event">Событие</option>
 					</InputSelect>
-					<InputField
-						type="text"
-						name="name"
-						id="name"
-						label="Название"
-						required
-					/>
-					<InputField
-						type="text"
-						name="short"
-						id="short"
-						label="Краткое описание"
-					/>
-					<InputArea
-						name="description"
-						id="description"
-						label="Полное описание"
-					/>
-					<InputField
-						type="number"
-						placeholder="Бесплатно"
-						name="price"
-						id="price"
-						label="Цена"
-					/>
+					<InputField type="text" name="name" id="name" label="Название" required />
+					<InputField type="text" name="short" id="short" label="Краткое описание" />
+					<InputArea name="description" id="description" label="Полное описание" />
+					<InputField type="number" placeholder="Бесплатно" name="price" id="price" label="Цена" />
 				</div>
 				<div className="mt-6 space-y-3">
 					<InputField
@@ -205,19 +164,17 @@ interface InputAreaProps extends ComponentPropsWithRef<"textarea"> {
 	label: string;
 }
 
-const InputArea = forwardRef<HTMLTextAreaElement, InputAreaProps>(
-	({ label, id, ...other }, forwardedRef) => (
-		<div>
-			<label htmlFor={id}>{label}</label>
-			<textarea
-				ref={forwardedRef}
-				id={id}
-				className="min-h-[2.125rem] w-full rounded-sm border px-2 py-1"
-				{...other}
-			/>
-		</div>
-	),
-);
+const InputArea = forwardRef<HTMLTextAreaElement, InputAreaProps>(({ label, id, ...other }, forwardedRef) => (
+	<div>
+		<label htmlFor={id}>{label}</label>
+		<textarea
+			ref={forwardedRef}
+			id={id}
+			className="min-h-[2.125rem] w-full rounded-sm border px-2 py-1"
+			{...other}
+		/>
+	</div>
+));
 
 interface InputSelectProps extends ComponentPropsWithRef<"select"> {
 	label: string;

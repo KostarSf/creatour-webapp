@@ -75,10 +75,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 		},
 	});
 
-	const [checksCount, nextEvent] = await db.$transaction([
-		checksCountPromise,
-		nextEventPromise,
-	]);
+	const [checksCount, nextEvent] = await db.$transaction([checksCountPromise, nextEventPromise]);
 
 	return { user, checksCount, nextEvent };
 };
@@ -89,11 +86,7 @@ export default function UserPage() {
 	return (
 		<div>
 			{nextEvent && (
-				<NextEventBanner
-					product={nextEvent}
-					username={user.username}
-					className="-mt-3 md:-mt-6"
-				/>
+				<NextEventBanner product={nextEvent} username={user.username} className="-mt-3 md:-mt-6" />
 			)}
 			<UserCard user={user} checksCount={checksCount} />
 		</div>

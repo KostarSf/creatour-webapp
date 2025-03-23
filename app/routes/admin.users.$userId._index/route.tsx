@@ -154,9 +154,8 @@ export default function UserRoute() {
 							const isPlace = comment.parentPlace !== null;
 
 							const name =
-								(isPlace
-									? comment.parentPlace?.name
-									: comment.parentProduct?.name) || "Ошибка";
+								(isPlace ? comment.parentPlace?.name : comment.parentProduct?.name) ||
+								"Ошибка";
 							const url = `/admin/${isPlace ? "places" : "products"}/${
 								isPlace ? comment.placeId : comment.productId
 							}`;
@@ -182,10 +181,7 @@ export default function UserRoute() {
 												value={`/admin/users/${data.user.id}`}
 											/>
 											<input type="hidden" name="id" value={comment.id} />
-											<button
-												type="submit"
-												className="text-red-600 hover:underline"
-											>
+											<button type="submit" className="text-red-600 hover:underline">
 												Удалить
 											</button>
 										</Form>
@@ -215,8 +211,7 @@ export default function UserRoute() {
 					data.user.ratings.map((rating) => {
 						const isPlace = rating.place !== null;
 
-						const name =
-							(isPlace ? rating.place?.name : rating.product?.name) || "Ошибка";
+						const name = (isPlace ? rating.place?.name : rating.product?.name) || "Ошибка";
 						const url = `/admin/${isPlace ? "places" : "products"}/${
 							isPlace ? rating.placeId : rating.productId
 						}`;
@@ -243,10 +238,7 @@ export default function UserRoute() {
 											value={`/admin/users/${data.user.id}`}
 										/>
 										<input type="hidden" name="id" value={rating.id} />
-										<button
-											type="submit"
-											className="text-red-600 hover:underline"
-										>
+										<button type="submit" className="text-red-600 hover:underline">
 											Удалить
 										</button>
 									</Form>

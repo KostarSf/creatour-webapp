@@ -1,19 +1,13 @@
 import type { ComponentPropsWithRef } from "react";
 import { forwardRef, useEffect } from "react";
-import type {
-	ActionFunctionArgs,
-	LoaderFunctionArgs,
-	MetaFunction,
-} from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "react-router";
 import { data, redirect } from "react-router";
 import { Form, useActionData, useLoaderData } from "react-router";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { requireUserId } from "~/utils/session.server";
 
-export const meta: MetaFunction = () => [
-	{ title: "Добавление нового места | Креатур" },
-];
+export const meta: MetaFunction = () => [{ title: "Добавление нового места | Креатур" }];
 
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
@@ -28,8 +22,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	}
 
 	const formData = await request.formData();
-	const { name, short, description, city, address, date } =
-		Object.fromEntries(formData);
+	const { name, short, description, city, address, date } = Object.fromEntries(formData);
 
 	if (
 		typeof name !== "string" ||
@@ -89,24 +82,9 @@ export default function NewPlacePage() {
 			<h1 className="text-xl ">Добавление нового места</h1>
 			<Form method="POST" className="py-6 md:py-12">
 				<div className="space-y-3">
-					<InputField
-						type="text"
-						name="name"
-						id="name"
-						label="Название"
-						required
-					/>
-					<InputField
-						type="text"
-						name="short"
-						id="short"
-						label="Краткое описание"
-					/>
-					<InputArea
-						name="description"
-						id="description"
-						label="Полное описание"
-					/>
+					<InputField type="text" name="name" id="name" label="Название" required />
+					<InputField type="text" name="short" id="short" label="Краткое описание" />
+					<InputArea name="description" id="description" label="Полное описание" />
 				</div>
 				<div className="mt-6 space-y-3">
 					<InputField
@@ -118,12 +96,7 @@ export default function NewPlacePage() {
 						required
 					/>
 					<InputField type="text" name="address" id="address" label="Адрес" />
-					<InputField
-						type="datetime-local"
-						name="date"
-						id="date"
-						label="Дата проведения"
-					/>
+					<InputField type="datetime-local" name="date" id="date" label="Дата проведения" />
 				</div>
 				<div className="mt-12">
 					<button
@@ -164,16 +137,14 @@ interface InputAreaProps extends ComponentPropsWithRef<"textarea"> {
 	required?: boolean | undefined;
 }
 
-const InputArea = forwardRef<HTMLTextAreaElement, InputAreaProps>(
-	({ label, id, ...other }, forwardedRef) => (
-		<div>
-			<label htmlFor={id}>{label}</label>
-			<textarea
-				ref={forwardedRef}
-				id={id}
-				className="min-h-[2.125rem] w-full rounded-sm border px-2 py-1"
-				{...other}
-			/>
-		</div>
-	),
-);
+const InputArea = forwardRef<HTMLTextAreaElement, InputAreaProps>(({ label, id, ...other }, forwardedRef) => (
+	<div>
+		<label htmlFor={id}>{label}</label>
+		<textarea
+			ref={forwardedRef}
+			id={id}
+			className="min-h-[2.125rem] w-full rounded-sm border px-2 py-1"
+			{...other}
+		/>
+	</div>
+));

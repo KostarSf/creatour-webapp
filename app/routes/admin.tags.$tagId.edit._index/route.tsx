@@ -69,22 +69,14 @@ export default function TagEditRoute() {
 					/>
 				</label>
 				<div>
-					<button
-						type="submit"
-						className="mt-8 block bg-blue-600 px-4 py-2 text-white"
-					>
+					<button type="submit" className="mt-8 block bg-blue-600 px-4 py-2 text-white">
 						Сохранить изменения
 					</button>
-					<Link
-						to={`../${data.tag.id}`}
-						className="mt-1 inline-block border px-4 py-2"
-					>
+					<Link to={`../${data.tag.id}`} className="mt-1 inline-block border px-4 py-2">
 						Вернуться
 					</Link>
 				</div>
-				<div>
-					{actionData?.formError ? <p>{actionData.formError}</p> : null}
-				</div>
+				<div>{actionData?.formError ? <p>{actionData.formError}</p> : null}</div>
 			</Form>
 		</div>
 	);

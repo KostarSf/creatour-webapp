@@ -98,26 +98,17 @@ export default function NewUser() {
 				</label>
 				<label>
 					<p>Тип аккаунта</p>
-					<select
-						name="role"
-						className="border"
-						defaultValue={actionData?.fields?.role}
-					>
+					<select name="role" className="border" defaultValue={actionData?.fields?.role}>
 						<option value="user">Пользователь</option>
 						<option value="creator">Разработчик турпродукта</option>
 						<option value="placeowner">Владелец объекта</option>
 						<option value="admin">Администратор</option>
 					</select>
 				</label>
-				<button
-					type="submit"
-					className="mt-8 block bg-blue-600 px-4 py-2 text-white"
-				>
+				<button type="submit" className="mt-8 block bg-blue-600 px-4 py-2 text-white">
 					Создать
 				</button>
-				<div>
-					{actionData?.formError ? <p>{actionData.formError}</p> : null}
-				</div>
+				<div>{actionData?.formError ? <p>{actionData.formError}</p> : null}</div>
 			</form>
 		</div>
 	);

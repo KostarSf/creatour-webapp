@@ -23,9 +23,7 @@ export default function ProductsList() {
 						prefetch="intent"
 						key={product.id}
 						className="block"
-						style={({ isActive }) =>
-							isActive ? { background: "#eee" } : undefined
-						}
+						style={({ isActive }) => (isActive ? { background: "#eee" } : undefined)}
 					>
 						<p>
 							<b>{product.name}</b> - {product.type}

@@ -112,21 +112,13 @@ export function ServiceProductCard<TType extends CardType>({
 					</Link>
 				</>
 			}
-			topLeftText={
-				type === "product"
-					? object.price === 0
-						? "Бесплатно"
-						: `${object.price} ₽`
-					: ""
-			}
+			topLeftText={type === "product" ? (object.price === 0 ? "Бесплатно" : `${object.price} ₽`) : ""}
 			type={type}
 			object={object}
 		>
 			{usedIn && usedIn.length > 0 ? (
 				<>
-					<p className="mt-6 font-medium text-lg">
-						Используется в турпродуктах
-					</p>
+					<p className="mt-6 font-medium text-lg">Используется в турпродуктах</p>
 					{usedIn.map((point) => (
 						<Link
 							to={`/products/${point.product.id}`}
@@ -190,13 +182,9 @@ function ProductCardBase<TType extends CardType>({
 					<div className="flex justify-between">
 						{type === "product" && (
 							<>
-								<div className="font-medium text-base/none uppercase">
-									{topLeftText}
-								</div>
+								<div className="font-medium text-base/none uppercase">{topLeftText}</div>
 								<div className="text-right">
-									{object.beginDate ? (
-										<CardDate date={object.beginDate} />
-									) : null}
+									{object.beginDate ? <CardDate date={object.beginDate} /> : null}
 								</div>
 							</>
 						)}
@@ -213,20 +201,13 @@ function ProductCardBase<TType extends CardType>({
 			</Link>
 			<div className="flex flex-1 flex-col gap-12 pt-3 pb-6 md:px-6 lg:min-h-[12rem]">
 				<div className="flex-1">
-					<Link
-						to={`/${type}s/${object.id}`}
-						className="font-bold font-serif text-2xl md:text-3xl"
-					>
+					<Link to={`/${type}s/${object.id}`} className="font-bold font-serif text-2xl md:text-3xl">
 						{object.name}
 					</Link>
 					<p className="text-lg text-slate-700">{object.short}</p>
 					<div>{children}</div>
 				</div>
-				{footer && (
-					<div className="flex flex-wrap items-center justify-between gap-2">
-						{footer}
-					</div>
-				)}
+				{footer && <div className="flex flex-wrap items-center justify-between gap-2">{footer}</div>}
 			</div>
 		</div>
 	);

@@ -23,9 +23,7 @@ export default function UsersList() {
 						prefetch="intent"
 						key={user.id}
 						className="my-2 block"
-						style={({ isActive }) =>
-							isActive ? { background: "#eee" } : undefined
-						}
+						style={({ isActive }) => (isActive ? { background: "#eee" } : undefined)}
 					>
 						<p>
 							<b>{user.username}</b> - {user.role}

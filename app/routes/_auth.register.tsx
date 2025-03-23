@@ -27,12 +27,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 function validateRole(role: unknown) {
-	if (
-		role !== "user" &&
-		role !== "placeowner" &&
-		role !== "creator" &&
-		role !== "admin"
-	) {
+	if (role !== "user" && role !== "placeowner" && role !== "creator" && role !== "admin") {
 		return "Роль указана неверно";
 	}
 }
@@ -119,19 +114,13 @@ export default function LoginRoute() {
 	return (
 		<>
 			<div className="my-12 text-center md:my-16 md:text-left">
-				<p className="font-medium text-2xl tracking-widest md:text-3xl/relaxed">
-					Добро пожаловать!
-				</p>
+				<p className="font-medium text-2xl tracking-widest md:text-3xl/relaxed">Добро пожаловать!</p>
 				<p className="text-gray-800 leading-relaxed md:text-lg">
 					Зарегистрируйтесь и начните <br /> открывать новые направления!
 				</p>
 			</div>
 			<Form method="POST">
-				<input
-					type="hidden"
-					name="redirectTo"
-					value={searchParams.get("redirectTo") ?? undefined}
-				/>
+				<input type="hidden" name="redirectTo" value={searchParams.get("redirectTo") ?? undefined} />
 				<div className="group relative w-full overflow-hidden rounded-md border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
 					<select
 						className="w-full bg-white px-4 py-3 outline-hidden"
@@ -139,9 +128,7 @@ export default function LoginRoute() {
 						required
 						defaultValue={actionData?.fields?.role}
 						aria-invalid={Boolean(actionData?.fieldErrors?.role)}
-						aria-errormessage={
-							actionData?.fieldErrors?.role ? "role-error" : undefined
-						}
+						aria-errormessage={actionData?.fieldErrors?.role ? "role-error" : undefined}
 					>
 						<option value="user">Пользователь</option>
 						<option value="placeowner">Владелец ресурсов</option>
@@ -149,10 +136,7 @@ export default function LoginRoute() {
 					</select>
 				</div>
 				{actionData?.fieldErrors?.role ? (
-					<p
-						id="role-error"
-						className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm"
-					>
+					<p id="role-error" className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm">
 						{actionData.fieldErrors.role}
 					</p>
 				) : null}
@@ -165,16 +149,11 @@ export default function LoginRoute() {
 						required
 						defaultValue={actionData?.fields?.username}
 						aria-invalid={Boolean(actionData?.fieldErrors?.username)}
-						aria-errormessage={
-							actionData?.fieldErrors?.username ? "username-error" : undefined
-						}
+						aria-errormessage={actionData?.fieldErrors?.username ? "username-error" : undefined}
 					/>
 				</div>
 				{actionData?.fieldErrors?.username ? (
-					<p
-						id="username-error"
-						className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm"
-					>
+					<p id="username-error" className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm">
 						{actionData.fieldErrors.username}
 					</p>
 				) : null}
@@ -187,16 +166,11 @@ export default function LoginRoute() {
 						required
 						defaultValue={actionData?.fields?.email}
 						aria-invalid={Boolean(actionData?.fieldErrors?.email)}
-						aria-errormessage={
-							actionData?.fieldErrors?.email ? "email-error" : undefined
-						}
+						aria-errormessage={actionData?.fieldErrors?.email ? "email-error" : undefined}
 					/>
 				</div>
 				{actionData?.fieldErrors?.email ? (
-					<p
-						id="email-error"
-						className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm"
-					>
+					<p id="email-error" className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm">
 						{actionData.fieldErrors.email}
 					</p>
 				) : null}
@@ -209,16 +183,11 @@ export default function LoginRoute() {
 						required
 						defaultValue={actionData?.fields?.password}
 						aria-invalid={Boolean(actionData?.fieldErrors?.password)}
-						aria-errormessage={
-							actionData?.fieldErrors?.password ? "password-error" : undefined
-						}
+						aria-errormessage={actionData?.fieldErrors?.password ? "password-error" : undefined}
 					/>
 				</div>
 				{actionData?.fieldErrors?.password ? (
-					<p
-						id="password-error"
-						className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm"
-					>
+					<p id="password-error" className="mt-1 mb-4 px-4 font-medium text-red-700 text-sm">
 						{actionData.fieldErrors.password}
 					</p>
 				) : null}

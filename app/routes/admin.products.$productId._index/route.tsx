@@ -75,11 +75,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 		const pointId = form.get("point");
 		const order = form.get("order");
 		const date = form.get("date");
-		if (
-			typeof pointId !== "string" ||
-			typeof order !== "string" ||
-			typeof date !== "string"
-		) {
+		if (typeof pointId !== "string" || typeof order !== "string" || typeof date !== "string") {
 			throw new Response("Ошибка отправки формы", {
 				status: 400,
 			});
@@ -96,9 +92,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 			where: { id: pointId },
 			data: {
 				order: Number(order),
-				date: !Number.isNaN(new Date(date).getTime())
-					? new Date(date).toISOString()
-					: undefined,
+				date: !Number.isNaN(new Date(date).getTime()) ? new Date(date).toISOString() : undefined,
 			},
 		});
 		return new Response("Ok", { status: 200 });
@@ -158,9 +152,7 @@ export default function ProductRoute() {
 	const data = useLoaderData<typeof loader>();
 
 	const ratingsCount = data.product.rating.length;
-	const ratingsSum = data.product.rating
-		.map((r) => r.value)
-		.reduce((prev, cur) => prev + cur, 0);
+	const ratingsSum = data.product.rating.map((r) => r.value).reduce((prev, cur) => prev + cur, 0);
 	const totalRatimg = Math.round((ratingsSum / ratingsCount) * 100) / 100;
 
 	return (
@@ -218,14 +210,10 @@ export default function ProductRoute() {
 						Тип турпродукта: <br /> <b>{data.product.type}</b>
 					</p>
 					<p>
-						Цена: <br />{" "}
-						<b>
-							{data.product.price > 0 ? `${data.product.price} ₽` : "бесплатно"}
-						</b>
+						Цена: <br /> <b>{data.product.price > 0 ? `${data.product.price} ₽` : "бесплатно"}</b>
 					</p>
 					<p>
-						Турпродукт активен: <br />{" "}
-						<b>{data.product.active ? "Да" : "Нет"}</b>
+						Турпродукт активен: <br /> <b>{data.product.active ? "Да" : "Нет"}</b>
 					</p>
 					<p>
 						Теги: <br />
@@ -260,11 +248,7 @@ export default function ProductRoute() {
 					</p>
 					<p>
 						Дата окончания: <br />{" "}
-						<b>
-							{data.product.endDate
-								? new Date(data.product.endDate).toLocaleString()
-								: null}
-						</b>
+						<b>{data.product.endDate ? new Date(data.product.endDate).toLocaleString() : null}</b>
 					</p>
 					<p>
 						Ассистент: <br /> <b>{data.product.assistant}</b>
@@ -290,10 +274,7 @@ export default function ProductRoute() {
 					<div>
 						{data.product.route.map((point) => (
 							<p key={point.placeId} className="flex items-baseline gap-2">
-								<Form
-									method="post"
-									className="flex flex-wrap items-baseline gap-2"
-								>
+								<Form method="post" className="flex flex-wrap items-baseline gap-2">
 									<input
 										type="number"
 										name="order"
@@ -310,9 +291,7 @@ export default function ProductRoute() {
 										type="datetime-local"
 										name="date"
 										defaultValue={
-											point.date
-												? getLocalDate(new Date(point.date))
-												: undefined
+											point.date ? getLocalDate(new Date(point.date)) : undefined
 										}
 										className="border"
 									/>
@@ -394,10 +373,7 @@ export default function ProductRoute() {
 											value={`/admin/products/${data.product.id}`}
 										/>
 										<input type="hidden" name="id" value={comment.id} />
-										<button
-											type="submit"
-											className="text-red-600 hover:underline"
-										>
+										<button type="submit" className="text-red-600 hover:underline">
 											Удалить
 										</button>
 									</Form>
@@ -428,11 +404,7 @@ export default function ProductRoute() {
 					encType="multipart/form-data"
 					className="flex flex-col gap-2"
 				>
-					<input
-						type="hidden"
-						name="redirectTo"
-						value={`/admin/products/${data.product.id}`}
-					/>
+					<input type="hidden" name="redirectTo" value={`/admin/products/${data.product.id}`} />
 					<input type="hidden" name="parentType" value="product" />
 					<input type="hidden" name="parentId" value={data.product.id} />
 					<select name="userId" className="border">
@@ -484,10 +456,7 @@ export default function ProductRoute() {
 										value={`/admin/products/${data.product.id}`}
 									/>
 									<input type="hidden" name="id" value={r.id} />
-									<button
-										type="submit"
-										className="text-red-600 hover:underline"
-									>
+									<button type="submit" className="text-red-600 hover:underline">
 										Удалить
 									</button>
 								</Form>
@@ -498,16 +467,8 @@ export default function ProductRoute() {
 					<p>Оценок пока нет</p>
 				)}
 				<hr className="my-4" />
-				<Form
-					method="post"
-					action="/api/add-rating"
-					className="flex flex-col gap-2"
-				>
-					<input
-						type="hidden"
-						name="redirectTo"
-						value={`/admin/products/${data.product.id}`}
-					/>
+				<Form method="post" action="/api/add-rating" className="flex flex-col gap-2">
+					<input type="hidden" name="redirectTo" value={`/admin/products/${data.product.id}`} />
 					<input type="hidden" name="parentType" value="product" />
 					<input type="hidden" name="parentId" value={data.product.id} />
 					<select name="userId" className="border" required>
@@ -539,11 +500,7 @@ export default function ProductRoute() {
 						data.product.media.map((media) => (
 							<div key={media.id} className="flex gap-2">
 								{media.type === "image" ? (
-									<img
-										src={media.url}
-										alt={media.name || "media"}
-										className="w-32"
-									/>
+									<img src={media.url} alt={media.name || "media"} className="w-32" />
 								) : (
 									// biome-ignore lint/a11y/useMediaCaption: <explanation>
 									<video src={media.url} className="w-32" loop />
@@ -568,10 +525,7 @@ export default function ProductRoute() {
 											value={`/admin/products/${data.product.id}`}
 										/>
 										<input type="hidden" name="id" value={media.id} />
-										<button
-											type="submit"
-											className="text-red-600 hover:underline"
-										>
+										<button type="submit" className="text-red-600 hover:underline">
 											Удалить
 										</button>
 									</Form>
@@ -591,17 +545,8 @@ export default function ProductRoute() {
 				>
 					<p>Добавить медиа:</p>
 					<input type="hidden" name="parentType" value="product" required />
-					<input
-						type="hidden"
-						name="parentId"
-						value={data.product.id}
-						required
-					/>
-					<input
-						type="hidden"
-						name="redirectTo"
-						value={`/admin/products/${data.product.id}`}
-					/>
+					<input type="hidden" name="parentId" value={data.product.id} required />
+					<input type="hidden" name="redirectTo" value={`/admin/products/${data.product.id}`} />
 					<input
 						type="file"
 						name="media"
@@ -615,11 +560,7 @@ export default function ProductRoute() {
 						className="border"
 						placeholder="Название (не обязательно)"
 					/>
-					<textarea
-						name="description"
-						className="border"
-						placeholder="Описание (не обязательно)"
-					/>
+					<textarea name="description" className="border" placeholder="Описание (не обязательно)" />
 					<button type="submit" className="bg-blue-600 text-white">
 						Добавить
 					</button>

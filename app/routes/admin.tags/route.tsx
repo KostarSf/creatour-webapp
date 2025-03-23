@@ -23,9 +23,7 @@ export default function TagsList() {
 						prefetch="intent"
 						key={tag.id}
 						className="block"
-						style={({ isActive }) =>
-							isActive ? { background: "#eee" } : undefined
-						}
+						style={({ isActive }) => (isActive ? { background: "#eee" } : undefined)}
 					>
 						<p>{tag.name}</p>
 					</NavLink>

@@ -11,9 +11,7 @@ export default function RatingBar({
 	if (ratings.length === 0) return <div className={className} />;
 
 	const totalRating = Math.ceil(
-		ratings.reduce((prev, rating) => prev + rating.value, 0) /
-			ratings.length /
-			2,
+		ratings.reduce((prev, rating) => prev + rating.value, 0) / ratings.length / 2,
 	);
 
 	return (

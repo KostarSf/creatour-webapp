@@ -35,9 +35,7 @@ export default function FeedbackDialog({
 	return (
 		<div
 			className={`fixed inset-0 z-10 flex items-center justify-center transition ${
-				visible
-					? "pointer-events-auto opacity-100"
-					: "pointer-events-none opacity-0"
+				visible ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
 			}`}
 			style={{
 				background: "rgba(200, 200, 200, 0.9)",
@@ -63,8 +61,8 @@ export default function FeedbackDialog({
 							</button>
 						</div>
 						<p className="mb-4 text-slate-600">
-							Заинтересованы этим проектом? <br /> Заполните форму и мы свяжемся
-							с Вами в ближайшее время, расскажем детали и ответим на вопросы!
+							Заинтересованы этим проектом? <br /> Заполните форму и мы свяжемся с Вами в
+							ближайшее время, расскажем детали и ответим на вопросы!
 						</p>
 						<input type="hidden" value={postId} name="postId" required />
 						{children}

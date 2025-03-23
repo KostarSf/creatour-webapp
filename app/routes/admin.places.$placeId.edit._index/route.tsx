@@ -1,12 +1,6 @@
 import { type FileUpload, parseFormData } from "@mjackson/form-data-parser";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import {
-	Form,
-	Link,
-	redirect,
-	useActionData,
-	useLoaderData,
-} from "react-router";
+import { Form, Link, redirect, useActionData, useLoaderData } from "react-router";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { getPlacesStorageKey, placesFileStorage } from "~/utils/storage.server";
@@ -16,10 +10,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
 	const uploadHandler = async (fileUpload: FileUpload) => {
 		if (fileUpload.type.startsWith("image/")) {
-			const storageKey = getPlacesStorageKey(
-				params.placeId as string,
-				fileUpload.name,
-			);
+			const storageKey = getPlacesStorageKey(params.placeId as string, fileUpload.name);
 			await placesFileStorage.set(storageKey, fileUpload);
 			imageName = storageKey;
 			return placesFileStorage.get(storageKey);
@@ -146,9 +137,7 @@ export default function PlaceEditRoute() {
 					<select
 						name="creatorId"
 						className="border"
-						defaultValue={
-							actionData?.fields?.creatorId || data.place.creatorId || "none"
-						}
+						defaultValue={actionData?.fields?.creatorId || data.place.creatorId || "none"}
 						required
 					>
 						<option value="none" selected>
@@ -175,9 +164,7 @@ export default function PlaceEditRoute() {
 					<textarea
 						name="description"
 						className="border"
-						defaultValue={
-							actionData?.fields?.description || data.place.description || ""
-						}
+						defaultValue={actionData?.fields?.description || data.place.description || ""}
 					/>
 				</label>
 
@@ -198,9 +185,7 @@ export default function PlaceEditRoute() {
 						type="text"
 						name="address"
 						className="border"
-						defaultValue={
-							actionData?.fields?.address || data.place.address || ""
-						}
+						defaultValue={actionData?.fields?.address || data.place.address || ""}
 					/>
 				</label>
 				<label>
@@ -209,9 +194,7 @@ export default function PlaceEditRoute() {
 						type="text"
 						name="coordinates"
 						className="border"
-						defaultValue={
-							actionData?.fields?.coordinates || data.place.coordinates || ""
-						}
+						defaultValue={actionData?.fields?.coordinates || data.place.coordinates || ""}
 					/>
 				</label>
 				<label>
@@ -226,35 +209,18 @@ export default function PlaceEditRoute() {
 				<hr className="my-4" />
 				<label>
 					<p>Изображение</p>
-					<img
-						src={`/images/places/${data.place.image}`}
-						alt="Изображение"
-						className="w-64"
-					/>
-					<input
-						type="file"
-						name="image"
-						accept=".png,.jpg,.jpeg,.webp"
-						className="border"
-					/>
+					<img src={`/images/places/${data.place.image}`} alt="Изображение" className="w-64" />
+					<input type="file" name="image" accept=".png,.jpg,.jpeg,.webp" className="border" />
 				</label>
 				<div>
-					<button
-						type="submit"
-						className="mt-8 block bg-blue-600 px-4 py-2 text-white"
-					>
+					<button type="submit" className="mt-8 block bg-blue-600 px-4 py-2 text-white">
 						Сохранить изменения
 					</button>
-					<Link
-						to={`../${data.place.id}`}
-						className="mt-1 inline-block border px-4 py-2"
-					>
+					<Link to={`../${data.place.id}`} className="mt-1 inline-block border px-4 py-2">
 						Вернуться
 					</Link>
 				</div>
-				<div>
-					{actionData?.formError ? <p>{actionData.formError}</p> : null}
-				</div>
+				<div>{actionData?.formError ? <p>{actionData.formError}</p> : null}</div>
 			</Form>
 		</div>
 	);

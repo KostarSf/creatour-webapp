@@ -35,9 +35,7 @@ export default function CheckTable({ checks }: Props) {
 						<td className="whitespace-nowrap px-4 py-2 text-right font-bold text-blue-500">
 							{check.price.toLocaleString("ru-ru")} ₽
 						</td>
-						<td className="py-2 pl-4 text-right">
-							{new Date(check.date).toLocaleString()}
-						</td>
+						<td className="py-2 pl-4 text-right">{new Date(check.date).toLocaleString()}</td>
 					</tr>
 				))}
 			</tbody>

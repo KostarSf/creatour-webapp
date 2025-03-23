@@ -68,8 +68,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 export default function ProductPage() {
 	const { product, user } = useLoaderData<typeof loader>();
 
-	const buyed =
-		user?.activeProducts.findIndex((p) => p.id === product.id) !== -1;
+	const buyed = user?.activeProducts.findIndex((p) => p.id === product.id) !== -1;
 
 	const canBuy = user?.role === "user" || false;
 
@@ -83,9 +82,7 @@ export default function ProductPage() {
 						<RatingBar ratings={product.rating} />
 						<p className="text-slate-500">{product.rating.length} оценок</p>
 					</div>
-					{product.beginDate && (
-						<CardDate date={product.beginDate} className="text-right" />
-					)}
+					{product.beginDate && <CardDate date={product.beginDate} className="text-right" />}
 				</div>
 			</div>
 
@@ -95,9 +92,7 @@ export default function ProductPage() {
 				onSubmit={(e) => {
 					if (
 						!confirm(
-							product.price > 0
-								? `Приобрести за ${product.price} ₽?`
-								: "Записаться бесплатно?",
+							product.price > 0 ? `Приобрести за ${product.price} ₽?` : "Записаться бесплатно?",
 						)
 					) {
 						e.preventDefault();
@@ -108,11 +103,7 @@ export default function ProductPage() {
 			>
 				<input type="hidden" name="userId" value={user?.id} />
 				<input type="hidden" name="productId" value={product.id} />
-				<input
-					type="hidden"
-					name="redirectTo"
-					value={`/products/${product.id}`}
-				/>
+				<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
 				<button
 					type="submit"
 					name="intent"
@@ -127,35 +118,23 @@ export default function ProductPage() {
 							: "border border-blue-100 text-blue-600",
 					)}
 				>
-					{buyed
-						? "Приобретено"
-						: product.price === 0
-							? "Бесплатно"
-							: `${product.price} ₽`}
+					{buyed ? "Приобретено" : product.price === 0 ? "Бесплатно" : `${product.price} ₽`}
 				</button>
 			</Form>
 
 			<p className="font-semibold font-serif text-xl">Галерея изображений</p>
 			<div className="-mx-6 md:-mx-12 my-6 md:my-12">
 				<div className="flex snap-x scroll-p-6 gap-6 overflow-x-auto px-6">
-					{product.image && (
-						<AlbumImage link={`/images/products/${product.image}`} />
-					)}
+					{product.image && <AlbumImage link={`/images/products/${product.image}`} />}
 					{product.media.map((image) => (
-						<AlbumImage
-							link={image.url}
-							key={image.id}
-							community={image.community}
-						/>
+						<AlbumImage link={image.url} key={image.id} community={image.community} />
 					))}
 				</div>
 			</div>
 
 			{product.route.length > 0 && (
 				<>
-					<p className="mt-24 font-semibold font-serif text-xl">
-						Места мероприятия
-					</p>
+					<p className="mt-24 font-semibold font-serif text-xl">Места мероприятия</p>
 					<div className="my-3">
 						{product.route.map((point) => (
 							<div key={point.id} className="flex items-center gap-3">
@@ -191,11 +170,7 @@ export default function ProductPage() {
 			<p className="mt-24 mb-6 font-semibold font-serif text-xl">Комментарии</p>
 			<div className="space-y-6">
 				{product.comments.map((comment) => (
-					<CommentItem
-						key={comment.id}
-						comment={comment}
-						rating={product.rating}
-					/>
+					<CommentItem key={comment.id} comment={comment} rating={product.rating} />
 				))}
 			</div>
 			<div className="mt-24 mb-12">
@@ -207,11 +182,7 @@ export default function ProductPage() {
 						preventScrollReset
 						className=" max-w-3xl"
 					>
-						<input
-							type="hidden"
-							name="redirectTo"
-							value={`/products/${product.id}`}
-						/>
+						<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
 						<input type="hidden" name="parentType" value="product" />
 						<input type="hidden" name="parentId" value={product.id} />
 						<input type="hidden" name="userId" value={user.id} />
@@ -241,9 +212,7 @@ export default function ProductPage() {
 						</div>
 					</Form>
 				) : (
-					<p className="text-center text-slate-500">
-						Войдите, чтобы оставить комментарий
-					</p>
+					<p className="text-center text-slate-500">Войдите, чтобы оставить комментарий</p>
 				)}
 			</div>
 		</>

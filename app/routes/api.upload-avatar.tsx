@@ -9,10 +9,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	let avatarStorageKey: string | null = null;
 
 	const uploadHandler = async (fileUpload: FileUpload) => {
-		if (
-			fileUpload.fieldName === "avatar" &&
-			fileUpload.type.startsWith("image/")
-		) {
+		if (fileUpload.fieldName === "avatar" && fileUpload.type.startsWith("image/")) {
 			avatarStorageKey = cuid2.createId();
 			await avatarsFileStorage.set(avatarStorageKey, fileUpload);
 			return avatarsFileStorage.get(avatarStorageKey);

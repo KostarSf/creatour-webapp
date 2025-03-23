@@ -23,9 +23,7 @@ export default function PlacesList() {
 						prefetch="intent"
 						key={place.id}
 						className="my-2 block"
-						style={({ isActive }) =>
-							isActive ? { background: "#eee" } : undefined
-						}
+						style={({ isActive }) => (isActive ? { background: "#eee" } : undefined)}
 					>
 						<p>
 							<b>{place.name}</b>

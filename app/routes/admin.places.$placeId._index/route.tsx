@@ -59,9 +59,7 @@ export default function PlaceRoute() {
 	const data = useLoaderData<typeof loader>();
 
 	const ratingsCount = data.place.rating.length;
-	const ratingsSum = data.place.rating
-		.map((r) => r.value)
-		.reduce((prev, cur) => prev + cur, 0);
+	const ratingsSum = data.place.rating.map((r) => r.value).reduce((prev, cur) => prev + cur, 0);
 	const totalRatimg = Math.round((ratingsSum / ratingsCount) * 100) / 100;
 
 	return (
@@ -151,11 +149,7 @@ export default function PlaceRoute() {
 					<hr />
 					<p>Изображение:</p>
 					{data.place.image ? (
-						<img
-							src={`/images/places/${data.place.image}`}
-							alt="Изображение"
-							className="w-64"
-						/>
+						<img src={`/images/places/${data.place.image}`} alt="Изображение" className="w-64" />
 					) : null}
 				</div>
 			</div>
@@ -187,10 +181,7 @@ export default function PlaceRoute() {
 											value={`/admin/places/${data.place.id}`}
 										/>
 										<input type="hidden" name="id" value={comment.id} />
-										<button
-											type="submit"
-											className="text-red-600 hover:underline"
-										>
+										<button type="submit" className="text-red-600 hover:underline">
 											Удалить
 										</button>
 									</Form>
@@ -221,11 +212,7 @@ export default function PlaceRoute() {
 					encType="multipart/form-data"
 					className="flex flex-col gap-2"
 				>
-					<input
-						type="hidden"
-						name="redirectTo"
-						value={`/admin/places/${data.place.id}`}
-					/>
+					<input type="hidden" name="redirectTo" value={`/admin/places/${data.place.id}`} />
 					<input type="hidden" name="parentType" value="place" />
 					<input type="hidden" name="parentId" value={data.place.id} />
 					<select name="userId" className="border" required>
@@ -277,10 +264,7 @@ export default function PlaceRoute() {
 										value={`/admin/places/${data.place.id}`}
 									/>
 									<input type="hidden" name="id" value={r.id} />
-									<button
-										type="submit"
-										className="text-red-600 hover:underline"
-									>
+									<button type="submit" className="text-red-600 hover:underline">
 										Удалить
 									</button>
 								</Form>
@@ -291,16 +275,8 @@ export default function PlaceRoute() {
 					<p>Оценок пока нет</p>
 				)}
 				<hr className="my-4" />
-				<Form
-					method="post"
-					action="/api/add-rating"
-					className="flex flex-col gap-2"
-				>
-					<input
-						type="hidden"
-						name="redirectTo"
-						value={`/admin/places/${data.place.id}`}
-					/>
+				<Form method="post" action="/api/add-rating" className="flex flex-col gap-2">
+					<input type="hidden" name="redirectTo" value={`/admin/places/${data.place.id}`} />
 					<input type="hidden" name="parentType" value="place" />
 					<input type="hidden" name="parentId" value={data.place.id} />
 					<select name="userId" className="border" required>
@@ -332,11 +308,7 @@ export default function PlaceRoute() {
 						data.place.media.map((media) => (
 							<div key={media.id} className="flex gap-2">
 								{media.type === "image" ? (
-									<img
-										src={media.url}
-										alt={media.name || "media"}
-										className="w-32"
-									/>
+									<img src={media.url} alt={media.name || "media"} className="w-32" />
 								) : (
 									// biome-ignore lint/a11y/useMediaCaption: <explanation>
 									<video src={media.url} className="w-32" loop />
@@ -361,10 +333,7 @@ export default function PlaceRoute() {
 											value={`/admin/places/${data.place.id}`}
 										/>
 										<input type="hidden" name="id" value={media.id} />
-										<button
-											type="submit"
-											className="text-red-600 hover:underline"
-										>
+										<button type="submit" className="text-red-600 hover:underline">
 											Удалить
 										</button>
 									</Form>
@@ -385,11 +354,7 @@ export default function PlaceRoute() {
 					<p>Добавить медиа:</p>
 					<input type="hidden" name="parentType" value="place" required />
 					<input type="hidden" name="parentId" value={data.place.id} required />
-					<input
-						type="hidden"
-						name="redirectTo"
-						value={`/admin/places/${data.place.id}`}
-					/>
+					<input type="hidden" name="redirectTo" value={`/admin/places/${data.place.id}`} />
 					<input
 						type="file"
 						name="media"
@@ -403,11 +368,7 @@ export default function PlaceRoute() {
 						className="border"
 						placeholder="Название (не обязательно)"
 					/>
-					<textarea
-						name="description"
-						className="border"
-						placeholder="Описание (не обязательно)"
-					/>
+					<textarea name="description" className="border" placeholder="Описание (не обязательно)" />
 					<button type="submit" className="bg-blue-600 text-white">
 						Добавить
 					</button>

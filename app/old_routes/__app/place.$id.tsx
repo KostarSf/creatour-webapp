@@ -24,9 +24,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 	const user = await getUser(request);
 	const ratingsCount = place.rating.length;
-	const ratingsSum = place.rating
-		.map((r) => r.value)
-		.reduce((prev, cur) => prev + cur, 0);
+	const ratingsSum = place.rating.map((r) => r.value).reduce((prev, cur) => prev + cur, 0);
 	const totalRatimg = Math.round((ratingsSum / ratingsCount) * 100) / 100;
 
 	return {
@@ -47,11 +45,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 		const userId = form.get("userId");
 		const value = form.get("value");
 
-		if (
-			typeof userId !== "string" ||
-			typeof value !== "string" ||
-			Number.isNaN(Number(value))
-		) {
+		if (typeof userId !== "string" || typeof value !== "string" || Number.isNaN(Number(value))) {
 			return badRequest({
 				fieldErrors: null,
 				fields: null,
@@ -203,10 +197,7 @@ export default function PlacePage() {
 									<Form action="/remove-comment" method="post">
 										<input type="hidden" name="commentId" value={c.id} />
 										<input type="hidden" name="redirect-to" value={data.url} />
-										<button
-											type="submit"
-											className="text-blue-600 hover:underline"
-										>
+										<button type="submit" className="text-blue-600 hover:underline">
 											Удалить комментарий
 										</button>
 									</Form>

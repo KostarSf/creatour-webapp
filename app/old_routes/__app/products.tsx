@@ -26,25 +26,20 @@ export default function ProductsPage() {
 function ProjectsSideBlock() {
 	return (
 		<SideBlockContent
-			firstParagraph={
-				<>Здесь вы найдете готовые проекты и решения от наших исполнителей.</>
-			}
+			firstParagraph={<>Здесь вы найдете готовые проекты и решения от наших исполнителей.</>}
 			secondParagraph={
 				<>
 					Если вас заинтересовало какое-либо предложение, смело{" "}
-					<span className="font-semibold">откликайтесь</span>, чтобы узнать
-					подробности.
+					<span className="font-semibold">откликайтесь</span>, чтобы узнать подробности.
 				</>
 			}
 			actionText={
 				<>
-					Вы <span className="font-semibold">исполнитель</span> с готовым
-					решением и хотите найти заказчика?
+					Вы <span className="font-semibold">исполнитель</span> с готовым решением и хотите найти
+					заказчика?
 				</>
 			}
-			actionButton={
-				<SideButtonLink text="Разместите свой проект" url="/projects/new" />
-			}
+			actionButton={<SideButtonLink text="Разместите свой проект" url="/projects/new" />}
 		/>
 	);
 }
@@ -61,9 +56,7 @@ function CategoryLink({
 			to={`.${category ? `/${category}` : ""}`}
 			className="text-slate-500 hover:text-blue-600 hover:underline"
 			style={({ isActive }) =>
-				isActive
-					? { fontWeight: 500, textDecoration: "underline", color: "black" }
-					: undefined
+				isActive ? { fontWeight: 500, textDecoration: "underline", color: "black" } : undefined
 			}
 			end
 		>

@@ -16,9 +16,7 @@ export default function AllPlaces() {
 		<CatalogLayout>
 			{data.places.map((p) => {
 				const ratingsCount = p.rating.length;
-				const ratingsSum = p.rating
-					.map((r) => r.value)
-					.reduce((prev, cur) => prev + cur, 0);
+				const ratingsSum = p.rating.map((r) => r.value).reduce((prev, cur) => prev + cur, 0);
 				const totalRatimg = Math.round((ratingsSum / ratingsCount) * 100) / 100;
 
 				return (
@@ -27,11 +25,7 @@ export default function AllPlaces() {
 						id={p.id}
 						name={p.name}
 						short={p.short}
-						rating={
-							Number.isNaN(totalRatimg)
-								? "Оценок пока нет"
-								: String(totalRatimg)
-						}
+						rating={Number.isNaN(totalRatimg) ? "Оценок пока нет" : String(totalRatimg)}
 						image={p.image}
 					/>
 				);

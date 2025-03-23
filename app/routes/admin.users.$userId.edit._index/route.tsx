@@ -70,8 +70,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	if (!user) {
 		throw new Response("Пользователь не найден", { status: 404 });
 	}
-	const passwordHash =
-		password !== "" ? await bcrypt.hash(password, 10) : user.passwordHash;
+	const passwordHash = password !== "" ? await bcrypt.hash(password, 10) : user.passwordHash;
 	await db.user.update({
 		where: { id },
 		data: {
@@ -105,12 +104,7 @@ export default function UserEditRoute() {
 		<div>
 			<h2 className="mb-2 font-medium">Редактирование пользователя</h2>
 			<Form method="post" className="mt-2">
-				<input
-					type="hidden"
-					name="id"
-					value={actionData?.fields?.id || data.user.id}
-					required
-				/>
+				<input type="hidden" name="id" value={actionData?.fields?.id || data.user.id} required />
 				<label>
 					<p>Имя пользователя</p>
 					<input
@@ -175,9 +169,7 @@ export default function UserEditRoute() {
 						type="text"
 						name="legalName"
 						className="border"
-						defaultValue={
-							actionData?.fields?.legalName || data.user.legalName || ""
-						}
+						defaultValue={actionData?.fields?.legalName || data.user.legalName || ""}
 					/>
 				</label>
 				<label>
@@ -190,22 +182,14 @@ export default function UserEditRoute() {
 					/>
 				</label>
 				<div>
-					<button
-						type="submit"
-						className="mt-8 block bg-blue-600 px-4 py-2 text-white"
-					>
+					<button type="submit" className="mt-8 block bg-blue-600 px-4 py-2 text-white">
 						Сохранить изменения
 					</button>
-					<Link
-						to={`../${data.user.id}`}
-						className="mt-1 inline-block border px-4 py-2"
-					>
+					<Link to={`../${data.user.id}`} className="mt-1 inline-block border px-4 py-2">
 						Вернуться
 					</Link>
 				</div>
-				<div>
-					{actionData?.formError ? <p>{actionData.formError}</p> : null}
-				</div>
+				<div>{actionData?.formError ? <p>{actionData.formError}</p> : null}</div>
 			</Form>
 		</div>
 	);

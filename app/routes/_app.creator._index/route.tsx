@@ -1,8 +1,4 @@
-import type {
-	ActionFunctionArgs,
-	LoaderFunctionArgs,
-	MetaFunction,
-} from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "react-router";
 import { data, redirect } from "react-router";
 import { Link, useLoaderData } from "react-router";
 import ActionLinkButton from "~/components/ActionLinkButton";
@@ -32,8 +28,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	const intent = formData.get("intent");
 
 	if (intent === "change-info") {
-		const { city, phone, legalName, inn, address } =
-			Object.fromEntries(formData);
+		const { city, phone, legalName, inn, address } = Object.fromEntries(formData);
 
 		if (
 			typeof city !== "string" ||
@@ -122,23 +117,18 @@ export default function CreatorPage() {
 	return (
 		<>
 			<div className="my-6 md:my-12">
-				<h1 className="font-medium text-xl">
-					Карточка разработчика турпродуктов
-				</h1>
+				<h1 className="font-medium text-xl">Карточка разработчика турпродуктов</h1>
 			</div>
 			<ServiceUserCard user={user} />
 			<div className="-mx-6 my-6 max-w-7xl border p-6 shadow-blue-900/5 shadow-lg md:mx-auto md:my-12 md:rounded-lg">
 				<p className="mb-2 flex flex-col gap-2 font-bold font-serif text-xl/none md:flex-row">
 					<span>Продажи ваших турпродуктов</span>
 					<span className="font-normal font-sans text-base text-gray-500">
-						({checks.length} чека на сумму{" "}
-						{checks.reduce((prev, check) => prev + check.price, 0)} ₽)
+						({checks.length} чека на сумму {checks.reduce((prev, check) => prev + check.price, 0)}{" "}
+						₽)
 					</span>
 				</p>
-				<Link
-					to={"checks"}
-					className="font-medium text-blue-500 text-lg uppercase hover:underline"
-				>
+				<Link to={"checks"} className="font-medium text-blue-500 text-lg uppercase hover:underline">
 					Смотреть
 				</Link>
 			</div>
@@ -147,22 +137,14 @@ export default function CreatorPage() {
 					<p className="text-xl">
 						<span className="text-blue-500">{user.username}</span> турпродукты
 					</p>
-					<ActionLinkButton to="/new-product">
-						Новый турпродукт
-					</ActionLinkButton>
+					<ActionLinkButton to="/new-product">Новый турпродукт</ActionLinkButton>
 				</div>
 				{product.length === 0 ? (
-					<p className="mt-24 text-center text-slate-400 text-xl">
-						У вас пока нет объектов
-					</p>
+					<p className="mt-24 text-center text-slate-400 text-xl">У вас пока нет объектов</p>
 				) : (
 					<div className="-mx-6 mt-6 max-w-7xl space-y-6 md:mx-auto md:mt-12">
 						{product.map((product) => (
-							<ServiceProductCard
-								type="product"
-								object={product}
-								key={product.id}
-							/>
+							<ServiceProductCard type="product" object={product} key={product.id} />
 						))}
 					</div>
 				)}
