@@ -43,14 +43,14 @@ export default function LandingPage() {
 	return (
 		<>
 			<div className="flex min-h-screen items-stretch justify-center bg-center bg-cover bg-white md:bg-[url('/images/landing/landing_bg.webp')]">
-				<div className="flex max-w-[100rem] flex-grow flex-col justify-between px-6 py-6 sm:px-12">
+				<div className="flex max-w-[100rem] grow flex-col justify-between px-6 py-6 sm:px-12">
 					<div />
 					<div className="mt-32 flex flex-col items-center md:mt-0 md:items-start">
-						<h1 className="text-center font-bold font-serif text-4xl text-blue-500 sm:text-5xl md:text-left md:text-6xl md:text-white md:drop-shadow">
+						<h1 className="text-center font-bold font-serif text-4xl text-blue-500 sm:text-5xl md:text-left md:text-6xl md:text-white md:drop-shadow-sm">
 							Открой для себя <br />
 							Креативный туризм
 						</h1>
-						<p className="mt-4 mb-12 text-center font-medium text-gray-600 text-xl md:text-left md:text-2xl md:text-white md:drop-shadow">
+						<p className="mt-4 mb-12 text-center font-medium text-gray-600 text-xl md:text-left md:text-2xl md:text-white md:drop-shadow-sm">
 							Отдыхай по новому с командой Креатура
 						</p>
 
@@ -76,7 +76,7 @@ export default function LandingPage() {
 
 					<div className="mt-32 flex flex-col-reverse justify-between gap-4 md:mt-16 xl:flex-row xl:items-end">
 						<div className="my-12 flex flex-col items-center md:my-0 md:items-start">
-							<p className="text-lg md:text-white md:drop-shadow">
+							<p className="text-lg md:text-white md:drop-shadow-sm">
 								Креатур в соцсетях
 							</p>
 							<div className="mt-2 flex gap-6">
@@ -181,7 +181,7 @@ export default function LandingPage() {
 				</div>
 
 				<div className="flex flex-col gap-2 lg:flex-row lg:gap-12">
-					<div className="flex-[3] overflow-hidden rounded-xl bg-[url(/images/landing/place_mmm.jpg)] bg-center bg-cover bg-slate-200">
+					<div className="flex-3 overflow-hidden rounded-xl bg-[url(/images/landing/place_mmm.jpg)] bg-center bg-cover bg-slate-200">
 						<Link
 							to="/products"
 							className="flex h-full w-full flex-col justify-between gap-8 bg-black/30 px-10 py-8 text-white"
@@ -204,7 +204,7 @@ export default function LandingPage() {
 						</Link>
 					</div>
 
-					<div className="flex-[2] space-y-8 py-8">
+					<div className="flex-2 space-y-8 py-8">
 						<h2 className="font-bold font-serif text-3xl sm:text-4xl xl:text-5xl">
 							Посмотрите все направления туров
 						</h2>
@@ -223,7 +223,7 @@ export default function LandingPage() {
 				</div>
 
 				<div className="my-36 flex flex-col gap-2 lg:flex-row lg:gap-12">
-					<div className="flex-[3] overflow-hidden rounded-xl bg-[url(/images/landing/review.jpg)] bg-center bg-cover bg-slate-200 lg:order-1">
+					<div className="flex-3 overflow-hidden rounded-xl bg-[url(/images/landing/review.jpg)] bg-center bg-cover bg-slate-200 lg:order-1">
 						<Link
 							to="/reviews"
 							className="flex h-full w-full flex-col justify-between gap-8 bg-black/30 px-10 py-8 text-white"
@@ -247,7 +247,7 @@ export default function LandingPage() {
 						</Link>
 					</div>
 
-					<div className="flex-[2] space-y-8 py-8">
+					<div className="flex-2 space-y-8 py-8">
 						<h2 className="font-bold font-serif text-3xl sm:text-4xl xl:text-5xl">
 							Что пишут участники наших турпрограмм
 						</h2>
@@ -280,7 +280,7 @@ function PreviewCard({ link, image, displayId, name }: PreviewCardProps) {
 		<Link
 			to={link}
 			className={
-				"relative aspect-[14/9] w-full overflow-hidden rounded-md md:h-44 md:w-auto"
+				"relative aspect-14/9 w-full overflow-hidden rounded-md md:h-44 md:w-auto"
 			}
 		>
 			<img src={image} alt="" className="h-full w-full" />

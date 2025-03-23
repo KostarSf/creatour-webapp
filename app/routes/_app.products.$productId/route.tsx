@@ -79,7 +79,7 @@ export default function ProductPage() {
 				<h1 className="font-bold font-serif text-2xl">{product.name}</h1>
 				<p className="mt-2">{product.short}</p>
 				<div className="mt-6 flex items-center">
-					<div className="flex-1 md:mr-12 md:flex-grow-0">
+					<div className="flex-1 md:mr-12 md:grow-0">
 						<RatingBar ratings={product.rating} />
 						<p className="text-slate-500">{product.rating.length} оценок</p>
 					</div>
@@ -119,7 +119,7 @@ export default function ProductPage() {
 					value="activate-product"
 					disabled={buyed || !canBuy}
 					className={clsx(
-						"rounded px-6 py-2 font-medium uppercase transition-colors",
+						"rounded-sm px-6 py-2 font-medium uppercase transition-colors",
 						canBuy
 							? !buyed
 								? "bg-blue-100 text-blue-600 hover:bg-blue-200"
@@ -217,7 +217,7 @@ export default function ProductPage() {
 						<input type="hidden" name="userId" value={user.id} />
 						<textarea
 							name="text"
-							className="min-h-[5rem] w-full rounded border px-2 py-1"
+							className="min-h-[5rem] w-full rounded-sm border px-2 py-1"
 							placeholder="Напишите свой отзыв!"
 						/>
 						<div className="mt-2 flex items-baseline justify-between gap-2">
@@ -229,12 +229,12 @@ export default function ProductPage() {
 								accept=".png,.jpg,.jpeg,.webp"
 								multiple
 							/>
-							{/* <label htmlFor='media-picker' className="cursor-pointer hover:bg-gray-200 transition-colors rounded text-gray-500 p-2">
+							{/* <label htmlFor='media-picker' className="cursor-pointer hover:bg-gray-200 transition-colors rounded-sm text-gray-500 p-2">
                 <PaperClipIcon/>
               </label> */}
 							<button
 								type="submit"
-								className="rounded bg-blue-100 px-4 py-2 font-medium text-blue-600 uppercase transition-colors hover:bg-blue-200"
+								className="rounded-sm bg-blue-100 px-4 py-2 font-medium text-blue-600 uppercase transition-colors hover:bg-blue-200"
 							>
 								Отправить
 							</button>
@@ -258,10 +258,10 @@ function AlbumImage({
 	community?: boolean;
 }) {
 	return (
-		<div className="relative aspect-square w-[95%] shrink-0 snap-center overflow-hidden rounded-lg md:aspect-[4/3] md:h-[50vh] md:w-auto">
+		<div className="relative aspect-square w-[95%] shrink-0 snap-center overflow-hidden rounded-lg md:aspect-4/3 md:h-[50vh] md:w-auto">
 			<img src={link} alt={link} className="h-full w-full object-cover" />
 			{community && (
-				<p className="absolute top-0 left-0 m-1 rounded bg-white p-2 px-3 py-1 font-medium">
+				<p className="absolute top-0 left-0 m-1 rounded-sm bg-white p-2 px-3 py-1 font-medium">
 					Коммьюнити
 				</p>
 			)}

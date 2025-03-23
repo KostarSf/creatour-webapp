@@ -46,7 +46,7 @@ export default function ServiceUserCard({ user }: Props) {
 		>
 			<div className="flex items-start justify-between">
 				<div className="flex items-center gap-4">
-					<div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full bg-slate-400 transition-colors hover:bg-slate-300">
+					<div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-slate-400 transition-colors hover:bg-slate-300">
 						<label
 							htmlFor="avatar-input"
 							className="block h-full w-full cursor-pointer"
@@ -92,7 +92,7 @@ export default function ServiceUserCard({ user }: Props) {
 					name="intent"
 					value="change-info"
 					className={clsx(
-						"rounded bg-blue-50 px-4 py-1 font-medium text-blue-500 uppercase transition-colors hover:bg-blue-100",
+						"rounded-sm bg-blue-50 px-4 py-1 font-medium text-blue-500 uppercase transition-colors hover:bg-blue-100",
 						!changingInfo && "hidden",
 					)}
 				>

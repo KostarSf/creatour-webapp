@@ -49,7 +49,7 @@ export default function CommentItem({
 								src={image.url}
 								alt={image.url}
 								key={image.id}
-								className="mt-2 h-24 w-24 rounded object-cover"
+								className="mt-2 h-24 w-24 rounded-sm object-cover"
 							/>
 						))}
 					</div>

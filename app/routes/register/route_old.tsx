@@ -238,7 +238,7 @@ export default function Login() {
 					</div>
 					<button
 						type="submit"
-						className="mt-8 inline-block rounded bg-blue-600 px-4 py-1 text-center font-semibold text-lg text-white"
+						className="mt-8 inline-block rounded-sm bg-blue-600 px-4 py-1 text-center font-semibold text-lg text-white"
 					>
 						Отправить
 					</button>

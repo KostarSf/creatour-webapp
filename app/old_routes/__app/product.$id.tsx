@@ -182,7 +182,7 @@ export default function TripPage() {
 	return (
 		<div className="px-4 pt-6 pb-2">
 			<img
-				className="h-32 w-96 rounded object-cover"
+				className="h-32 w-96 rounded-sm object-cover"
 				src={`/images/products/${product.image}`}
 				alt={product.image || "image"}
 			/>
@@ -217,7 +217,7 @@ export default function TripPage() {
 						name="intent"
 						value="subscribe"
 						className={
-							"block rounded bg-blue-500 px-4 py-2 text-center font-semibold text-white transition hover:bg-blue-400 hover:shadow-blue-100 hover:shadow-md sm:inline-block"
+							"block rounded-sm bg-blue-500 px-4 py-2 text-center font-semibold text-white transition hover:bg-blue-400 hover:shadow-blue-100 hover:shadow-md sm:inline-block"
 						}
 					>
 						{data.subscribed
@@ -338,7 +338,7 @@ export default function TripPage() {
 						</div>
 						<button
 							type="submit"
-							className="block rounded bg-blue-600 px-4 py-1 font-semibold text-lg text-white"
+							className="block rounded-sm bg-blue-600 px-4 py-1 font-semibold text-lg text-white"
 						>
 							Отправить
 						</button>

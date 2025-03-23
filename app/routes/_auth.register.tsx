@@ -134,7 +134,7 @@ export default function LoginRoute() {
 				/>
 				<div className="group relative w-full overflow-hidden rounded-md border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500 sm:w-80 lg:w-96">
 					<select
-						className="w-full bg-white px-4 py-3 outline-none"
+						className="w-full bg-white px-4 py-3 outline-hidden"
 						name="role"
 						required
 						defaultValue={actionData?.fields?.role}
@@ -160,7 +160,7 @@ export default function LoginRoute() {
 					<input
 						type="text"
 						name="username"
-						className="w-full px-4 py-3 outline-none"
+						className="w-full px-4 py-3 outline-hidden"
 						placeholder="Имя"
 						required
 						defaultValue={actionData?.fields?.username}
@@ -182,7 +182,7 @@ export default function LoginRoute() {
 					<input
 						type="email"
 						name="email"
-						className="w-full px-4 py-3 outline-none"
+						className="w-full px-4 py-3 outline-hidden"
 						placeholder="Email"
 						required
 						defaultValue={actionData?.fields?.email}
@@ -204,7 +204,7 @@ export default function LoginRoute() {
 					<input
 						type="password"
 						name="password"
-						className="w-full px-4 py-3 outline-none"
+						className="w-full px-4 py-3 outline-hidden"
 						placeholder="Пароль"
 						required
 						defaultValue={actionData?.fields?.password}

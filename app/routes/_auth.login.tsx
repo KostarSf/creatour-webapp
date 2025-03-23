@@ -86,7 +86,7 @@ export default function LoginRoute() {
 					<input
 						type="text"
 						name="email"
-						className="w-full px-4 py-3 outline-none"
+						className="w-full px-4 py-3 outline-hidden"
 						placeholder="Email"
 						defaultValue={actionData?.fields?.email}
 						required
@@ -96,7 +96,7 @@ export default function LoginRoute() {
 					<input
 						type="password"
 						name="password"
-						className="w-full px-4 py-3 outline-none"
+						className="w-full px-4 py-3 outline-hidden"
 						placeholder="Пароль"
 						defaultValue={actionData?.fields?.password}
 						required

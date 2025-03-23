@@ -134,7 +134,7 @@ export default function PlacePage() {
 	return (
 		<div className="px-4 pt-6 pb-2">
 			<img
-				className="h-32 w-96 rounded object-cover"
+				className="h-32 w-96 rounded-sm object-cover"
 				src={`/images/places/${place.image}`}
 				alt={place.image || "image"}
 			/>
@@ -234,7 +234,7 @@ export default function PlacePage() {
 					</div>
 					<button
 						type="submit"
-						className="block rounded bg-blue-600 px-4 py-1 font-semibold text-lg text-white"
+						className="block rounded-sm bg-blue-600 px-4 py-1 font-semibold text-lg text-white"
 					>
 						Отправить
 					</button>

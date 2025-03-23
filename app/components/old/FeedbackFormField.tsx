@@ -25,7 +25,7 @@ export default function FeedbackFormField({
 				type={type}
 				name={name}
 				id={`feedbackForm_${name}`}
-				className={`rounded border px-2 py-1 ${!caption ? "mt-3" : ""}`}
+				className={`rounded-sm border px-2 py-1 ${!caption ? "mt-3" : ""}`}
 				required={required}
 				placeholder={placeholder}
 			/>

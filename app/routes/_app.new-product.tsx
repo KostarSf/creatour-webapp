@@ -170,7 +170,7 @@ export default function NewProductPage() {
 				<div className="mt-12">
 					<button
 						type="submit"
-						className="w-full rounded bg-blue-100 px-4 py-2 font-medium text-blue-600 uppercase transition-colors hover:bg-blue-200"
+						className="w-full rounded-sm bg-blue-100 px-4 py-2 font-medium text-blue-600 uppercase transition-colors hover:bg-blue-200"
 					>
 						Добавить
 					</button>
@@ -194,7 +194,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
 				required={required}
 				ref={forwardedRef}
 				id={id}
-				className="w-full rounded border px-2 py-1"
+				className="w-full rounded-sm border px-2 py-1"
 				{...other}
 			/>
 		</div>
@@ -212,7 +212,7 @@ const InputArea = forwardRef<HTMLTextAreaElement, InputAreaProps>(
 			<textarea
 				ref={forwardedRef}
 				id={id}
-				className="min-h-[2.125rem] w-full rounded border px-2 py-1"
+				className="min-h-[2.125rem] w-full rounded-sm border px-2 py-1"
 				{...other}
 			/>
 		</div>
@@ -231,7 +231,7 @@ const InputSelect = forwardRef<HTMLSelectElement, InputSelectProps>(
 			<select
 				ref={forwardedRef}
 				id={id}
-				className="w-full rounded border bg-white px-2 py-1"
+				className="w-full rounded-sm border bg-white px-2 py-1"
 				{...other}
 			>
 				{children}

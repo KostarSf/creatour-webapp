@@ -5,13 +5,13 @@ export default function LandingPage() {
 		<>
 			<header className="absolute top-0 right-0 left-0 z-50">
 				<nav className="flex justify-center gap-3 py-3 font-medium text-white">
-					<a href="#creatour" className="block px-4 py-2 text-lg drop-shadow">
+					<a href="#creatour" className="block px-4 py-2 text-lg drop-shadow-sm">
 						Креатур
 					</a>
-					<a href="#about" className="block px-4 py-2 text-lg drop-shadow">
+					<a href="#about" className="block px-4 py-2 text-lg drop-shadow-sm">
 						О нас
 					</a>
-					<a href="#contacts" className="block px-4 py-2 text-lg drop-shadow">
+					<a href="#contacts" className="block px-4 py-2 text-lg drop-shadow-sm">
 						Контакты
 					</a>
 				</nav>
@@ -32,11 +32,11 @@ export default function LandingPage() {
 				</a>
 				<section id="creatour" className="relative z-40 h-screen">
 					<div className="absolute inset-0 flex flex-col items-start justify-center px-16">
-						<h1 className="mb-8 font-serif text-7xl text-white leading-tight drop-shadow">
+						<h1 className="mb-8 font-serif text-7xl text-white leading-tight drop-shadow-sm">
 							Открой для себя <br />
 							Креативный туризм
 						</h1>
-						<p className="mb-12 text-3xl text-white drop-shadow">
+						<p className="mb-12 text-3xl text-white drop-shadow-sm">
 							Отдыхай по-новому с командой Креатура
 						</p>
 						<a
@@ -47,7 +47,7 @@ export default function LandingPage() {
 						</a>
 					</div>
 					<div className="absolute right-0 bottom-0 left-0 px-16 pb-14">
-						<div className="drop-shadow">
+						<div className="drop-shadow-sm">
 							<p className="mb-2 text-white text-xl">Мы в соцсетях</p>
 							<div className="flex items-center gap-4">
 								{/* biome-ignore lint/a11y/useValidAnchor: <explanation> */}
@@ -88,7 +88,7 @@ export default function LandingPage() {
 							/>
 							<div className="z-10" />
 							<div className="z-10 flex items-end justify-between">
-								<p className="text-white text-xl drop-shadow">
+								<p className="text-white text-xl drop-shadow-sm">
 									Мало-Коннюшенный мост <br /> в Санкт-Петербурге
 								</p>
 								<img
@@ -129,14 +129,14 @@ export default function LandingPage() {
 									backgroundColor: "rgba(0, 0, 0, 0.3)",
 								}}
 							/>
-							<div className="z-10 drop-shadow">
+							<div className="z-10 drop-shadow-sm">
 								<p className="font-semibold font-serif text-white text-xl">
 									Отзыв
 								</p>
 								<p className="text-lg text-white">Елена Ивановна</p>
 							</div>
 							<div className="z-10 flex items-end justify-between">
-								<p className="text-white text-xl drop-shadow">
+								<p className="text-white text-xl drop-shadow-sm">
 									Пожалуй, это был лучший <br /> гастрономический тур на Юге
 								</p>
 								<img

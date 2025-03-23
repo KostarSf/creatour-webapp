@@ -5,7 +5,7 @@ export default function AuthLayout() {
 
 	return (
 		<div className="flex min-h-screen w-screen items-stretch">
-			<div className="flex-grow md:flex-shrink-0 md:flex-grow-0">
+			<div className="grow md:shrink-0 md:grow-0">
 				<div className="flex flex-col items-stretch bg-white px-6 py-8 sm:items-center md:items-start md:px-12 md:py-12 lg:px-24 lg:py-16">
 					<Link
 						to={"/"}

@@ -18,7 +18,7 @@ export default function PlaceItem({
 			<img
 				src={`/images/places/${image}`}
 				alt={image || "place"}
-				className="block h-14 w-24 shrink-0 rounded object-cover md:h-28 md:w-48"
+				className="block h-14 w-24 shrink-0 rounded-sm object-cover md:h-28 md:w-48"
 			/>
 			<div>
 				<h2 className="font-semibold text-2xl leading-none hover:text-blue-600 md:mb-3">

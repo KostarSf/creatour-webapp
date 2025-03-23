@@ -22,7 +22,7 @@ export default function HeaderMobileMenu() {
 							<SearchBlock showButton={false} />
 						</div>
 						<label
-							className="-mr-3 block cursor-pointer rounded bg-slate-100 p-3 text-slate-500"
+							className="-mr-3 block cursor-pointer rounded-sm bg-slate-100 p-3 text-slate-500"
 							htmlFor="mobile-menu-switcher"
 						>
 							<CloseIcon />
@@ -43,7 +43,7 @@ export default function HeaderMobileMenu() {
 				<label htmlFor="mobile-menu-switcher" className="block flex-1" />
 			</div>
 			<label
-				className="-mr-3 block cursor-pointer rounded p-3 text-slate-500"
+				className="-mr-3 block cursor-pointer rounded-sm p-3 text-slate-500"
 				htmlFor="mobile-menu-switcher"
 			>
 				<MobileMenuIcon />

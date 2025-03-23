@@ -45,7 +45,7 @@ export default function FeedbackDialog({
 			onClick={onClose}
 		>
 			<div
-				className={`h-full w-full overflow-hidden overflow-y-auto rounded bg-white px-4 shadow-xl transition md:h-fit md:max-h-full md:max-w-lg ${visible ? " translate-y-0" : " -translate-y-4"}`}
+				className={`h-full w-full overflow-hidden overflow-y-auto rounded-sm bg-white px-4 shadow-xl transition md:h-fit md:max-h-full md:max-w-lg ${visible ? " translate-y-0" : " -translate-y-4"}`}
 				onClick={(e) => e.stopPropagation()}
 			>
 				<Form method={method} action={action} className="h-full">
@@ -57,7 +57,7 @@ export default function FeedbackDialog({
 							<button
 								type="button"
 								onClick={onClose}
-								className="self-start rounded bg-slate-100 p-2 text-slate-600"
+								className="self-start rounded-sm bg-slate-100 p-2 text-slate-600"
 							>
 								<CloseIcon />
 							</button>
@@ -92,17 +92,17 @@ export default function FeedbackDialog({
 							</a>{" "}
 							сервиса
 						</label>
-						<div className="mt-12 flex flex-grow flex-col-reverse justify-start gap-2 pb-4 md:flex-row md:justify-end">
+						<div className="mt-12 flex grow flex-col-reverse justify-start gap-2 pb-4 md:flex-row md:justify-end">
 							<button
 								type="button"
 								onClick={onClose}
-								className="rounded border border-slate-400 px-4 py-2 font-semibold text-slate-400 transition hover:border-slate-400 hover:bg-slate-400 hover:text-white hover:shadow-md hover:shadow-slate-200"
+								className="rounded-sm border border-slate-400 px-4 py-2 font-semibold text-slate-400 transition hover:border-slate-400 hover:bg-slate-400 hover:text-white hover:shadow-md hover:shadow-slate-200"
 							>
 								Закрыть
 							</button>
 							<button
 								type="submit"
-								className="rounded bg-blue-500 px-12 py-2 font-semibold text-white transition hover:bg-blue-400 hover:shadow-blue-100 hover:shadow-md"
+								className="rounded-sm bg-blue-500 px-12 py-2 font-semibold text-white transition hover:bg-blue-400 hover:shadow-blue-100 hover:shadow-md"
 							>
 								Отправить
 							</button>

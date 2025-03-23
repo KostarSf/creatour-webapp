@@ -45,7 +45,7 @@ export function ProductCard<TType extends CardType>({
 									value="activate-product"
 									disabled={buyed || !canBuy}
 									className={clsx(
-										"rounded px-6 py-2 font-medium uppercase transition-colors",
+										"rounded-sm px-6 py-2 font-medium uppercase transition-colors",
 										canBuy
 											? !buyed
 												? "bg-blue-100 text-blue-600 hover:bg-blue-200"
@@ -92,7 +92,7 @@ export function ServiceProductCard<TType extends CardType>({
 								name="intent"
 								value={`${type}-active-toggle`}
 								className={clsx(
-									"rounded px-6 py-2 font-medium uppercase transition-colors",
+									"rounded-sm px-6 py-2 font-medium uppercase transition-colors",
 									object.active
 										? "bg-green-100 text-green-600 hover:bg-green-200"
 										: "bg-gray-100 text-gray-600 hover:bg-gray-200",
@@ -106,7 +106,7 @@ export function ServiceProductCard<TType extends CardType>({
 					)}
 					<Link
 						to={`/admin/${type}s/${object.id}/edit`}
-						className="rounded px-6 py-2 font-medium text-blue-600 uppercase transition-colors hover:bg-blue-100"
+						className="rounded-sm px-6 py-2 font-medium text-blue-600 uppercase transition-colors hover:bg-blue-100"
 					>
 						Изменить
 					</Link>
@@ -168,10 +168,10 @@ function ProductCardBase<TType extends CardType>({
 	children,
 }: CardBaseProps<TType>) {
 	return (
-		<div className="flex flex-col overflow-hidden px-6 shadow md:rounded md:px-0 lg:flex-row lg:items-stretch">
+		<div className="flex flex-col overflow-hidden px-6 shadow-sm md:rounded-sm md:px-0 lg:flex-row lg:items-stretch">
 			<Link
 				to={`/${type}s/${object.id}`}
-				className="-mx-6 relative block h-48 flex-shrink-0 overflow-hidden bg-slate-300 text-white md:mx-0 md:rounded lg:h-auto lg:w-[40%]"
+				className="-mx-6 relative block h-48 shrink-0 overflow-hidden bg-slate-300 text-white md:mx-0 md:rounded-sm lg:h-auto lg:w-[40%]"
 			>
 				{object.image ? (
 					<div className="absolute inset-0">

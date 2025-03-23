@@ -16,7 +16,7 @@ export default function AppLayout({ children }: React.PropsWithChildren) {
 
 function Header() {
 	return (
-		<header className="sticky top-0 z-10 bg-white shadow-sm">
+		<header className="sticky top-0 z-10 bg-white shadow-xs">
 			<div className="mx-auto max-w-7xl px-4">
 				<div className="items-center gap-4 md:flex md:justify-between">
 					<div className="flex h-14 items-center justify-between lg:h-16">
@@ -46,7 +46,7 @@ function Header() {
 
 function Main({ children }: React.PropsWithChildren) {
 	return (
-		<main className="flex-grow">
+		<main className="grow">
 			<div className="mx-auto max-w-7xl">{children}</div>
 		</main>
 	);

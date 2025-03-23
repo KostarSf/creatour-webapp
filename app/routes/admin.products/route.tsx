@@ -39,7 +39,7 @@ export default function ProductsList() {
 
 	return (
 		<div className="flex gap-4">
-			<div className="flex-shrink-0">
+			<div className="shrink-0">
 				<Link to="new" className="text-blue-600 hover:underline">
 					+ Добавить турпродукт
 				</Link>
