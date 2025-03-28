@@ -6,3 +6,5 @@ node_modules
 .env
 .react-router
 /public/uploads
+
+prisma/dev.db

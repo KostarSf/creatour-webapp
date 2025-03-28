@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import { HeartIcon } from "lucide-react";
-import { data } from "react-router";
-import { Form, useLoaderData } from "react-router";
+import { Form, data, useLoaderData } from "react-router";
 import CardDate from "~/components/CardDate";
 import CommentItem from "~/components/CommentItem";
 import RatingBar from "~/components/RatingBar";
@@ -11,6 +10,7 @@ import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { db } from "~/utils/db.server";
 import { useOptionalUser } from "~/utils/user";
+import { LikeProductButton } from "~/widgets/like-button";
 import type { Route } from "./+types/route";
 
 export const meta: Route.MetaFunction = ({ data }) => [{ title: `${data?.product.name ?? ""} | Креатур` }];
@@ -78,41 +78,43 @@ export default function ProductPage() {
 					</div>
 				</div>
 
-				<Form
-					method="POST"
-					action="/products?index"
-					onSubmit={(e) => {
-						if (
-							!confirm(
-								product.price > 0
-									? `Приобрести за ${product.price} ₽?`
-									: "Записаться бесплатно?",
-							)
-						) {
-							e.preventDefault();
-						}
-					}}
-					className="my-12"
-					preventScrollReset
-				>
-					<input type="hidden" name="userId" value={user?.id} />
-					<input type="hidden" name="productId" value={product.id} />
-					<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
-					<Button
-						type="submit"
-						name="intent"
-						value="activate-product"
-						disabled={buyed || !canBuy}
-						variant={buyed ? "default" : "outline"}
-						className={clsx(buyed && "disabled:opacity-100")}
+				<div className="my-12 flex items-center gap-2">
+					<Form
+						method="POST"
+						action="/products?index"
+						onSubmit={(e) => {
+							if (
+								!confirm(
+									product.price > 0
+										? `Приобрести за ${product.price} ₽?`
+										: "Записаться бесплатно?",
+								)
+							) {
+								e.preventDefault();
+							}
+						}}
+						preventScrollReset
 					>
-						{buyed
-							? "Приобретено"
-							: product.price === 0
-								? "Бесплатно"
-								: `Приобрести за ${product.price.toLocaleString("ru")} ₽`}
-					</Button>
-				</Form>
+						<input type="hidden" name="userId" value={user?.id} />
+						<input type="hidden" name="productId" value={product.id} />
+						<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
+						<Button
+							type="submit"
+							name="intent"
+							value="activate-product"
+							disabled={buyed || !canBuy}
+							variant={buyed ? "default" : "outline"}
+							className={clsx(buyed && "disabled:opacity-100")}
+						>
+							{buyed
+								? "Приобретено"
+								: product.price === 0
+									? "Бесплатно"
+									: `Приобрести за ${product.price.toLocaleString("ru")} ₽`}
+						</Button>
+					</Form>
+					<LikeProductButton productId={product.id} />
+				</div>
 
 				<p className="font-semibold font-serif text-xl">Галерея изображений</p>
 			</div>

@@ -1,9 +1,9 @@
 import type { Place, Product, RoutePoint } from "@prisma/client";
 import clsx from "clsx";
-import { HeartIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Form, Link } from "react-router";
 import { useOptionalUser } from "~/utils/user";
+import { LikeProductButton } from "~/widgets/like-button";
 import CardDate from "./CardDate";
 import { NoImageIcon } from "./NoImageIcon";
 import { Button } from "./ui/button";
@@ -19,11 +19,7 @@ export function ProductCard<TType extends CardType>({ type, object }: CardProps<
 				type === "product" ? (
 					<>
 						<div className="flex-1" />
-						{user ? (
-							<Button size="icon" variant="ghost">
-								<HeartIcon />
-							</Button>
-						) : null}
+						{type === "product" ? <LikeProductButton productId={object.id} /> : null}
 						{user ? (
 							<Form
 								method="POST"

@@ -1,9 +1,12 @@
+import clsx from "clsx";
 import type { ActionFunctionArgs, MetaFunction } from "react-router";
-import { data, redirect, useLoaderData } from "react-router";
+import { Link, data, redirect, useLoaderData, useSearchParams } from "react-router";
 import { ProductCard } from "~/components/ProductCard";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { requireUserId } from "~/utils/session.server";
+import { getUserId, requireUserId } from "~/utils/session.server";
+import { useOptionalUser } from "~/utils/user";
+import type { Route } from "./+types/route";
 
 export const meta: MetaFunction = () => [{ title: "Календарь мероприятий | Креатур" }];
 
@@ -88,14 +91,24 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	return redirect(redirectTo);
 };
 
-export const loader = async () => {
+export const loader = async ({ request }: Route.LoaderArgs) => {
+	const searchParams = new URL(request.url).searchParams;
+	const favorites = searchParams.get("type") === "favorites";
+	const userId = await getUserId(request);
+
 	const products = await db.product.findMany({
-		where: {
-			active: true,
-			beginDate: {
-				gte: new Date(),
-			},
-		},
+		where:
+			userId && favorites
+				? {
+						active: true,
+						favors: { some: { id: userId } },
+					}
+				: {
+						active: true,
+						beginDate: {
+							gte: new Date(),
+						},
+					},
 		orderBy: {
 			beginDate: "asc",
 		},
@@ -106,16 +119,32 @@ export const loader = async () => {
 
 export default function ProductsCatalog() {
 	const { products } = useLoaderData<typeof loader>();
+	const user = useOptionalUser();
+
+	const [searchParams] = useSearchParams();
+	const favorites = searchParams.get("type") === "favorites";
 
 	return (
 		<>
-			<div className="mx-auto my-6 max-w-6xl px-5 md:my-12 md:px-10">
-				<h1 className="font-medium text-xl">Календарь мероприятий</h1>
+			<div className="mx-auto my-6 flex max-w-6xl gap-5 px-5 md:my-12 md:px-10">
+				<Link to="." className={clsx("font-medium text-xl transition", favorites && "opacity-40")}>
+					Календарь мероприятий
+				</Link>
+				{user ? (
+					<Link
+						to=".?type=favorites"
+						className={clsx("font-medium text-xl transition", !favorites && "opacity-40")}
+					>
+						Избранное
+					</Link>
+				) : null}
 			</div>
 			<div className="mx-auto my-6 max-w-6xl px-5 md:my-12 md:px-10">
 				{products.length === 0 ? (
 					<p className="mt-24 text-center text-slate-400 text-xl">
-						Каталог пока что пуст! Зайдите позже
+						{favorites
+							? "Похоже, у вас пока нет избранных продуктов!"
+							: "Каталог пока что пуст! Зайдите позже"}
 					</p>
 				) : (
 					<div className="mt-6 space-y-6 md:mt-12">
