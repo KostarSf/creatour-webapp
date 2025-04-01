@@ -5,16 +5,18 @@ import { Form, Link } from "react-router";
 import { useOptionalUser } from "~/utils/user";
 import { LikeProductButton } from "~/widgets/like-button";
 import CardDate from "./CardDate";
-import { NoImageIcon } from "./NoImageIcon";
+import { AspectRatio } from "./ui/aspect-ratio";
 import { Button } from "./ui/button";
+import { Card } from "./ui/card";
 
-export function ProductCard<TType extends CardType>({ type, object }: CardProps<TType>) {
+export function ProductCard<TType extends CardType>({ type, object, className }: CardProps<TType>) {
 	const user = useOptionalUser();
 	const buyed = user ? user.activeProducts.findIndex((p) => p.id === object.id) !== -1 : false;
 	const canBuy = user ? user.role === "user" : false;
 
 	return (
 		<ProductCardBase
+			className={className}
 			footer={
 				type === "product" ? (
 					<>
@@ -86,14 +88,17 @@ export function ServiceProductCard<TType extends CardType>({
 	type,
 	object,
 	usedIn,
+	className,
 }: CardProps<TType> & {
 	usedIn?: RoutePoint &
 		{
 			product: Product;
 		}[];
+	className?: string;
 }) {
 	return (
 		<ProductCardBase
+			className={className}
 			footer={
 				<>
 					{type === "product" ? (
@@ -148,7 +153,7 @@ export function ServiceProductCard<TType extends CardType>({
 
 type CardType = "place" | "product";
 
-type CardProps<TType extends CardType> = TType extends "place"
+type CardProps<TType extends CardType> = { className?: string } & (TType extends "place"
 	? {
 			type: "place";
 			object: Place;
@@ -156,12 +161,13 @@ type CardProps<TType extends CardType> = TType extends "place"
 	: {
 			type: "product";
 			object: Product;
-		};
+		});
 
 type CardBaseProps<TType extends CardType> = CardProps<TType> & {
 	topLeftText?: string;
 	footer?: ReactNode;
 	children?: ReactNode;
+	className?: string;
 };
 
 function ProductCardBase<TType extends CardType>({
@@ -170,57 +176,69 @@ function ProductCardBase<TType extends CardType>({
 	topLeftText,
 	footer,
 	children,
+	className,
 }: CardBaseProps<TType>) {
 	return (
-		<div className="flex flex-col overflow-hidden px-6 shadow-sm md:rounded-sm md:px-0 lg:flex-row lg:items-stretch">
-			<Link
-				to={`/${type}s/${object.id}`}
-				className="-mx-6 relative block h-48 shrink-0 overflow-hidden bg-slate-300 text-white md:mx-0 md:rounded-sm lg:h-auto lg:w-[40%]"
-			>
-				{object.image ? (
-					<div className="absolute inset-0">
-						<img
-							src={`/images/${type}s/${object.image}`}
-							alt={object.name}
-							className="h-full w-full object-cover object-center"
-						/>
+		<Card className={clsx("overflow-hidden py-0", className)}>
+			<div className="grid gap-5 lg:grid-cols-5">
+				<Link to={`/${type}s/${object.id}`} className="relative lg:col-span-2">
+					<div className="hidden lg:block">
+						<AspectRatio ratio={16 / 9} className="bg-muted">
+							{object.image ? (
+								<img
+									src={`/images/${type}s/${object.image}`}
+									alt={object.name}
+									className="h-full w-full object-cover object-center"
+								/>
+							) : null}
+						</AspectRatio>
 					</div>
-				) : (
-					<div className="grid h-full w-full place-items-center">
-						<NoImageIcon className="h-32 w-32 text-slate-100" />
+					<div className="absolute inset-0 lg:hidden">
+						{object.image ? (
+							<img
+								src={`/images/${type}s/${object.image}`}
+								alt={object.name}
+								className="h-full w-full object-cover object-center"
+							/>
+						) : null}
 					</div>
-				)}
-				<div className="absolute inset-0 flex flex-col justify-between bg-black/10 p-6">
-					<div className="flex justify-between">
-						{type === "product" && (
-							<>
-								<div className="font-medium text-base/none uppercase">{topLeftText}</div>
-								<div className="text-right">
-									{object.beginDate ? <CardDate date={object.beginDate} /> : null}
-								</div>
-							</>
-						)}
+					<div className="flex min-h-48 flex-col justify-between text-white lg:absolute lg:inset-0 lg:min-h-auto">
+						<div className="z-10 flex justify-between px-5 py-4">
+							{type === "product" && (
+								<>
+									<div className="font-medium text-base/none uppercase">{topLeftText}</div>
+									<div className="text-right">
+										{object.beginDate ? <CardDate date={object.beginDate} /> : null}
+									</div>
+								</>
+							)}
+						</div>
+						<div className="z-10 flex items-center justify-between bg-black/10 px-5 py-3 backdrop-blur-md">
+							<p className="text-sm/none md:text-base/none">{object.address}</p>
+							<img
+								src="/images/landing/arrow_right.svg"
+								alt="arrow_right.svg"
+								className="inline px-2"
+							/>
+						</div>
 					</div>
-					<div className="flex items-center justify-between">
-						<p className="text-base/none">{object.address}</p>
-						<img
-							src="/images/landing/arrow_right.svg"
-							alt="arrow_right.svg"
-							className="inline px-2"
-						/>
+				</Link>
+				<div className="flex flex-col gap-3 pr-5 pb-4 pl-5 lg:col-span-3 lg:pt-4 lg:pl-0">
+					<div className="flex-1">
+						<Link
+							to={`/${type}s/${object.id}`}
+							className="font-medium font-serif text-xl/none md:text-3xl"
+						>
+							{object.name}
+						</Link>
+						<p className="mt-2 text-slate-700">{object.short}</p>
+						<div>{children}</div>
 					</div>
+					{footer && (
+						<div className="flex flex-wrap items-center justify-between gap-2">{footer}</div>
+					)}
 				</div>
-			</Link>
-			<div className="flex flex-1 flex-col gap-12 pt-3 pb-6 md:px-6 lg:min-h-[12rem]">
-				<div className="flex-1">
-					<Link to={`/${type}s/${object.id}`} className="font-bold font-serif text-2xl md:text-3xl">
-						{object.name}
-					</Link>
-					<p className="text-lg text-slate-700">{object.short}</p>
-					<div>{children}</div>
-				</div>
-				{footer && <div className="flex flex-wrap items-center justify-between gap-2">{footer}</div>}
 			</div>
-		</div>
+		</Card>
 	);
 }
