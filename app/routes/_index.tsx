@@ -63,6 +63,7 @@ export default function LandingPage() {
 						<Link
 							to={user ? (user.role !== "user" ? "/user" : "/products") : "/register"}
 							className={cn(buttonVariants({ size: "lg" }), "max-w-96 text-base max-md:w-full")}
+							prefetch="render"
 						>
 							{user
 								? user.role !== "user"
