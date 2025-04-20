@@ -2,6 +2,7 @@ import type { Product } from "@prisma/client";
 import clsx from "clsx";
 import { Link } from "react-router";
 import CardDate from "~/components/CardDate";
+import LayoutWrapper from "~/components/LayoutWrapper";
 
 type Props = {
 	product: Product;
@@ -24,13 +25,17 @@ export default function NextEventBanner({ product, username, className }: Props)
 				<div className="absolute inset-0 bg-black/50" />
 			</div>
 
-			<div className="absolute inset-0 flex flex-col justify-between py-3 text-white">
-				<div className="flex justify-between">
-					<p className="font-medium">{username.split(" ").shift()}, ваше ближайшее событие</p>
-					{product.beginDate && <CardDate date={product.beginDate} className="text-right" />}
-				</div>
-				<p className="text-center font-semibold font-serif text-2xl lg:text-3xl">{product.name}</p>
-				<p>{product.address}</p>
+			<div className="absolute inset-0">
+				<LayoutWrapper className="flex h-full flex-col justify-between px-5 py-3 text-white">
+					<div className="flex justify-between">
+						<p className="font-medium">{username.split(" ").shift()}, ваше ближайшее событие</p>
+						{product.beginDate && <CardDate date={product.beginDate} className="text-right" />}
+					</div>
+					<p className="text-center font-semibold font-serif text-2xl lg:text-3xl">
+						{product.name}
+					</p>
+					<p>{product.address}</p>
+				</LayoutWrapper>
 			</div>
 		</Link>
 	);

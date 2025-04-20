@@ -1,9 +1,13 @@
 import clsx from "clsx";
 import type { PropsWithChildren } from "react";
+import type React from "react";
 import { useEffect, useState } from "react";
 import { Link, useFetcher } from "react-router";
 import { InfoField } from "~/components/InfoField";
+import LayoutWrapper from "~/components/LayoutWrapper";
 import { NoImageIcon } from "~/components/NoImageIcon";
+import { Button, buttonVariants } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
 import type { CurrentUser } from "~/models/users";
 import type { UploadAvatarAction } from "../api.upload-avatar";
 
@@ -42,7 +46,7 @@ export default function UserCard({ user, checksCount }: Props) {
 	};
 
 	return (
-		<div className="mx-auto my-6 flex max-w-7xl flex-col gap-6 md:my-12 lg:flex-row">
+		<LayoutWrapper className="my-6 flex flex-col gap-6 md:my-12 lg:flex-row">
 			<div className="flex-1">
 				<CardContainer>
 					<fetcher.Form method="POST">
@@ -79,27 +83,22 @@ export default function UserCard({ user, checksCount }: Props) {
 									<p>ID {user.id.split("-")[0].toUpperCase()}</p>
 								</div>
 							</div>
-							<button
+							<Button
 								onClick={() => setChangingInfo(true)}
 								type="button"
-								className={clsx(
-									"px-4 py-1 font-medium text-blue-500 uppercase hover:underline",
-									changingInfo && "hidden",
-								)}
+								variant="outline"
+								className={clsx(changingInfo && "hidden")}
 							>
 								Изменить
-							</button>
-							<button
+							</Button>
+							<Button
 								type="submit"
 								name="intent"
 								value="change-info"
-								className={clsx(
-									"rounded-sm bg-blue-50 px-4 py-1 font-medium text-blue-500 uppercase transition-colors hover:bg-blue-100",
-									!changingInfo && "hidden",
-								)}
+								className={clsx(!changingInfo && "hidden")}
 							>
 								Сохранить
-							</button>
+							</Button>
 						</div>
 						<div className="mt-6 flex flex-col gap-3 md:pl-16 lg:flex-row">
 							<div className="flex-1 space-y-3">
@@ -111,8 +110,8 @@ export default function UserCard({ user, checksCount }: Props) {
 									defaultValue={user.city || ""}
 								/>
 								<InfoField
-									type="text"
-									editable={false}
+									type="email"
+									disabled
 									label="E-mail"
 									name="email"
 									defaultValue={user.email || ""}
@@ -134,28 +133,30 @@ export default function UserCard({ user, checksCount }: Props) {
 					<p className="mb-4 font-bold font-serif text-xl/none">Способы оплаты</p>
 					<div className="flex flex-wrap items-baseline justify-between gap-4">
 						<p className="font-mono">**** 1234 01/23</p>
-						<p className="cursor-default font-medium text-gray-500 uppercase">Сменить</p>
+						<Button type="button" variant="outline" disabled>
+							Сменить
+						</Button>
 					</div>
 				</CardContainer>
-				<CardContainer>
+				<CardContainer className="flex justify-between gap-5">
 					<p className="mb-2 font-bold font-serif text-xl/none">
 						Чеки{" "}
-						<span className="ml-4 font-normal font-sans text-base text-gray-500">
+						<span className="ml-2 font-normal font-sans text-base text-gray-500">
 							({checksCount} всего)
 						</span>
 					</p>
-					<Link
-						to={"checks"}
-						className="font-medium text-blue-500 text-lg uppercase hover:underline"
-					>
+					<Link to={"checks"} className={buttonVariants({ variant: "secondary" })}>
 						Смотреть
 					</Link>
 				</CardContainer>
 			</div>
-		</div>
+		</LayoutWrapper>
 	);
 }
 
-const CardContainer = ({ children }: PropsWithChildren) => (
-	<div className="-mx-6 border p-6 shadow-blue-900/5 shadow-lg md:mx-0 md:rounded-lg">{children}</div>
+const CardContainer = ({ className, ...props }: React.ComponentProps<"div">) => (
+	<div
+		{...props}
+		className={cn("border p-6 shadow-blue-900/5 shadow-lg md:mx-0 md:rounded-lg", className)}
+	/>
 );

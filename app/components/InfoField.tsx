@@ -1,25 +1,19 @@
 import type { ComponentPropsWithRef } from "react";
-import { forwardRef } from "react";
+import { useId } from "react";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 
 interface InfoFieldProps extends ComponentPropsWithRef<"input"> {
 	label: string;
-	editable?: boolean | undefined;
 }
 
-export const InfoField = forwardRef<HTMLInputElement, InfoFieldProps>(
-	({ disabled, label, defaultValue, editable, ...other }, forwardedRef) => (
-		<div className="flex items-baseline gap-2">
-			<p className="w-24 shrink-0 text-blue-500">{label}</p>
-			<div className="flex-1">
-				<input
-					ref={forwardedRef}
-					disabled={editable !== false ? disabled : true}
-					defaultValue={defaultValue || ""}
-					placeholder="—"
-					className="w-full rounded-sm border px-2 py-1 transition-colors enabled:placeholder:text-transparent disabled:border-transparent"
-					{...other}
-				/>
-			</div>
+export function InfoField({ label, ...other }: InfoFieldProps) {
+	const id = useId();
+
+	return (
+		<div className="grid space-y-1.5">
+			<Label htmlFor={other.id ?? id}>{label}</Label>
+			<Input {...other} id={other.id ?? id} />
 		</div>
-	),
-);
+	);
+}

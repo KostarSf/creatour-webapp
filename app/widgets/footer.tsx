@@ -1,4 +1,5 @@
 import { Link, href } from "react-router";
+import LayoutWrapper from "~/components/LayoutWrapper";
 import { buttonVariants } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import { cn } from "~/lib/utils";
@@ -6,7 +7,7 @@ import { cn } from "~/lib/utils";
 export function Footer() {
 	return (
 		<footer className="bg-secondary pb-16">
-			<div className="mx-auto max-w-6xl space-y-6 p-5 md:p-10">
+			<LayoutWrapper className="space-y-6 p-5 md:py-10">
 				<div className="grid grid-cols-2 gap-y-12 sm:grid-cols-4">
 					<div className="col-span-2 space-y-3 sm:space-y-6">
 						<Link
@@ -163,7 +164,7 @@ export function Footer() {
 						</Link>
 					</div>
 				</div>
-			</div>
+			</LayoutWrapper>
 		</footer>
 	);
 }

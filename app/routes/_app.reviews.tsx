@@ -2,6 +2,7 @@ import type { Comment, Media, Place, Product, Rating, User } from "@prisma/clien
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { Link, useLoaderData } from "react-router";
 import CommentItem from "~/components/CommentItem";
+import LayoutWrapper from "~/components/LayoutWrapper";
 import RatingBar from "~/components/RatingBar";
 import { db } from "~/utils/db.server";
 
@@ -55,23 +56,23 @@ export default function ReviewsPage() {
 	} = useLoaderData<typeof loader>();
 
 	return (
-		<div>
+		<LayoutWrapper className="px-5">
 			<div>
 				<h1 className="my-6 font-bold font-serif text-2xl md:my-12">Отзывы</h1>
 			</div>
 			<div className="mx-auto max-w-7xl">
 				{/* <div className='space-y-6 mb-12'>
-          {places.map((place) => (
-            <CommentSection key={place.id} name='place' parent={place} />
-          ))}
-        </div> */}
+						{places.map((place) => (
+							<CommentSection key={place.id} name='place' parent={place} />
+						))}
+					</div> */}
 				<div className="mb-12 space-y-6">
 					{products.map((product) => (
 						<CommentSection key={product.id} name="product" parent={product} />
 					))}
 				</div>
 			</div>
-		</div>
+		</LayoutWrapper>
 	);
 }
 
@@ -126,7 +127,12 @@ const CommentSection = ({ name, parent }: CommentSectionProps) => {
 			</Link>
 			<div className="space-y-6">
 				{parent.comments.map((comment) => (
-					<CommentItem key={comment.id} comment={comment} rating={parent.rating} />
+					<CommentItem
+						key={comment.id}
+						comment={comment}
+						rating={parent.rating}
+						className="last-of-type:mb-10 last-of-type:border-b last-of-type:pb-10"
+					/>
 				))}
 			</div>
 		</div>

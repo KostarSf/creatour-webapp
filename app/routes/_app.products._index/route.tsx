@@ -11,6 +11,7 @@ import {
 	useLoaderData,
 	useSearchParams,
 } from "react-router";
+import LayoutWrapper from "~/components/LayoutWrapper";
 import { ProductCard } from "~/components/ProductCard";
 import { Socials } from "~/components/Socials";
 import { Badge } from "~/components/ui/badge";
@@ -178,7 +179,7 @@ export default function ProductsCatalog() {
 		<>
 			<ProductsListHeader />
 
-			<div className="mx-auto my-6 flex max-w-6xl gap-5 px-5 md:my-12 md:px-10">
+			<LayoutWrapper className="my-6 flex gap-5 px-5 md:my-12">
 				<Link
 					to={href("/products")}
 					className={clsx("font-medium text-xl transition", favorites && "opacity-40")}
@@ -199,8 +200,8 @@ export default function ProductsCatalog() {
 						</Badge>
 					</Link>
 				) : null}
-			</div>
-			<div className="mx-auto my-6 max-w-6xl md:my-12 md:px-10">
+			</LayoutWrapper>
+			<LayoutWrapper className="my-6 md:my-12">
 				{products.length === 0 ? (
 					<>
 						<p className="mt-24 text-center text-slate-400 text-xl">
@@ -241,7 +242,7 @@ export default function ProductsCatalog() {
 						) : null}
 					</div>
 				)}
-			</div>
+			</LayoutWrapper>
 		</>
 	);
 }

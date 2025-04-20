@@ -11,10 +11,11 @@ export async function getCurrentUser(userId: string): Promise<CurrentUser | null
 		omit: { passwordHash: true },
 	});
 
-	return user;
+	return user as CurrentUser | null;
 }
 
 export type CurrentUser = Omit<User, "passwordHash"> & {
-	activeProducts: Pick<Product, "id">[];
-	favoriteProducts: Pick<Product, "id">[];
-};
+		activeProducts: Pick<Product, "id">[];
+		favoriteProducts: Pick<Product, "id">[];
+		role: "user" | "creator" | "placeowner" | "admin";
+	};
