@@ -1,5 +1,7 @@
-import type { Prisma } from "@prisma/client";
+import type { Prisma, Tag } from "@prisma/client";
 import clsx from "clsx";
+import { FilterIcon, XIcon } from "lucide-react";
+import React, { useRef } from "react";
 import type { ActionFunctionArgs, MetaFunction } from "react-router";
 import {
 	Form,
@@ -17,6 +19,7 @@ import { Socials } from "~/components/Socials";
 import { Badge } from "~/components/ui/badge";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import type { CustomHeaderHandle } from "~/lib/hooks/use-custom-header";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
@@ -35,6 +38,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 	const searchParams = new URL(request.url).searchParams;
 	const favorites = searchParams.get("type") === "favorites";
 	const userId = await getUserId(request);
+	const selectedTags = searchParams.get("tags")?.split(",").filter(Boolean) ?? [];
 
 	const query = searchParams.get("q");
 	const page = Number.parseInt(searchParams.get("page") ?? "1");
@@ -46,40 +50,55 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 	const offset = (page - 1) * 4;
 
 	const where: Prisma.ProductFindManyArgs["where"] = {
-		...(userId && favorites
-			? {
-					active: true,
-					favors: { some: { id: userId } },
-				}
-			: {
-					active: true,
-					beginDate: {
-						gte: new Date(),
+		AND: [
+			selectedTags.length ? { tags: { some: { id: { in: selectedTags } } } } : {},
+			userId && favorites
+				? {
+						active: true,
+						favors: { some: { id: userId } },
+					}
+				: {
+						active: true,
+						beginDate: {
+							gte: new Date(),
+						},
 					},
-				}),
+		],
 		active: true,
 		...(query
 			? {
 					OR: [
-						{ name: { contains: query.toLowerCase() } },
-						{ description: { contains: query.toLowerCase() } },
+						{ name: { contains: query } },
+						{ description: { contains: query } },
+						{ short: { contains: query } },
 					],
 				}
 			: {}),
 	};
 
-	const [products, count] = await db.$transaction([
+	const [products, count, tags] = await db.$transaction([
 		db.product.findMany({
 			where: where,
 			take: size * page,
 			orderBy: { beginDate: "asc" },
 		}),
 		db.product.count({ where: where }),
+		db.tag.findMany({
+			where: {
+				products: {
+					some: {
+						active: true,
+						favors: userId && favorites ? { some: { id: userId } } : undefined,
+					},
+				},
+			},
+			orderBy: { name: "asc" },
+		}),
 	]);
 
 	const nextPage = page * size < count ? page + 1 : null;
 
-	return { products, nextPage };
+	return { products, nextPage, tags };
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -164,7 +183,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function ProductsCatalog() {
-	const { products, nextPage } = useLoaderData<typeof loader>();
+	const { products, nextPage, tags } = useLoaderData<typeof loader>();
 	const user = useOptionalUser();
 
 	const [searchParams] = useSearchParams();
@@ -201,6 +220,11 @@ export default function ProductsCatalog() {
 					</Link>
 				) : null}
 			</LayoutWrapper>
+			{tags.length ? (
+				<LayoutWrapper className="my-6 px-5 md:my-12">
+					<TagsChooser tags={tags} />
+				</LayoutWrapper>
+			) : null}
 			<LayoutWrapper className="my-6 md:my-12">
 				{products.length === 0 ? (
 					<>
@@ -247,7 +271,86 @@ export default function ProductsCatalog() {
 	);
 }
 
+function TagsChooser({ tags }: { tags: Tag[] }) {
+	const [searchParams] = useSearchParams();
+	const currentTagsIds = (searchParams.get("tags") ?? "").split(",");
+	const currentTags = tags.filter((tag) => currentTagsIds.includes(tag.id));
+
+	const clearTagsSearchParams = new URLSearchParams(searchParams);
+	clearTagsSearchParams.delete("tags");
+
+	const tagLinkSearchParams = (tag: Tag) => {
+		const linkParams = new URLSearchParams(searchParams);
+		const hasTag = currentTagsIds.includes(tag.id);
+		if (hasTag) {
+			linkParams.set("tags", currentTagsIds.filter((id) => id !== tag.id).join(","));
+		} else {
+			linkParams.set("tags", [...currentTagsIds, tag.id].join(","));
+		}
+
+		return `?${linkParams}`;
+	};
+
+	return (
+		<div className="flex flex-wrap items-center gap-2">
+			<Popover>
+				<PopoverTrigger className="group/filters" asChild>
+					<Button variant="outline">
+						<FilterIcon />
+						Фильтры
+					</Button>
+				</PopoverTrigger>
+				<PopoverContent className="w-auto rounded-2xl p-6" align="start">
+					<div className="flex max-h-80 flex-col flex-wrap gap-x-6 gap-y-4">
+						{tags.map((tag) => (
+							<Link
+								key={tag.id}
+								to={{ search: tagLinkSearchParams(tag) }}
+								className={clsx(
+									"hover:text-primary",
+									currentTagsIds.includes(tag.id) && "text-primary underline",
+								)}
+							>
+								{tag.name}
+							</Link>
+						))}
+					</div>
+				</PopoverContent>
+			</Popover>
+			{currentTags.length ? (
+				<Link
+					to={{ search: `?${clearTagsSearchParams}` }}
+					className={buttonVariants({ variant: "outline", size: "icon" })}
+				>
+					<XIcon />
+				</Link>
+			) : null}
+			{currentTags.map((tag) => (
+				<Link
+					key={tag.id}
+					to={{ search: tagLinkSearchParams(tag) }}
+					className={buttonVariants({ variant: "secondary" })}
+				>
+					{tag.name}
+				</Link>
+			))}
+		</div>
+	);
+}
+
 function ProductsListHeader() {
+	const queryFieldRef = useRef<HTMLInputElement>(null);
+
+	const [searchParams] = useSearchParams();
+	const queryValue = searchParams.get("q") ?? "";
+
+	React.useEffect(() => {
+		const queryField = queryFieldRef.current;
+		if (queryField) {
+			queryField.value = queryValue;
+		}
+	}, [queryValue]);
+
 	return (
 		<div className="relative h-[500px] max-h-screen">
 			<img
@@ -263,9 +366,11 @@ function ProductsListHeader() {
 					</p>
 					<div className="flex w-full rounded-full md:w-[600px]">
 						<Input
+							ref={queryFieldRef}
 							name="q"
 							className="h-10 flex-1 rounded-none rounded-l-full bg-background px-5"
 							placeholder="Поиск турпродуктов..."
+							defaultValue={queryValue}
 						/>
 						<Button type="submit" className="rounded-none rounded-r-full">
 							Найти
