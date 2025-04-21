@@ -1,19 +1,26 @@
+import { Placemark, Map as YMap, YMaps } from "@pbe/react-yandex-maps";
 import clsx from "clsx";
-import { HeartIcon } from "lucide-react";
-import { Form, data, useLoaderData } from "react-router";
-import CardDate from "~/components/CardDate";
+import { Form, Link, data, href, useLoaderData } from "react-router";
+
 import CommentItem from "~/components/CommentItem";
+import LayoutWrapper from "~/components/LayoutWrapper";
 import RatingBar from "~/components/RatingBar";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
+import type { CustomHeaderHandle } from "~/lib/hooks/use-custom-header";
 import { db } from "~/utils/db.server";
 import { useOptionalUser } from "~/utils/user";
+import { Header } from "~/widgets/header";
 import { LikeProductButton } from "~/widgets/like-button";
 import type { Route } from "./+types/route";
 
 export const meta: Route.MetaFunction = ({ data }) => [{ title: `${data?.product.name ?? ""} | Креатур` }];
+
+export const handle: CustomHeaderHandle = {
+	customHeader: true,
+};
 
 export const loader = async ({ params }: Route.LoaderArgs) => {
 	const product = await db.product.findUnique({
@@ -39,6 +46,7 @@ export const loader = async ({ params }: Route.LoaderArgs) => {
 					order: "asc",
 				},
 			},
+			tags: true,
 		},
 	});
 
@@ -46,11 +54,15 @@ export const loader = async ({ params }: Route.LoaderArgs) => {
 		throw data({}, { status: 404 });
 	}
 
-	return { product };
+	const coordinates = product.coordinates
+		? product.coordinates.split(",").map((c) => Number(c.trim()))
+		: null;
+
+	return { product, coordinates: coordinates ? [coordinates[0], coordinates[1]] : null };
 };
 
 export default function ProductPage() {
-	const { product } = useLoaderData<typeof loader>();
+	const { product, coordinates } = useLoaderData<typeof loader>();
 	const user = useOptionalUser();
 
 	const buyed = user?.activeProducts.findIndex((p) => p.id === product.id) !== -1;
@@ -58,66 +70,130 @@ export default function ProductPage() {
 
 	return (
 		<>
-			<div className="mx-auto max-w-6xl px-5 md:px-10">
-				<div className="my-6 md:my-12">
-					<div className="flex justify-between gap-2 md:justify-start">
-						<h1 className="font-bold font-serif text-2xl">{product.name}</h1>
-						{user ? (
-							<Button size="icon" variant="ghost">
-								<HeartIcon />
-							</Button>
+			<div className="relative h-[800px]">
+				{product.image ? (
+					<img
+						src={`/images/products/${product.image}`}
+						alt={product.name}
+						className="-z-10 absolute top-0 left-0 h-full w-full object-cover object-center"
+					/>
+				) : null}
+				<div className="h-full bg-black/40 pb-16">
+					<LayoutWrapper className="flex h-full flex-col justify-end gap-4 px-5">
+						<Header className="absolute top-0 left-0 w-full text-white" />
+						<div className="flex flex-wrap">
+							{product.tags.map((tag) => (
+								<Link
+									key={tag.id}
+									to={{
+										pathname: href("/products"),
+										search: `?tags=${tag.id}`,
+									}}
+									className="mr-2 border-r-2 pr-2 text-white leading-tight first-of-type:pl-0 last-of-type:border-r-0 hover:underline sm:text-lg"
+								>
+									{tag.name}
+								</Link>
+							))}
+						</div>
+						<h1 className="font-medium font-serif text-4xl text-white md:text-6xl">
+							{product.name}
+						</h1>
+
+						{product.route.length === 0 ? (
+							<p className="text-white">{product.short}</p>
+						) : (
+							<div className="flex">
+								{product.route.map((routeItem) => (
+									<p
+										key={routeItem.id}
+										className="border-r-2 pr-2 pl-2 text-lg text-white leading-none first-of-type:pl-0 last-of-type:border-r-0"
+									>
+										{routeItem.place.name}
+									</p>
+								))}
+							</div>
+						)}
+
+						<div className="flex gap-3">
+							<Form
+								method="POST"
+								action="/products?index"
+								onSubmit={(e) => {
+									if (
+										!confirm(
+											product.price > 0
+												? `Приобрести за ${product.price} ₽?`
+												: "Записаться бесплатно?",
+										)
+									) {
+										e.preventDefault();
+									}
+								}}
+								preventScrollReset
+							>
+								<input type="hidden" name="userId" value={user?.id} />
+								<input type="hidden" name="productId" value={product.id} />
+								<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
+								<Button
+									type="submit"
+									name="intent"
+									value="activate-product"
+									disabled={buyed || !canBuy}
+									variant={buyed ? "default" : "outline"}
+									className={clsx(buyed && "disabled:opacity-100")}
+								>
+									{buyed
+										? "Приобретено"
+										: product.price === 0
+											? "Бесплатно"
+											: `${product.price.toLocaleString("ru")} ₽`}
+								</Button>
+							</Form>
+							<LikeProductButton productId={product.id} className="bg-background" />
+						</div>
+					</LayoutWrapper>
+				</div>
+			</div>
+
+			<LayoutWrapper className="px-5 pt-6 md:pt-12">
+				<div className="flex flex-wrap items-start justify-between gap-y-3">
+					<div className="flex flex-wrap items-baseline gap-3">
+						<p className="not-last:border-r-2 pr-3 font-semibold text-xl leading-none">
+							О мероприятии
+						</p>
+						{product.beginDate ? (
+							<p className="font-serif text-lg leading-none">{formatDate(product.beginDate)}</p>
 						) : null}
 					</div>
-					<p className="mt-2">{product.short}</p>
-					<div className="mt-6 flex items-center">
-						<div className="flex-1 md:mr-12 md:grow-0">
-							<RatingBar ratings={product.rating} />
-							<p className="text-slate-500">{product.rating.length} оценок</p>
-						</div>
-						{product.beginDate && <CardDate date={product.beginDate} className="text-right" />}
-					</div>
+					<RatingBar ratings={product.rating} />
 				</div>
 
-				<div className="my-12 flex items-center gap-2">
-					<Form
-						method="POST"
-						action="/products?index"
-						onSubmit={(e) => {
-							if (
-								!confirm(
-									product.price > 0
-										? `Приобрести за ${product.price} ₽?`
-										: "Записаться бесплатно?",
-								)
-							) {
-								e.preventDefault();
-							}
-						}}
-						preventScrollReset
-					>
-						<input type="hidden" name="userId" value={user?.id} />
-						<input type="hidden" name="productId" value={product.id} />
-						<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
-						<Button
-							type="submit"
-							name="intent"
-							value="activate-product"
-							disabled={buyed || !canBuy}
-							variant={buyed ? "default" : "outline"}
-							className={clsx(buyed && "disabled:opacity-100")}
+				<p className="mt-5 whitespace-pre-line">{product.description}</p>
+
+				<p className="mt-12 font-semibold text-xl leading-none">Адрес</p>
+				{coordinates ? (
+					<div className="mt-5 overflow-hidden rounded-xl bg-secondary">
+						<YMaps
+							query={{
+								apikey: "ea2f1a91-b606-4692-ae42-b82c4f60899e",
+							}}
 						>
-							{buyed
-								? "Приобретено"
-								: product.price === 0
-									? "Бесплатно"
-									: `Приобрести за ${product.price.toLocaleString("ru")} ₽`}
-						</Button>
-					</Form>
-					<LikeProductButton productId={product.id} />
-				</div>
+							<YMap
+								state={{
+									center: coordinates,
+									zoom: 15,
+								}}
+								height={"400px"}
+							>
+								<Placemark geometry={coordinates} />
+							</YMap>
+						</YMaps>
+					</div>
+				) : null}
+				<p className="mt-5">{product.address}</p>
 
-				<p className="font-semibold font-serif text-xl">Галерея изображений</p>
-			</div>
+				<p className="mt-12 font-semibold font-serif text-xl">Галерея изображений</p>
+			</LayoutWrapper>
 
 			<div className="-mx-6 md:-mx-12 my-6 md:my-12">
 				<div className="flex snap-x scroll-p-6 gap-6 overflow-x-auto px-6">
@@ -154,13 +230,6 @@ export default function ProductPage() {
 								</div>
 							))}
 						</div>
-					</>
-				)}
-
-				{product.description && (
-					<>
-						<p className="mt-24 font-semibold font-serif text-xl">Описание</p>
-						<p>{product.description}</p>
 					</>
 				)}
 
@@ -250,3 +319,17 @@ const PaperClipIcon = ({ className }: { className?: string }) => (
 		/>
 	</svg>
 );
+
+function formatDate(date: Date) {
+	const options: Intl.DateTimeFormatOptions = {
+		year: undefined,
+		month: "long",
+		day: "numeric",
+		weekday: "long",
+		hour: "numeric",
+		minute: "numeric",
+	};
+
+	const formatter = new Intl.DateTimeFormat("ru-RU", options);
+	return formatter.format(date);
+}

@@ -17,6 +17,7 @@
 		"@mjackson/file-storage": "^0.6.1",
 		"@mjackson/form-data-parser": "^0.7.0",
 		"@paralleldrive/cuid2": "^2.2.2",
+		"@pbe/react-yandex-maps": "^1.2.5",
 		"@prisma/client": "^6.6.0",
 		"@radix-ui/react-accordion": "^1.2.7",
 		"@radix-ui/react-alert-dialog": "^1.1.10",

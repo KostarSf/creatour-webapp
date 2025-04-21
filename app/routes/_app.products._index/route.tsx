@@ -321,8 +321,10 @@ function TagsChooser({ tags }: { tags: Tag[] }) {
 				<Link
 					to={{ search: `?${clearTagsSearchParams}` }}
 					className={buttonVariants({ variant: "outline", size: "icon" })}
+					title="Очистить фильтры"
 				>
 					<XIcon />
+					<span className="sr-only">Очистить фильтры</span>
 				</Link>
 			) : null}
 			{currentTags.map((tag) => (
