@@ -300,7 +300,7 @@ function TagsChooser({ tags }: { tags: Tag[] }) {
 						Фильтры
 					</Button>
 				</PopoverTrigger>
-				<PopoverContent className="w-auto rounded-2xl p-6" align="start">
+				<PopoverContent className="w-auto max-w-screen overflow-x-auto rounded-2xl p-6" align="start">
 					<div className="flex max-h-80 flex-col flex-wrap gap-x-6 gap-y-4">
 						{tags.map((tag) => (
 							<Link
