@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import type { Prisma, Tag } from "generated/prisma_client";
 import { FilterIcon, XIcon } from "lucide-react";
 import React, { useRef } from "react";
 import type { ActionFunctionArgs, MetaFunction } from "react-router";
@@ -13,6 +12,7 @@ import {
 	useLoaderData,
 	useSearchParams,
 } from "react-router";
+import type { Prisma, Tag } from "~/../node_modules/@prisma/prisma_client";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import { ProductCard } from "~/components/ProductCard";
 import { Socials } from "~/components/Socials";

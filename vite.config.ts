@@ -9,11 +9,6 @@ const ReactCompilerConfig = {
 };
 
 export default defineConfig({
-	build: {
-		rollupOptions: {
-			external: ["generated/prisma_client"],
-		},
-	},
 	plugins: [
 		tailwindcss(),
 		reactRouter(),

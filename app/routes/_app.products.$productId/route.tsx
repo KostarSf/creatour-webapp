@@ -2,7 +2,16 @@ import { Placemark, Map as YMap, YMaps } from "@pbe/react-yandex-maps";
 import clsx from "clsx";
 import { Form, Link, data, href, useLoaderData } from "react-router";
 
-import type { Comment, Media, Place, Product, Rating, RoutePoint, Tag, User } from "generated/prisma_client";
+import type {
+	Comment,
+	Media,
+	Place,
+	Product,
+	Rating,
+	RoutePoint,
+	Tag,
+	User,
+} from "~/../node_modules/@prisma/prisma_client";
 import CommentItem from "~/components/CommentItem";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import RatingBar from "~/components/RatingBar";
