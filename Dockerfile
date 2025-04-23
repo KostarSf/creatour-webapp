@@ -41,7 +41,7 @@ FROM base
 # Copy built application
 COPY --from=build /app /app
 
-RUN apt-get update -y && apt-get install -y openssl
+RUN apt-get update -y && apt-get install -y openssl curl
 
 RUN npx prisma generate
 
