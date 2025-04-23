@@ -39,6 +39,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 	const favorites = searchParams.get("type") === "favorites";
 	const userId = await getUserId(request);
 	const selectedTags = searchParams.get("tags")?.split(",").filter(Boolean) ?? [];
+	const news = Boolean(searchParams.get("news"));
 
 	const query = searchParams.get("q");
 	const page = Number.parseInt(searchParams.get("page") ?? "1");
@@ -48,9 +49,11 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 
 	const size = 4;
 	const offset = (page - 1) * 4;
+	const newsMinDate = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30);
 
 	const where: Prisma.ProductFindManyArgs["where"] = {
 		AND: [
+			news ? { createdAt: { gt: newsMinDate } } : {},
 			selectedTags.length ? { tags: { some: { id: { in: selectedTags } } } } : {},
 			userId && favorites
 				? {
@@ -76,7 +79,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 			: {}),
 	};
 
-	const [products, count, tags] = await db.$transaction([
+	const [products, count, tags, newsCount] = await db.$transaction([
 		db.product.findMany({
 			where: where,
 			take: size * page,
@@ -86,19 +89,27 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 		db.tag.findMany({
 			where: {
 				products: {
-					some: {
-						active: true,
-						favors: userId && favorites ? { some: { id: userId } } : undefined,
-					},
+					some:
+						userId && favorites
+							? {
+									favors: userId && favorites ? { some: { id: userId } } : undefined,
+								}
+							: {
+									active: true,
+									beginDate: {
+										gte: new Date(),
+									},
+								},
 				},
 			},
 			orderBy: { name: "asc" },
 		}),
+		db.product.count({ where: { active: true, createdAt: { gt: newsMinDate } } }),
 	]);
 
 	const nextPage = page * size < count ? page + 1 : null;
 
-	return { products, nextPage, tags };
+	return { products, nextPage, tags, count, hasNews: newsCount > 0 };
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -183,11 +194,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function ProductsCatalog() {
-	const { products, nextPage, tags } = useLoaderData<typeof loader>();
+	const { products, nextPage, tags, count, hasNews } = useLoaderData<typeof loader>();
 	const user = useOptionalUser();
 
 	const [searchParams] = useSearchParams();
+
 	const favorites = searchParams.get("type") === "favorites";
+	const news = Boolean(searchParams.get("news"));
+	const events = !favorites && !news;
 
 	const nextPageParams = new URLSearchParams(searchParams);
 	nextPageParams.set("page", String(nextPage ?? "1"));
@@ -198,31 +212,49 @@ export default function ProductsCatalog() {
 		<>
 			<ProductsListHeader />
 
-			<LayoutWrapper className="my-6 flex gap-5 px-5 md:my-12">
-				<Link
-					to={href("/products")}
-					className={clsx("font-medium text-xl transition", favorites && "opacity-40")}
-				>
-					Календарь мероприятий
-				</Link>
-				{user ? (
+			<div id="content" />
+
+			<LayoutWrapper className="my-6 md:my-12">
+				<div className="flex gap-5 overflow-x-auto whitespace-nowrap px-5 md:px-0">
 					<Link
-						to=".?type=favorites"
-						className={clsx("flex items-center gap-2 font-medium text-xl transition")}
+						to={href("/products")}
+						className={clsx("font-medium text-xl transition", !events && "opacity-40")}
+						preventScrollReset
 					>
-						<span className={clsx(!favorites && "opacity-40")}>Избранное</span>
-						<Badge
-							variant="outline"
-							className={clsx("transition", !hasFavs && "scale-75 opacity-0")}
-						>
-							{user.favoriteProducts.length}
-						</Badge>
+						Календарь мероприятий
 					</Link>
-				) : null}
+					{hasNews ? (
+						<Link
+							to={`${href("/products")}?news=true`}
+							className={clsx("font-medium text-xl transition", !news && "opacity-40")}
+							preventScrollReset
+						>
+							Новинки
+						</Link>
+					) : null}
+					{user ? (
+						<Link
+							to=".?type=favorites"
+							className={clsx("flex items-center gap-2 font-medium text-xl transition")}
+							preventScrollReset
+						>
+							<span className={clsx(!favorites && "opacity-40")}>Избранное</span>
+							<Badge
+								variant="outline"
+								className={clsx("transition", !hasFavs && "scale-75 opacity-0")}
+							>
+								{user.favoriteProducts.length}
+							</Badge>
+						</Link>
+					) : null}
+				</div>
 			</LayoutWrapper>
 			{tags.length ? (
-				<LayoutWrapper className="my-6 px-5 md:my-12">
+				<LayoutWrapper className="my-6 flex flex-wrap justify-between gap-x-3 px-5 md:my-12">
 					<TagsChooser tags={tags} />
+					{count > 0 ? (
+						<p className="py-2 text-muted-foreground">{`Нашлось ${count} ${pluralizeProducts(count)}`}</p>
+					) : null}
 				</LayoutWrapper>
 			) : null}
 			<LayoutWrapper className="my-6 md:my-12">
@@ -310,6 +342,7 @@ function TagsChooser({ tags }: { tags: Tag[] }) {
 									"hover:text-primary",
 									currentTagsIds.includes(tag.id) && "text-primary underline",
 								)}
+								preventScrollReset
 							>
 								{tag.name}
 							</Link>
@@ -322,6 +355,7 @@ function TagsChooser({ tags }: { tags: Tag[] }) {
 					to={{ search: `?${clearTagsSearchParams}` }}
 					className={buttonVariants({ variant: "outline", size: "icon" })}
 					title="Очистить фильтры"
+					preventScrollReset
 				>
 					<XIcon />
 					<span className="sr-only">Очистить фильтры</span>
@@ -332,6 +366,7 @@ function TagsChooser({ tags }: { tags: Tag[] }) {
 					key={tag.id}
 					to={{ search: tagLinkSearchParams(tag) }}
 					className={buttonVariants({ variant: "secondary" })}
+					preventScrollReset
 				>
 					{tag.name}
 				</Link>
@@ -409,4 +444,10 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 			</div>
 		</>
 	);
+}
+
+const productTitles = ["мероприятие", "мероприятия", "мероприятий"];
+const cases = [2, 0, 1, 1, 1, 2];
+function pluralizeProducts(number: number) {
+	return productTitles[number % 100 > 4 && number % 100 < 20 ? 2 : cases[Math.min(number % 10, 5)]];
 }

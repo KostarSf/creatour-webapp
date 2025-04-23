@@ -48,11 +48,11 @@ export default function AuthLayout() {
 				<div className="text-right md:px-12 md:py-12 lg:px-24 lg:py-16">
 					<Link
 						to={"/"}
-						className="font-bold font-serif text-5xl text-white transition-colors hover:text-blue-500 lg:text-6xl"
+						className="font-bold font-serif text-5xl text-white transition-colors hover:text-blue-500"
 					>
 						Креатур
 					</Link>
-					<p className="mt-16 text-3xl/normal text-white tracking-widest lg:text-4xl/normal">
+					<p className="mt-16 text-3xl text-white leading-tight tracking-widest">
 						Отдыхай <br />
 						креативно <br />
 						вместе с <br />

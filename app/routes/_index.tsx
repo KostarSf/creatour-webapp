@@ -1,11 +1,12 @@
 import type { MetaFunction } from "react-router";
-import { Link, useLoaderData } from "react-router";
+import { Link, href, useLoaderData } from "react-router";
 import { Socials } from "~/components/Socials";
 import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 import { db } from "~/utils/db.server";
 import { useOptionalUser } from "~/utils/user";
 import { Footer } from "~/widgets/footer";
+import type { Route } from "./+types/_index";
 
 export const meta: MetaFunction = () => [
 	{ title: "Добро пожаловать | Креатур" },
@@ -16,18 +17,35 @@ export const meta: MetaFunction = () => [
 ];
 
 export const loader = async () => {
-	const products = await db.product.findMany({
-		where: {
-			active: true,
-			beginDate: {
-				gte: new Date(),
+	const newsMinDate = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30);
+	const [products, tags, newsCount] = await db.$transaction([
+		db.product.findMany({
+			where: {
+				active: true,
+				beginDate: {
+					gte: new Date(),
+				},
 			},
-		},
-		orderBy: {
-			beginDate: "asc",
-		},
-		take: 3,
-	});
+			orderBy: {
+				beginDate: "asc",
+			},
+			take: 3,
+		}),
+		db.tag.findMany({
+			where: {
+				products: {
+					some: {
+						active: true,
+						beginDate: {
+							gte: new Date(),
+						},
+					},
+				},
+			},
+			orderBy: { name: "asc" },
+		}),
+		db.product.count({ where: { active: true, createdAt: { gt: newsMinDate } } }),
+	]);
 
 	return {
 		cards: products.map((product) => ({
@@ -36,12 +54,12 @@ export const loader = async () => {
 			image: `/images/products/${product.image}`,
 			link: `/products/${product.id}`,
 		})),
+		tags,
+		hasNews: newsCount > 0,
 	};
 };
 
-export default function LandingPage() {
-	const { cards } = useLoaderData<typeof loader>();
-
+export default function LandingPage({ loaderData }: Route.ComponentProps) {
 	const user = useOptionalUser();
 
 	return (
@@ -73,50 +91,45 @@ export default function LandingPage() {
 						</Link>
 					</div>
 
-					<div className="mt-32 flex flex-col-reverse justify-between gap-4 md:mt-16 xl:flex-row xl:items-end">
-						<Socials className="my-12 md:my-0 md:text-white" />
-
-						<div className="flex flex-col flex-wrap items-start gap-2 md:flex-row">
-							{cards.map((card, i) => (
-								<PreviewCard
-									key={card.id}
-									name={card.name}
-									image={card.image}
-									link={card.link}
-									displayId={`0${i + 1}`}
+					<div className="mt-32 grid gap-2 md:mt-16">
+						<div className="flex xl:justify-end">
+							<Link
+								to={href("/products")}
+								className="py-2 font-medium text-foreground hover:underline md:text-white"
+							>
+								Посмотреть все предложения
+								<img
+									src="/images/landing/arrow_right.svg"
+									alt="arrow_right.svg"
+									className="inline px-2 max-md:invert"
 								/>
-							))}
+							</Link>
+						</div>
 
-							{/* <PreviewCard
-								name='Гастрономический тур по Новороссийску'
-								image='/images/tour_food.png'
-								link='/products/123'
-								displayId='02'
-							/>
+						<div className="flex flex-col-reverse justify-between gap-4 xl:flex-row xl:items-end">
+							<Socials className="my-12 md:my-0 md:text-white" />
 
-							<PreviewCard
-								name='Достопримечательности Новороссийска'
-								image='/images/trip_memorial.jpg'
-								link='/products/123'
-								displayId='03'
-							/>
-
-							<PreviewCard
-								name='Интерактивный квест "Темное сердце"'
-								image='/images/sea.jpg'
-								link='/products/123'
-								displayId='04'
-							/> */}
+							<div className="flex flex-col flex-wrap items-start gap-2 md:flex-row">
+								{loaderData.cards.map((card, i) => (
+									<PreviewCard
+										key={card.id}
+										name={card.name}
+										image={card.image}
+										link={card.link}
+										displayId={`0${i + 1}`}
+									/>
+								))}
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
 			<div className="mx-auto max-w-6xl bg-white px-6 md:px-12">
-				<div className="my-48">
+				<div id="brand-about" className="my-48">
 					<p className="mb-10 text-center text-4xl">***</p>
-					<p className="text-center font-light text-xl leading-normal tracking-widest md:text-3xl xl:text-4xl">
-						<span className="font-bold font-serif text-2xl md:text-3xl xl:text-5xl">Креатур</span>{" "}
+					<p className="text-center font-light text-xl leading-normal tracking-widest md:text-3xl">
+						<span className="font-bold font-serif text-2xl md:text-3xl xl:text-4xl">Креатур</span>{" "}
 						- это творческое объединение разнообразных компаний туристической сферы, разработчиков
 						креативных туристических программ, владельцев инфраструктуры и любителей пробовать
 						что-то новое.
@@ -148,10 +161,10 @@ export default function LandingPage() {
 					</div>
 
 					<div className="flex-2 space-y-8 py-8">
-						<h2 className="font-bold font-serif text-3xl sm:text-4xl xl:text-5xl">
+						<h2 className="font-bold font-serif text-3xl sm:text-4xl">
 							Посмотрите все направления туров
 						</h2>
-						<p className="text-xl">
+						<p className="text-pretty text-lg">
 							Бескрайние просторы тайги, огромные реки, золотые степи и венцы человеческого
 							творения - архитектурные памятники - это и делает нашу страну такой уникальной.
 						</p>
@@ -186,12 +199,12 @@ export default function LandingPage() {
 					</div>
 
 					<div className="flex-2 space-y-8 py-8">
-						<h2 className="font-bold font-serif text-3xl sm:text-4xl xl:text-5xl">
+						<h2 className="font-bold font-serif text-3xl sm:text-4xl">
 							Что пишут участники наших турпрограмм
 						</h2>
-						<p className="text-xl">
-							87% участников приходят по личной рекомендации от друзей. Каждый 4-ый проводит
-							досуг с нами больше 2-ух раз!
+						<p className="text-pretty text-lg">
+							87% участников приходят по личной рекомендации от друзей. Каждый четвертый
+							проводит досуг с нами больше двух раз!
 						</p>
 						<Link to="/reviews" className={buttonVariants({ variant: "outline", size: "lg" })}>
 							Читать отзывы
@@ -199,7 +212,7 @@ export default function LandingPage() {
 					</div>
 				</div>
 			</div>
-			<Footer />
+			<Footer hasNews={loaderData.hasNews} tags={loaderData.tags} />
 		</>
 	);
 }

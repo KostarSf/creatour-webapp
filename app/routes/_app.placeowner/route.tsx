@@ -1,8 +1,10 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import { data, useLoaderData } from "react-router";
-import ActionLinkButton from "~/components/ActionLinkButton";
+import { Link, data, href, useLoaderData } from "react-router";
+
+import LayoutWrapper from "~/components/LayoutWrapper";
 import { ServiceProductCard } from "~/components/ProductCard";
 import ServiceUserCard from "~/components/ServiceUserCard";
+import { buttonVariants } from "~/components/ui/button";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { requireRoleSession, requireUserId } from "~/utils/session.server";
@@ -111,21 +113,18 @@ export default function PlaceownerPage() {
 
 	return (
 		<>
-			<div className="my-6 md:my-12">
-				<h1 className="font-medium text-xl">Карточка владельца объекта</h1>
-			</div>
 			<ServiceUserCard user={user} />
 			<div className="my-6 md:my-12">
-				<div className="flex flex-wrap items-baseline justify-between gap-3">
-					<p className="text-xl">
-						<span className="text-blue-500">{user.username}</span> объекты
-					</p>
-					<ActionLinkButton to="/new-place">Новый объект</ActionLinkButton>
-				</div>
+				<LayoutWrapper className="flex flex-wrap items-baseline justify-between gap-3 px-5">
+					<p className="text-xl">Ваши объекты</p>
+					<Link to={href("/new-place")} className={buttonVariants({ variant: "default" })}>
+						Новый объект
+					</Link>
+				</LayoutWrapper>
 				{places.length === 0 ? (
 					<p className="mt-24 text-center text-slate-400 text-xl">У вас пока нет объектов</p>
 				) : (
-					<div className="-mx-6 mt-6 max-w-7xl space-y-6 md:mx-auto md:mt-12">
+					<LayoutWrapper className="mt-6 space-y-6 md:mt-12">
 						{places.map((place) => (
 							<ServiceProductCard
 								type="place"
@@ -134,7 +133,7 @@ export default function PlaceownerPage() {
 								usedIn={place.routes}
 							/>
 						))}
-					</div>
+					</LayoutWrapper>
 				)}
 			</div>
 		</>

@@ -2,6 +2,7 @@ import { Placemark, Map as YMap, YMaps } from "@pbe/react-yandex-maps";
 import clsx from "clsx";
 import { Form, Link, data, href, useLoaderData } from "react-router";
 
+import type { Comment, Media, Place, Product, Rating, RoutePoint, Tag, User } from "@prisma/client";
 import CommentItem from "~/components/CommentItem";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import RatingBar from "~/components/RatingBar";
@@ -63,97 +64,10 @@ export const loader = async ({ params }: Route.LoaderArgs) => {
 
 export default function ProductPage() {
 	const { product, coordinates } = useLoaderData<typeof loader>();
-	const user = useOptionalUser();
-
-	const buyed = user?.activeProducts.findIndex((p) => p.id === product.id) !== -1;
-	const canBuy = user?.role === "user" || false;
 
 	return (
 		<>
-			<div className="relative h-[800px]">
-				{product.image ? (
-					<img
-						src={`/images/products/${product.image}`}
-						alt={product.name}
-						className="-z-10 absolute top-0 left-0 h-full w-full object-cover object-center"
-					/>
-				) : null}
-				<div className="h-full bg-black/40 pb-16">
-					<LayoutWrapper className="flex h-full flex-col justify-end gap-4 px-5">
-						<Header className="absolute top-0 left-0 w-full text-white" />
-						<div className="flex flex-wrap">
-							{product.tags.map((tag) => (
-								<Link
-									key={tag.id}
-									to={{
-										pathname: href("/products"),
-										search: `?tags=${tag.id}`,
-									}}
-									className="mr-2 border-r-2 pr-2 text-white leading-tight first-of-type:pl-0 last-of-type:border-r-0 hover:underline sm:text-lg"
-								>
-									{tag.name}
-								</Link>
-							))}
-						</div>
-						<h1 className="font-medium font-serif text-4xl text-white md:text-6xl">
-							{product.name}
-						</h1>
-
-						{product.route.length === 0 ? (
-							<p className="text-white">{product.short}</p>
-						) : (
-							<div className="flex">
-								{product.route.map((routeItem) => (
-									<p
-										key={routeItem.id}
-										className="border-r-2 pr-2 pl-2 text-lg text-white leading-none first-of-type:pl-0 last-of-type:border-r-0"
-									>
-										{routeItem.place.name}
-									</p>
-								))}
-							</div>
-						)}
-
-						<div className="flex gap-3">
-							<Form
-								method="POST"
-								action="/products?index"
-								onSubmit={(e) => {
-									if (
-										!confirm(
-											product.price > 0
-												? `Приобрести за ${product.price} ₽?`
-												: "Записаться бесплатно?",
-										)
-									) {
-										e.preventDefault();
-									}
-								}}
-								preventScrollReset
-							>
-								<input type="hidden" name="userId" value={user?.id} />
-								<input type="hidden" name="productId" value={product.id} />
-								<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
-								<Button
-									type="submit"
-									name="intent"
-									value="activate-product"
-									disabled={buyed || !canBuy}
-									variant={buyed ? "default" : "outline"}
-									className={clsx(buyed && "disabled:opacity-100")}
-								>
-									{buyed
-										? "Приобретено"
-										: product.price === 0
-											? "Бесплатно"
-											: `${product.price.toLocaleString("ru")} ₽`}
-								</Button>
-							</Form>
-							<LikeProductButton productId={product.id} className="bg-background" />
-						</div>
-					</LayoutWrapper>
-				</div>
-			</div>
+			<ProductHeader product={product} />
 
 			<LayoutWrapper className="px-5 pt-6 md:pt-12">
 				<div className="flex flex-wrap items-start justify-between gap-y-3">
@@ -233,53 +147,105 @@ export default function ProductPage() {
 					</>
 				)}
 
-				<p className="mt-24 mb-6 font-semibold font-serif text-xl">Комментарии</p>
-				<div className="space-y-6">
-					{product.comments.map((comment) => (
-						<CommentItem key={comment.id} comment={comment} rating={product.rating} />
-					))}
-				</div>
-				<div className="mt-24 mb-12">
-					{user ? (
-						<Form
-							method="POST"
-							action="/api/add-comment"
-							encType="multipart/form-data"
-							preventScrollReset
-							className=" max-w-3xl"
-						>
-							<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
-							<input type="hidden" name="parentType" value="product" />
-							<input type="hidden" name="parentId" value={product.id} />
-							<input type="hidden" name="userId" value={user.id} />
-							<Textarea name="text" placeholder="Напишите свой отзыв!" required />
-							<div className="mt-2 flex items-baseline justify-between gap-2">
-								{/* <div className="flex-1"></div> */}
-								<Label className="whitespace-nowrap" htmlFor="media-picker">
-									Прекрепить файл:
-								</Label>
-								<Input
-									type="file"
-									name="media"
-									id="media-picker"
-									accept=".png,.jpg,.jpeg,.webp"
-									multiple
-									className="border-0 shadow-none"
-								/>
-								{/* <label htmlFor='media-picker' className="cursor-pointer hover:bg-gray-200 transition-colors rounded-sm text-gray-500 p-2">
-                <PaperClipIcon/>
-              </label> */}
-								<Button type="submit" variant="secondary">
-									Отправить
-								</Button>
-							</div>
-						</Form>
-					) : (
-						<p className="text-center text-slate-500">Войдите, чтобы оставить комментарий</p>
-					)}
-				</div>
+				<CommentsBlock product={product} />
 			</div>
 		</>
+	);
+}
+
+interface ProductHeaderProps {
+	product: Product & { tags: Tag[]; route: (RoutePoint & { place: Place })[] };
+}
+
+function ProductHeader({ product }: ProductHeaderProps) {
+	const user = useOptionalUser();
+
+	const buyed = user?.activeProducts.findIndex((p) => p.id === product.id) !== -1;
+	const canBuy = user?.role === "user" || false;
+
+	return (
+		<div className="relative h-[800px]">
+			{product.image ? (
+				<img
+					src={`/images/products/${product.image}`}
+					alt={product.name}
+					className="-z-10 absolute top-0 left-0 h-full w-full object-cover object-center"
+				/>
+			) : null}
+			<div className="h-full bg-black/40 pb-16">
+				<LayoutWrapper className="flex h-full flex-col justify-end gap-4 px-5">
+					<Header className="absolute top-0 left-0 w-full text-white" />
+					<div className="flex flex-wrap gap-x-3 gap-y-2">
+						{product.tags.map((tag) => (
+							<Link
+								key={tag.id}
+								to={{
+									pathname: href("/products"),
+									search: `?tags=${tag.id}`,
+								}}
+								className="text-white leading-tight hover:underline sm:text-lg"
+							>
+								#{tag.name}
+							</Link>
+						))}
+					</div>
+					<h1 className="font-medium font-serif text-4xl text-white md:text-6xl">{product.name}</h1>
+
+					{product.route.length === 0 ? (
+						<p className="text-white">{product.short}</p>
+					) : (
+						<div className="flex flex-wrap gap-2">
+							{product.route.map((routeItem) => (
+								<p
+									key={routeItem.id}
+									className="border-r-2 pr-2 text-lg text-white leading-none last-of-type:border-r-0"
+								>
+									{routeItem.place.name}
+								</p>
+							))}
+						</div>
+					)}
+
+					<div className="flex gap-3">
+						<Form
+							method="POST"
+							action="/products?index"
+							onSubmit={(e) => {
+								if (
+									!confirm(
+										product.price > 0
+											? `Приобрести за ${product.price} ₽?`
+											: "Записаться бесплатно?",
+									)
+								) {
+									e.preventDefault();
+								}
+							}}
+							preventScrollReset
+						>
+							<input type="hidden" name="userId" value={user?.id} />
+							<input type="hidden" name="productId" value={product.id} />
+							<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
+							<Button
+								type="submit"
+								name="intent"
+								value="activate-product"
+								disabled={buyed || !canBuy}
+								variant={buyed ? "default" : "outline"}
+								className={clsx(buyed && "disabled:opacity-100")}
+							>
+								{buyed
+									? "Приобретено"
+									: product.price === 0
+										? "Бесплатно"
+										: `${product.price.toLocaleString("ru")} ₽`}
+							</Button>
+						</Form>
+						<LikeProductButton productId={product.id} className="bg-background" />
+					</div>
+				</LayoutWrapper>
+			</div>
+		</div>
 	);
 }
 
@@ -332,4 +298,68 @@ function formatDate(date: Date) {
 
 	const formatter = new Intl.DateTimeFormat("ru-RU", options);
 	return formatter.format(date);
+}
+
+interface CommentsBlockProps {
+	product: Product & {
+		comments: (Comment & {
+			user: User;
+			media: Media[];
+		})[];
+		rating: Rating[];
+	};
+}
+
+function CommentsBlock({ product }: CommentsBlockProps) {
+	const user = useOptionalUser();
+
+	return (
+		<>
+			<p className="mt-24 mb-6 font-semibold font-serif text-xl">Комментарии</p>
+			<div className="space-y-6">
+				{product.comments.map((comment) => (
+					<CommentItem key={comment.id} comment={comment} rating={product.rating} />
+				))}
+			</div>
+			<div className="mt-24 mb-12">
+				{user ? (
+					<Form
+						method="POST"
+						action="/api/add-comment"
+						encType="multipart/form-data"
+						preventScrollReset
+						className=" max-w-3xl"
+					>
+						<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
+						<input type="hidden" name="parentType" value="product" />
+						<input type="hidden" name="parentId" value={product.id} />
+						<input type="hidden" name="userId" value={user.id} />
+						<Textarea name="text" placeholder="Напишите свой отзыв!" required />
+						<div className="mt-2 flex items-baseline justify-between gap-2">
+							{/* <div className="flex-1"></div> */}
+							<Label className="whitespace-nowrap" htmlFor="media-picker">
+								Прекрепить файл:
+							</Label>
+							<Input
+								type="file"
+								name="media"
+								id="media-picker"
+								accept=".png,.jpg,.jpeg,.webp"
+								multiple
+								className="border-0 shadow-none"
+							/>
+							{/* <label htmlFor='media-picker' className="cursor-pointer hover:bg-gray-200 transition-colors rounded-sm text-gray-500 p-2">
+                <PaperClipIcon/>
+              </label> */}
+							<Button type="submit" variant="secondary">
+								Отправить
+							</Button>
+						</div>
+					</Form>
+				) : (
+					<p className="text-center text-slate-500">Войдите, чтобы оставить комментарий</p>
+				)}
+			</div>
+		</>
+	);
 }

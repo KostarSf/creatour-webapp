@@ -1,13 +1,11 @@
 import clsx from "clsx";
-import type { PropsWithChildren } from "react";
-import type React from "react";
 import { useEffect, useState } from "react";
 import { Link, useFetcher } from "react-router";
+import { CardContainer } from "~/components/CardContainer";
 import { InfoField } from "~/components/InfoField";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import { NoImageIcon } from "~/components/NoImageIcon";
 import { Button, buttonVariants } from "~/components/ui/button";
-import { cn } from "~/lib/utils";
 import type { CurrentUser } from "~/models/users";
 import type { UploadAvatarAction } from "../api.upload-avatar";
 
@@ -153,10 +151,3 @@ export default function UserCard({ user, checksCount }: Props) {
 		</LayoutWrapper>
 	);
 }
-
-const CardContainer = ({ className, ...props }: React.ComponentProps<"div">) => (
-	<div
-		{...props}
-		className={cn("border p-6 shadow-blue-900/5 shadow-lg md:mx-0 md:rounded-lg", className)}
-	/>
-);

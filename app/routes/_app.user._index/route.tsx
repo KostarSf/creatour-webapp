@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs } from "react-router";
-import { type LoaderFunctionArgs, data, redirect, useLoaderData } from "react-router";
+import { type LoaderFunctionArgs, data, useLoaderData } from "react-router";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { getUserSessionPayload, logout, requireUserId } from "~/utils/session.server";
@@ -15,13 +15,8 @@ export const meta: Route.MetaFunction = ({ matches }) => [
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
 	const user = await db.user.findUnique({ where: { id: userId } });
-	if (!user || user.role !== "user") {
-		return data(
-			{
-				error: "Некорректный пользователь",
-			},
-			{ status: 403 },
-		);
+	if (!user) {
+		return data({ error: "Некорректный пользователь" }, { status: 403 });
 	}
 
 	const formData = await request.formData();
@@ -55,9 +50,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const user = await getUserSessionPayload(request);
 
-	if (!user) throw logout(request);
-	if (user.role === "placeowner") throw redirect("/placeowner");
-	if (user.role === "creator") throw redirect("/creator");
+	if (!user) {
+		throw logout(request);
+	}
 
 	const checksCountPromise = db.check.count({ where: { buyerId: user.id } });
 	const nextEventPromise = db.product.findFirst({

@@ -28,16 +28,15 @@ export function Header({ className }: { className?: string }) {
 				{user ? (
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
-							<Button
-								variant="ghost"
-								className="pl-1 ring-border hover:bg-transparent hover:ring"
-							>
+							<Button variant="ghost" className="pl-1 ring-border">
 								<Avatar>
 									<AvatarImage src={user.avatar ?? undefined} />
-									<AvatarFallback>{user.username.substring(0, 1)}</AvatarFallback>
+									<AvatarFallback className="border text-foreground">
+										{user.username.substring(0, 1)}
+									</AvatarFallback>
 								</Avatar>
 								<span className="flex flex-col items-start leading-none">
-									<span className="font-semibold">{user.email}</span>
+									<span className="font-medium">{user.email}</span>
 									<span>{user.username}</span>
 								</span>
 							</Button>
