@@ -1,9 +1,9 @@
+import type { Comment, Media, Place, Product, Rating, User } from "generated/prisma_client";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { Link, useLoaderData } from "react-router";
 import CommentItem from "~/components/CommentItem";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import RatingBar from "~/components/RatingBar";
-import type { Comment, Media, Place, Product, Rating, User } from "~/generated/prisma/client";
 import { db } from "~/utils/db.server";
 
 export const meta: MetaFunction = () => [{ title: "Наши отзывы | Креатур" }];

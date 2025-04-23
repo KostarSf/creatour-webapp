@@ -1,4 +1,4 @@
-import type { Product, User } from "~/generated/prisma/client";
+import type { Product, User } from "generated/prisma_client";
 import { db } from "~/utils/db.server";
 
 export async function getCurrentUser(userId: string): Promise<CurrentUser | null> {

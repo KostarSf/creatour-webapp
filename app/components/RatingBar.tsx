@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import type { Rating } from "~/generated/prisma/client";
+import type { Rating } from "generated/prisma_client";
 
 export default function RatingBar({
 	ratings,

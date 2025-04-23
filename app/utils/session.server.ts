@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { createCookieSessionStorage, redirect } from "react-router";
 
-import type { User } from "~/generated/prisma/client";
+import type { User } from "generated/prisma_client";
 import { type CurrentUser, getCurrentUser } from "~/models/users";
 import { db } from "./db.server";
 

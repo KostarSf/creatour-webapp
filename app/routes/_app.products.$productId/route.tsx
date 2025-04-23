@@ -2,6 +2,7 @@ import { Placemark, Map as YMap, YMaps } from "@pbe/react-yandex-maps";
 import clsx from "clsx";
 import { Form, Link, data, href, useLoaderData } from "react-router";
 
+import type { Comment, Media, Place, Product, Rating, RoutePoint, Tag, User } from "generated/prisma_client";
 import CommentItem from "~/components/CommentItem";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import RatingBar from "~/components/RatingBar";
@@ -9,16 +10,6 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
-import type {
-	Comment,
-	Media,
-	Place,
-	Product,
-	Rating,
-	RoutePoint,
-	Tag,
-	User,
-} from "~/generated/prisma/client";
 import type { CustomHeaderHandle } from "~/lib/hooks/use-custom-header";
 import { db } from "~/utils/db.server";
 import { useOptionalUser } from "~/utils/user";

@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import type { Prisma, Tag } from "generated/prisma_client";
 import { FilterIcon, XIcon } from "lucide-react";
 import React, { useRef } from "react";
 import type { ActionFunctionArgs, MetaFunction } from "react-router";
@@ -19,7 +20,6 @@ import { Badge } from "~/components/ui/badge";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
-import type { Prisma, Tag } from "~/generated/prisma/client";
 import type { CustomHeaderHandle } from "~/lib/hooks/use-custom-header";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
