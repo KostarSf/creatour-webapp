@@ -1,5 +1,5 @@
+import type { Product, User } from "~/generated/prisma/client";
 import { db } from "~/utils/db.server";
-import type { Product, User } from ".prisma/client";
 
 export async function getCurrentUser(userId: string): Promise<CurrentUser | null> {
 	const user = await db.user.findUnique({

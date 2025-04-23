@@ -8,4 +8,4 @@ node_modules
 /public/uploads
 
 prisma/dev.db
-.prisma
+app/generated/prisma/client

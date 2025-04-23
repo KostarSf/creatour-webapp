@@ -19,6 +19,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
+import type { Prisma, Tag } from "~/generated/prisma/client";
 import type { CustomHeaderHandle } from "~/lib/hooks/use-custom-header";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
@@ -26,7 +27,6 @@ import { getUserId, requireUserId } from "~/utils/session.server";
 import { useOptionalUser } from "~/utils/user";
 import { Header } from "~/widgets/header";
 import type { Route } from "./+types/route";
-import type { Prisma, Tag } from ".prisma/client";
 
 export const meta: MetaFunction = () => [{ title: "Календарь мероприятий | Креатур" }];
 

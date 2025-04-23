@@ -9,13 +9,22 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
+import type {
+	Comment,
+	Media,
+	Place,
+	Product,
+	Rating,
+	RoutePoint,
+	Tag,
+	User,
+} from "~/generated/prisma/client";
 import type { CustomHeaderHandle } from "~/lib/hooks/use-custom-header";
 import { db } from "~/utils/db.server";
 import { useOptionalUser } from "~/utils/user";
 import { Header } from "~/widgets/header";
 import { LikeProductButton } from "~/widgets/like-button";
 import type { Route } from "./+types/route";
-import type { Comment, Media, Place, Product, Rating, RoutePoint, Tag, User } from ".prisma/client";
 
 export const meta: Route.MetaFunction = ({ data }) => [{ title: `${data?.product.name ?? ""} | Креатур` }];
 
