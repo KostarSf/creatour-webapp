@@ -42,7 +42,7 @@ COPY --from=build /app /app
 # Remove development dependencies
 RUN npm prune --production
 
-COPY --from=build /app/node_modules/@prisma-app /app/node_modules/@prisma-app
+COPY --from=build ./node_modules/@prisma-app ./node_modules/@prisma-app
 
 # Start the server by default, this can be overwritten at runtime
 CMD [ "npm", "run", "start" ]
