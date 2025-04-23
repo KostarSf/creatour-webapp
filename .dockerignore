@@ -10,3 +10,4 @@ node_modules
 /public/build
 /build
 .react-router
+/prisma/dev.db
