@@ -32,15 +32,17 @@ COPY . .
 # Build application
 RUN npm run build
 
-# Remove development dependencies
-RUN npm prune --production
-
 
 # Final stage for app image
 FROM base
 
 # Copy built application
 COPY --from=build /app /app
+
+# Remove development dependencies
+RUN npm prune --production
+
+COPY --from=build /app/node_modules/@prisma-app /app/node_modules/@prisma-app
 
 # Start the server by default, this can be overwritten at runtime
 CMD [ "npm", "run", "start" ]
