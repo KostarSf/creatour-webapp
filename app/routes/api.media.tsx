@@ -130,7 +130,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			});
 		}
 
-		await unlink(`public/${media.url}`);
+		await Promise.allSettled([
+			unlink(`public/${media.url}`),
+			mediaFileStorage.remove(media.url.replace("/media/", "")),
+		]);
 		await db.media.delete({ where: { id } });
 
 		return redirect(redirectTo);

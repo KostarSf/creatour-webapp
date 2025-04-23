@@ -42,8 +42,8 @@ export default function CommentItem({ comment, rating, className }: CommentItemP
 				<div className="flex flex-wrap gap-2">
 					{comment.media.map((image) => (
 						<img
-							src={image.url}
-							alt={image.url}
+							src={`/api/uploads${image.url}`}
+							alt={image.name ?? image.url}
 							key={image.id}
 							className="mt-2 h-24 w-24 rounded-sm object-cover"
 						/>

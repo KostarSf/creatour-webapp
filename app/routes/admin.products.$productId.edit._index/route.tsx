@@ -3,16 +3,16 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { Form, Link, redirect, useActionData, useLoaderData } from "react-router";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { getProductsStorageKey, placesFileStorage } from "~/utils/storage.server";
+import { getProductsStorageKey, productsFileStorage } from "~/utils/storage.server";
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
 	let imageName = "";
 
 	const uploadHandler = async (fileUpload: FileUpload) => {
 		const storageKey = getProductsStorageKey(params.productId as string, fileUpload.name);
-		await placesFileStorage.set(storageKey, fileUpload);
+		await productsFileStorage.set(storageKey, fileUpload);
 		imageName = storageKey;
-		return placesFileStorage.get(storageKey);
+		return productsFileStorage.get(storageKey);
 	};
 
 	const form = await parseFormData(request, uploadHandler);
@@ -309,7 +309,11 @@ export default function ProductEditRoute() {
 
 				<label>
 					<p>Изображение</p>
-					<img src={`/images/products/${data.product.image}`} alt="Изображение" className="w-64" />
+					<img
+						src={`/api/uploads/products/${data.product.image}`}
+						alt="Изображение"
+						className="w-64"
+					/>
 					<input type="file" name="image" accept=".png,.jpg,.jpeg,.webp" className="border" />
 				</label>
 				<div>

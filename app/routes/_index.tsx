@@ -51,7 +51,7 @@ export const loader = async () => {
 		cards: products.map((product) => ({
 			id: product.id,
 			name: product.name,
-			image: `/images/products/${product.image}`,
+			image: `/api/uploads/products/${product.image}`,
 			link: `/products/${product.id}`,
 		})),
 		tags,

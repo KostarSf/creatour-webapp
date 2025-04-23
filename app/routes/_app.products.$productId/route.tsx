@@ -111,9 +111,13 @@ export default function ProductPage() {
 
 			<div className="-mx-6 md:-mx-12 my-6 md:my-12">
 				<div className="flex snap-x scroll-p-6 gap-6 overflow-x-auto px-6">
-					{product.image && <AlbumImage link={`/images/products/${product.image}`} />}
+					{product.image && <AlbumImage link={`/api/uploads/products/${product.image}`} />}
 					{product.media.map((image) => (
-						<AlbumImage link={image.url} key={image.id} community={image.community} />
+						<AlbumImage
+							link={`/api/uploads${image.url}`}
+							key={image.id}
+							community={image.community}
+						/>
 					))}
 				</div>
 			</div>
@@ -128,7 +132,7 @@ export default function ProductPage() {
 									<div className="h-12 w-16 overflow-hidden rounded-lg bg-slate-300">
 										{point.place.image && (
 											<img
-												src={`/images/places/${point.place.image}`}
+												src={`/api/uploads/places/${point.place.image}`}
 												className="aspect-square w-24 rounded-md object-cover"
 												alt={point.place.image}
 											/>
@@ -166,7 +170,7 @@ function ProductHeader({ product }: ProductHeaderProps) {
 	return (
 		<div className="relative h-[30vh] md:h-[800px]">
 			<img
-				src={product.image ? `/images/products/${product.image}` : "/images/no-image.webp"}
+				src={product.image ? `/api/uploads/products/${product.image}` : "/images/no-image.webp"}
 				alt={product.name}
 				className="-z-10 absolute top-0 left-0 h-full w-full object-cover object-center"
 			/>
@@ -323,7 +327,7 @@ function CommentsBlock({ product }: CommentsBlockProps) {
 				{user ? (
 					<Form
 						method="POST"
-						action="/api/add-comment"
+						action={href("/api/add-comment")}
 						encType="multipart/form-data"
 						preventScrollReset
 						className=" max-w-3xl"

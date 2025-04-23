@@ -1,6 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import { redirect } from "react-router";
-import { Form, Link, useLoaderData } from "react-router";
+import { Form, Link, href, redirect, useLoaderData } from "react-router";
 import { db } from "~/utils/db.server";
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
@@ -259,7 +258,7 @@ export default function ProductRoute() {
 					<p>Изображение:</p>
 					{data.product.image ? (
 						<img
-							src={`/images/products/${data.product.image}`}
+							src={`/api/uploads/products/${data.product.image}`}
 							alt="Изображение"
 							className="w-64"
 						/>
@@ -274,7 +273,11 @@ export default function ProductRoute() {
 					<div>
 						{data.product.route.map((point) => (
 							<p key={point.placeId} className="flex items-baseline gap-2">
-								<Form method="post" className="flex flex-wrap items-baseline gap-2">
+								<Form
+									method="post"
+									className="flex flex-wrap items-baseline gap-2"
+									preventScrollReset
+								>
 									<input
 										type="number"
 										name="order"
@@ -313,6 +316,7 @@ export default function ProductRoute() {
 											e.preventDefault();
 										}
 									}}
+									preventScrollReset
 								>
 									<input type="hidden" name="point" value={point.id} />
 									<button
@@ -329,7 +333,7 @@ export default function ProductRoute() {
 					</div>
 				)}
 				<hr className="my-2" />
-				<Form method="post">
+				<Form method="post" preventScrollReset>
 					<select name="place" className="border">
 						{data.places.map((place) => (
 							<option key={place.id} value={place.id}>
@@ -360,12 +364,13 @@ export default function ProductRoute() {
 									</Link>
 									<Form
 										method="post"
-										action="/api/del-comment"
+										action={href("/api/del-comment")}
 										onSubmit={(e) => {
 											if (!confirm("Удалить комментарий?")) {
 												e.preventDefault();
 											}
 										}}
+										preventScrollReset
 									>
 										<input
 											type="hidden"
@@ -383,10 +388,18 @@ export default function ProductRoute() {
 									{comment.media.map((media) => (
 										<div key={media.id}>
 											{media.type === "image" ? (
-												<img src={media.url} alt={"media"} className="w-24" />
+												<img
+													src={`/api/uploads${media.url}`}
+													alt={"media"}
+													className="w-24"
+												/>
 											) : (
 												// biome-ignore lint/a11y/useMediaCaption: <explanation>
-												<video src={media.url} className="w-24" loop />
+												<video
+													src={`/api/uploads${media.url}`}
+													className="w-24"
+													loop
+												/>
 											)}
 										</div>
 									))}
@@ -400,9 +413,10 @@ export default function ProductRoute() {
 				<hr className="my-4" />
 				<Form
 					method="post"
-					action="/api/add-comment"
+					action={href("/api/add-comment")}
 					encType="multipart/form-data"
 					className="flex flex-col gap-2"
+					preventScrollReset
 				>
 					<input type="hidden" name="redirectTo" value={`/admin/products/${data.product.id}`} />
 					<input type="hidden" name="parentType" value="product" />
@@ -442,13 +456,14 @@ export default function ProductRoute() {
 								<span className="px-2">{r.value}</span>
 								<Form
 									method="post"
-									action="/api/del-rating"
+									action={href("/api/del-rating")}
 									onSubmit={(e) => {
 										if (!confirm("Удалить рейтинг?")) {
 											e.preventDefault();
 										}
 									}}
 									className="inline"
+									preventScrollReset
 								>
 									<input
 										type="hidden"
@@ -467,7 +482,12 @@ export default function ProductRoute() {
 					<p>Оценок пока нет</p>
 				)}
 				<hr className="my-4" />
-				<Form method="post" action="/api/add-rating" className="flex flex-col gap-2">
+				<Form
+					method="post"
+					action={href("/api/add-rating")}
+					className="flex flex-col gap-2"
+					preventScrollReset
+				>
 					<input type="hidden" name="redirectTo" value={`/admin/products/${data.product.id}`} />
 					<input type="hidden" name="parentType" value="product" />
 					<input type="hidden" name="parentId" value={data.product.id} />
@@ -500,10 +520,14 @@ export default function ProductRoute() {
 						data.product.media.map((media) => (
 							<div key={media.id} className="flex gap-2">
 								{media.type === "image" ? (
-									<img src={media.url} alt={media.name || "media"} className="w-32" />
+									<img
+										src={`/api/uploads${media.url}`}
+										alt={media.name || "media"}
+										className="w-32"
+									/>
 								) : (
 									// biome-ignore lint/a11y/useMediaCaption: <explanation>
-									<video src={media.url} className="w-32" loop />
+									<video src={`/api/uploads${media.url}`} className="w-32" loop />
 								)}
 								<div>
 									<p>
@@ -512,12 +536,13 @@ export default function ProductRoute() {
 									<p>{media.description}</p>
 									<Form
 										method="delete"
-										action="/api/media"
+										action={href("/api/media")}
 										onSubmit={(e) => {
 											if (!confirm("Удалить медиафайл?")) {
 												e.preventDefault();
 											}
 										}}
+										preventScrollReset
 									>
 										<input
 											type="hidden"
@@ -539,9 +564,10 @@ export default function ProductRoute() {
 				<hr className="my-4" />
 				<Form
 					method="post"
-					action="/api/media"
+					action={href("/api/media")}
 					encType="multipart/form-data"
 					className="flex flex-col gap-2"
+					preventScrollReset
 				>
 					<p>Добавить медиа:</p>
 					<input type="hidden" name="parentType" value="product" required />

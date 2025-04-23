@@ -1,7 +1,34 @@
-import type { LoaderFunctionArgs } from "react-router";
-import { avatarsFileStorage } from "~/utils/storage.server";
+import { type LoaderFunctionArgs, redirect } from "react-router";
+import { avatarsFileStorage, mediaFileStorage, productsFileStorage } from "~/utils/storage.server";
+import type { Route } from "./+types/api.uploads.$storageName.$fileKey";
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params }: Route.LoaderArgs) => {
+	if (params.storageName === "media") {
+		const file = await mediaFileStorage.get(params.fileKey as string);
+
+		if (file) {
+			return new Response(file.stream(), {
+				headers: {
+					"Content-Type": file.type,
+					"Content-Disposition": `attachment; filename=${file.name}`,
+				},
+			});
+		}
+	}
+
+	if (params.storageName === "products") {
+		const file = await productsFileStorage.get(params.fileKey as string);
+
+		if (file) {
+			return new Response(file.stream(), {
+				headers: {
+					"Content-Type": file.type,
+					"Content-Disposition": `attachment; filename=${file.name}`,
+				},
+			});
+		}
+	}
+
 	if (params.storageName === "avatars") {
 		const file = await avatarsFileStorage.get(params.fileKey as string);
 
@@ -15,7 +42,9 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 		}
 	}
 
-	throw new Response("Upload file not found", {
-		status: 404,
-	});
+	if (params.storageName === "media") {
+		return redirect(`/media/${params.fileKey}`);
+	}
+
+	return redirect(`/images/${params.storageName}/${params.fileKey}`);
 };

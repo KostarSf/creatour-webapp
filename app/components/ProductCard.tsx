@@ -6,7 +6,7 @@ import { useOptionalUser } from "~/utils/user";
 import { LikeProductButton } from "~/widgets/like-button";
 import CardDate from "./CardDate";
 import { AspectRatio } from "./ui/aspect-ratio";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import { Card } from "./ui/card";
 
 export function ProductCard<TType extends CardType>({ type, object, className }: CardProps<TType>) {
@@ -104,26 +104,21 @@ export function ServiceProductCard<TType extends CardType>({
 					{type === "product" ? (
 						<Form method="POST">
 							<input type="hidden" name={`${type}Id`} value={object.id} />
-							<button
+							<Button
 								type="submit"
 								name="intent"
 								value={`${type}-active-toggle`}
-								className={clsx(
-									"rounded-sm px-6 py-2 font-medium uppercase transition-colors",
-									object.active
-										? "bg-green-100 text-green-600 hover:bg-green-200"
-										: "bg-gray-100 text-gray-600 hover:bg-gray-200",
-								)}
+								variant={object.active ? "default" : "secondary"}
 							>
 								{object.active ? "Активно" : "Неактивно"}
-							</button>
+							</Button>
 						</Form>
 					) : (
 						<div />
 					)}
 					<Link
 						to={`/admin/${type}s/${object.id}/edit`}
-						className="rounded-sm px-6 py-2 font-medium text-blue-600 uppercase transition-colors hover:bg-blue-100"
+						className={buttonVariants({ variant: "outline" })}
 					>
 						Изменить
 					</Link>
@@ -187,7 +182,7 @@ function ProductCardBase<TType extends CardType>({
 							<img
 								src={
 									object.image
-										? `/images/${type}s/${object.image}`
+										? `/api/uploads/${type}s/${object.image}`
 										: "/images/no-image.webp"
 								}
 								alt={object.name}
