@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs } from "react-router";
-import { type LoaderFunctionArgs, data, useLoaderData } from "react-router";
+import { type LoaderFunctionArgs, data, href, replace, useLoaderData } from "react-router";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { getUserSessionPayload, logout, requireUserId } from "~/utils/session.server";
@@ -51,7 +51,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const user = await getUserSessionPayload(request);
 
 	if (!user) {
-		throw logout(request);
+		throw replace(href("/login"));
 	}
 
 	const checksCountPromise = db.check.count({ where: { buyerId: user.id } });

@@ -6,7 +6,7 @@ import type { Comment, Media, Place, Product, Rating, RoutePoint, Tag, User } fr
 import CommentItem from "~/components/CommentItem";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import RatingBar from "~/components/RatingBar";
-import { Button } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
@@ -164,8 +164,8 @@ interface ProductHeaderProps {
 function ProductHeader({ product }: ProductHeaderProps) {
 	const user = useOptionalUser();
 
-	const buyed = user?.activeProducts.findIndex((p) => p.id === product.id) !== -1;
-	const canBuy = user?.role === "user" || false;
+	const buyed = !!user && user.activeProducts.findIndex((p) => p.id === product.id) !== -1;
+	const canBuy = (!!user && user.role === "user") || false;
 
 	return (
 		<div className="relative h-[30vh] md:h-[800px]">
@@ -228,20 +228,33 @@ function ProductHeader({ product }: ProductHeaderProps) {
 							<input type="hidden" name="userId" value={user?.id} />
 							<input type="hidden" name="productId" value={product.id} />
 							<input type="hidden" name="redirectTo" value={`/products/${product.id}`} />
-							<Button
-								type="submit"
-								name="intent"
-								value="activate-product"
-								disabled={buyed || !canBuy}
-								variant={buyed ? "default" : "outline"}
-								className={clsx(buyed && "disabled:opacity-100")}
-							>
-								{buyed
-									? "Приобретено"
-									: product.price === 0
-										? "Бесплатно"
-										: `${product.price.toLocaleString("ru")} ₽`}
-							</Button>
+							<div className="flex flex-wrap items-center gap-2">
+								<Button
+									type="submit"
+									name="intent"
+									value="activate-product"
+									disabled={buyed || !canBuy}
+									variant={buyed ? "default" : "outline"}
+									className={clsx(buyed && "disabled:opacity-100")}
+								>
+									{buyed
+										? "Приобретено"
+										: product.price === 0
+											? "Бесплатно"
+											: `${product.price.toLocaleString("ru")} ₽`}
+								</Button>
+								{!user ? (
+									<Link
+										to={{
+											pathname: href("/login"),
+											search: `?redirectTo=${href("/products/:productId", { productId: product.id })}`,
+										}}
+										className={buttonVariants({ variant: "default" })}
+									>
+										Войдите чтобы приобрести!
+									</Link>
+								) : null}
+							</div>
 						</Form>
 						<LikeProductButton productId={product.id} className="bg-background" />
 					</div>
