@@ -1,10 +1,8 @@
 # syntax = docker/dockerfile:1
 
 # Adjust NODE_VERSION as desired
-ARG NODE_VERSION=18.16.0
+ARG NODE_VERSION=22.15.0
 FROM node:${NODE_VERSION}-slim as base
-
-LABEL fly_launch_runtime="Remix/Prisma"
 
 # Remix/Prisma app lives here
 WORKDIR /app
@@ -18,18 +16,18 @@ FROM base as build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
-    apt-get install -y python-is-python3 pkg-config build-essential openssl 
+    apt-get install -y python-is-python3 pkg-config build-essential openssl
 
 # Install node modules
-COPY --link package.json package-lock.json .
-RUN npm install --production=false
+COPY package.json package-lock.json .npmrc ./
+RUN npm install --include=dev
 
 # Generate Prisma Client
-COPY --link prisma .
+COPY prisma .
 RUN npx prisma generate
 
 # Copy application code
-COPY --link . .
+COPY . .
 
 # Build application
 RUN npm run build
@@ -43,9 +41,6 @@ FROM base
 
 # Copy built application
 COPY --from=build /app /app
-
-# Entrypoint prepares the database.
-ENTRYPOINT ["/app/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
 CMD [ "npm", "run", "start" ]
