@@ -184,23 +184,23 @@ function ProductCardBase<TType extends CardType>({
 				<Link to={`/${type}s/${object.id}`} className="relative lg:col-span-2">
 					<div className="hidden lg:block">
 						<AspectRatio ratio={16 / 9} className="bg-muted">
-							{object.image ? (
-								<img
-									src={`/images/${type}s/${object.image}`}
-									alt={object.name}
-									className="h-full w-full object-cover object-center"
-								/>
-							) : null}
-						</AspectRatio>
-					</div>
-					<div className="absolute inset-0 lg:hidden">
-						{object.image ? (
 							<img
-								src={`/images/${type}s/${object.image}`}
+								src={
+									object.image
+										? `/images/${type}s/${object.image}`
+										: "/images/no-image.webp"
+								}
 								alt={object.name}
 								className="h-full w-full object-cover object-center"
 							/>
-						) : null}
+						</AspectRatio>
+					</div>
+					<div className="absolute inset-0 lg:hidden">
+						<img
+							src={object.image ? `/images/${type}s/${object.image}` : "/images/no-image.webp"}
+							alt={object.name}
+							className="h-full w-full object-cover object-center"
+						/>
 					</div>
 					<div className="flex min-h-48 flex-col justify-between text-white lg:absolute lg:inset-0 lg:min-h-auto">
 						<div className="z-10 flex justify-between px-5 py-4">

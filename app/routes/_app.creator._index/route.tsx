@@ -47,11 +47,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		await db.user.update({
 			where: { id: userId },
 			data: {
-				city: city || user.city,
-				phone: phone || user.phone,
-				legalName: legalName || user.legalName,
-				inn: inn || user.inn,
-				address: address || user.address,
+				city: city,
+				phone: phone,
+				legalName: legalName,
+				inn: inn,
+				address: address,
 			},
 		});
 

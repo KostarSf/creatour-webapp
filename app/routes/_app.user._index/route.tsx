@@ -32,8 +32,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		await db.user.update({
 			where: { id: userId },
 			data: {
-				city: city || user.city,
-				phone: phone || user.phone,
+				city: city,
+				phone: phone,
 			},
 		});
 	} else {

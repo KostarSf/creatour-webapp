@@ -164,15 +164,13 @@ function ProductHeader({ product }: ProductHeaderProps) {
 	const canBuy = user?.role === "user" || false;
 
 	return (
-		<div className="relative h-[800px]">
-			{product.image ? (
-				<img
-					src={`/images/products/${product.image}`}
-					alt={product.name}
-					className="-z-10 absolute top-0 left-0 h-full w-full object-cover object-center"
-				/>
-			) : null}
-			<div className="h-full bg-black/40 pb-16">
+		<div className="relative h-[30vh] md:h-[800px]">
+			<img
+				src={product.image ? `/images/products/${product.image}` : "/images/no-image.webp"}
+				alt={product.name}
+				className="-z-10 absolute top-0 left-0 h-full w-full object-cover object-center"
+			/>
+			<div className={clsx("h-full bg-black/40 pb-5 md:pb-16", !product.image && "backdrop-blur-sm")}>
 				<LayoutWrapper className="flex h-full flex-col justify-end gap-4 px-5">
 					<Header className="absolute top-0 left-0 w-full text-white" />
 					<div className="flex flex-wrap gap-x-3 gap-y-2">

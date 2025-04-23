@@ -1,3 +1,4 @@
+import { BinocularsIcon, LogOutIcon, MapPinHouseIcon, UserIcon } from "lucide-react";
 import { Form, Link, href } from "react-router";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
@@ -37,23 +38,35 @@ export function Header({ className }: { className?: string }) {
 								</Avatar>
 								<span className="flex flex-col items-start leading-none">
 									<span className="font-medium">{user.email}</span>
-									<span>{user.username}</span>
+									<span className="space-x-2 text-xs leading-none">
+										<span>{user.username}</span>
+										{user.legalName ? <span>{`(${user.legalName})`}</span> : null}
+									</span>
 								</span>
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="start">
 							<DropdownMenuGroup>
 								<DropdownMenuItem className="cursor-pointer" asChild>
-									<Link to={href("/user")}>Кабинет пользователя</Link>
+									<Link to={href("/user")}>
+										<UserIcon />
+										<span>Кабинет пользователя</span>
+									</Link>
 								</DropdownMenuItem>
 								{user.role === "creator" && (
 									<DropdownMenuItem className="cursor-pointer" asChild>
-										<Link to={href("/creator")}>Кабинет создателя турпродуктов</Link>
+										<Link to={href("/creator")}>
+											<BinocularsIcon />
+											<span>Кабинет создателя турпродуктов</span>
+										</Link>
 									</DropdownMenuItem>
 								)}
 								{user.role === "placeowner" && (
 									<DropdownMenuItem className="cursor-pointer" asChild>
-										<Link to={href("/placeowner")}>Кабинет владельца ресурсов</Link>
+										<Link to={href("/placeowner")}>
+											<MapPinHouseIcon />
+											<span>Кабинет владельца ресурсов</span>
+										</Link>
 									</DropdownMenuItem>
 								)}
 							</DropdownMenuGroup>
@@ -61,7 +74,10 @@ export function Header({ className }: { className?: string }) {
 							<DropdownMenuGroup>
 								<Form method="POST" action="/logout" className="grid w-full">
 									<DropdownMenuItem asChild>
-										<button type="submit">Выход</button>
+										<button type="submit">
+											<LogOutIcon />
+											Выход
+										</button>
 									</DropdownMenuItem>
 								</Form>
 							</DropdownMenuGroup>
