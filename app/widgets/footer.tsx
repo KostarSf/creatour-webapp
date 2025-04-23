@@ -1,10 +1,10 @@
 import { Link, href } from "react-router";
 
-import type { Tag } from "@prisma/client";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import { buttonVariants } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import { cn } from "~/lib/utils";
+import type { Tag } from ".prisma/client";
 
 interface FooterProps {
 	tags: Tag[];

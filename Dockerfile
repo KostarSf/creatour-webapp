@@ -10,10 +10,13 @@ WORKDIR /app
 # Set production environment
 ENV NODE_ENV=production
 
+RUN apt-get update -y && apt-get install -y curl
+
+# Throw-away build stage to reduce size of final image
+FROM base as build
 
 # Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install -y python-is-python3 pkg-config build-essential openssl curl
+RUN apt-get update -y && apt-get install -y openssl
 
 # Install node modules
 COPY package.json package-lock.json .npmrc ./
@@ -31,6 +34,13 @@ RUN npm run build
 
 # Remove development dependencies
 RUN npm prune --production
+
+
+# Final stage for app image
+FROM base
+
+# Copy built application
+COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 CMD [ "npm", "run", "start" ]

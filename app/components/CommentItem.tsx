@@ -1,6 +1,6 @@
-import type { Comment, Media, Rating, User } from "@prisma/client";
 import { cn } from "~/lib/utils";
 import RatingBar from "./RatingBar";
+import type { Comment, Media, Rating, User } from ".prisma/client";
 
 interface CommentItemProps {
 	comment: Comment & {

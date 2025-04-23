@@ -1,4 +1,3 @@
-import type { Prisma, Tag } from "@prisma/client";
 import clsx from "clsx";
 import { FilterIcon, XIcon } from "lucide-react";
 import React, { useRef } from "react";
@@ -27,6 +26,7 @@ import { getUserId, requireUserId } from "~/utils/session.server";
 import { useOptionalUser } from "~/utils/user";
 import { Header } from "~/widgets/header";
 import type { Route } from "./+types/route";
+import type { Prisma, Tag } from ".prisma/client";
 
 export const meta: MetaFunction = () => [{ title: "Календарь мероприятий | Креатур" }];
 

@@ -1,4 +1,3 @@
-import type { Place, Product, RoutePoint } from "@prisma/client";
 import clsx from "clsx";
 import type { ReactNode } from "react";
 import { Form, Link } from "react-router";
@@ -8,6 +7,7 @@ import CardDate from "./CardDate";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Button, buttonVariants } from "./ui/button";
 import { Card } from "./ui/card";
+import type { Place, Product, RoutePoint } from ".prisma/client";
 
 export function ProductCard<TType extends CardType>({ type, object, className }: CardProps<TType>) {
 	const user = useOptionalUser();

@@ -2,7 +2,6 @@ import { Placemark, Map as YMap, YMaps } from "@pbe/react-yandex-maps";
 import clsx from "clsx";
 import { Form, Link, data, href, useLoaderData } from "react-router";
 
-import type { Comment, Media, Place, Product, Rating, RoutePoint, Tag, User } from "@prisma/client";
 import CommentItem from "~/components/CommentItem";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import RatingBar from "~/components/RatingBar";
@@ -16,6 +15,7 @@ import { useOptionalUser } from "~/utils/user";
 import { Header } from "~/widgets/header";
 import { LikeProductButton } from "~/widgets/like-button";
 import type { Route } from "./+types/route";
+import type { Comment, Media, Place, Product, Rating, RoutePoint, Tag, User } from ".prisma/client";
 
 export const meta: Route.MetaFunction = ({ data }) => [{ title: `${data?.product.name ?? ""} | Креатур` }];
 
