@@ -1,4 +1,4 @@
-import type { Comment, Media, Rating, User } from "~/../node_modules/@prisma/prisma_client";
+import type { Comment, Media, Rating, User } from "@prisma-app/client";
 import { cn } from "~/lib/utils";
 import RatingBar from "./RatingBar";
 

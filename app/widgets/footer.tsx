@@ -1,6 +1,6 @@
 import { Link, href } from "react-router";
 
-import type { Tag } from "~/../node_modules/@prisma/prisma_client";
+import type { Tag } from "@prisma-app/client";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import { buttonVariants } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";

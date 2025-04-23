@@ -1,7 +1,7 @@
+import type { Place, Product, RoutePoint } from "@prisma-app/client";
 import clsx from "clsx";
 import type { ReactNode } from "react";
 import { Form, Link } from "react-router";
-import type { Place, Product, RoutePoint } from "~/../node_modules/@prisma/prisma_client";
 import { useOptionalUser } from "~/utils/user";
 import { LikeProductButton } from "~/widgets/like-button";
 import CardDate from "./CardDate";

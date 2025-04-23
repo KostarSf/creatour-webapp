@@ -9,6 +9,9 @@ const ReactCompilerConfig = {
 };
 
 export default defineConfig({
+	optimizeDeps: {
+		exclude: [".prisma/client"],
+	},
 	plugins: [
 		tailwindcss(),
 		reactRouter(),

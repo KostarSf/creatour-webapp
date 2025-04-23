@@ -1,6 +1,6 @@
+import type { Product } from "@prisma-app/client";
 import clsx from "clsx";
 import { Link } from "react-router";
-import type { Product } from "~/../node_modules/@prisma/prisma_client";
 import CardDate from "~/components/CardDate";
 import LayoutWrapper from "~/components/LayoutWrapper";
 
