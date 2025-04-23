@@ -32,6 +32,8 @@ COPY . .
 # Build application
 RUN npm run build
 
+# Remove development dependencies
+RUN npm prune --production
 
 # Final stage for app image
 FROM base
@@ -39,10 +41,9 @@ FROM base
 # Copy built application
 COPY --from=build /app /app
 
-# Remove development dependencies
-RUN npm prune --production
+RUN apt-get update -y && apt-get install -y openssl
 
-COPY --from=build /app/node_modules/.prisma/client /app/node_modules/.prisma/client
+RUN npx prisma generate
 
 # Start the server by default, this can be overwritten at runtime
 CMD [ "npm", "run", "start" ]
