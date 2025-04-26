@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
-import { type ActionFunctionArgs, Form, redirect, useActionData, useSearchParams } from "react-router";
+import { type ActionFunctionArgs, Form, Link, redirect, useActionData, useSearchParams } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
@@ -195,8 +195,15 @@ export default function LoginRoute() {
 				) : null}
 				<div className="mt-2 flex items-center space-x-2 sm:w-80 lg:w-96">
 					<Checkbox id="confirm-check" required />
-					<Label htmlFor="confirm-check">
-						Нажимая кнопку, вы даете согласие на обработку персональных данных
+					<Label htmlFor="confirm-check" className="inline">
+						Я даю свое согласие на{" "}
+						<Link
+							to="/docs/privacy-policy.pdf"
+							className="text-primary hover:underline"
+							target="_blank"
+						>
+							обработку персональных данных
+						</Link>
 					</Label>
 				</div>
 				<div className="mt-12 text-center md:text-left">

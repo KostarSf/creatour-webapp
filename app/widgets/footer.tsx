@@ -134,22 +134,24 @@ export function Footer({ hasNews, tags }: FooterProps) {
 				<div className="grid gap-y-3 sm:grid-cols-4">
 					<div className="sm:col-span-2">
 						<Link
-							to="#"
+							to="/docs/privacy-policy.pdf"
 							className={cn(
 								buttonVariants({ variant: "link" }),
 								"h-auto justify-start p-0 text-foreground",
 							)}
+							target="_blank"
 						>
 							Политика конфиденциальности
 						</Link>
 					</div>
 					<div>
 						<Link
-							to="#"
+							to="/docs/public-offer.pdf"
 							className={cn(
 								buttonVariants({ variant: "link" }),
 								"h-auto justify-start p-0 text-foreground",
 							)}
+							target="_blank"
 						>
 							Договор оферта
 						</Link>
