@@ -1,4 +1,4 @@
-import { BinocularsIcon, LogOutIcon, MapPinHouseIcon, UserIcon } from "lucide-react";
+import { BinocularsIcon, LogOutIcon, MapPinHouseIcon, ShieldIcon, UserIcon } from "lucide-react";
 import { Form, Link, href } from "react-router";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
@@ -69,6 +69,12 @@ export function Header({ className }: { className?: string }) {
 										</Link>
 									</DropdownMenuItem>
 								)}
+								<DropdownMenuItem className="cursor-pointer" asChild>
+									<Link to={href("/admin-v2")}>
+										<ShieldIcon />
+										<span>Панель администрирования</span>
+									</Link>
+								</DropdownMenuItem>
 							</DropdownMenuGroup>
 							<DropdownMenuSeparator />
 							<DropdownMenuGroup>

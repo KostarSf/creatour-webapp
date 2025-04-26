@@ -13,6 +13,7 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+
 	*,
 	::after,
 	::before,
@@ -135,6 +136,7 @@
 		from {
 			height: 0;
 		}
+
 		to {
 			height: var(--radix-accordion-content-height);
 		}
@@ -144,16 +146,29 @@
 		from {
 			height: var(--radix-accordion-content-height);
 		}
+
 		to {
 			height: 0;
 		}
 	}
+--animate-progress: progress 1s infinite linear;
+
+@keyframes progress {
+	0% {
+		transform: translateX(-100%) scaleX(0.5);
+	}
+
+	100% {
+		transform: translateX(100%) scaleX(0.5);
+	}
+}
 }
 
 @layer base {
 	* {
 		@apply border-border outline-ring/50;
 	}
+
 	body {
 		@apply bg-background text-foreground;
 	}

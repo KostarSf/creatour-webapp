@@ -47,6 +47,7 @@
 		"@radix-ui/react-tooltip": "^1.2.4",
 		"@react-router/node": "^7.5.2",
 		"@react-router/serve": "^7.5.2",
+		"@tanstack/react-table": "^8.21.3",
 		"bcryptjs": "^3.0.2",
 		"canvas-confetti": "^1.9.3",
 		"class-variance-authority": "^0.7.1",
