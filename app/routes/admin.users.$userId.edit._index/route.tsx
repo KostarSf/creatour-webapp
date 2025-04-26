@@ -116,7 +116,7 @@ export default function UserEditRoute() {
 					/>
 				</label>
 				<label>
-					<p>E-mail</p>
+					<p>Email</p>
 					<input
 						type="email"
 						name="email"

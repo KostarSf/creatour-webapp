@@ -102,7 +102,7 @@ export default function ServiceUserCard({ user }: { user: CurrentUser }) {
 							<InfoField
 								type="text"
 								disabled
-								label="E-mail"
+								label="Email"
 								name="email"
 								defaultValue={user.email || ""}
 							/>

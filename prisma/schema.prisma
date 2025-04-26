@@ -187,3 +187,12 @@ model Media {
   places      Place[]
   products    Product[]
 }
+
+model Feedback {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+
+  name    String
+  email   String
+  content String
+}

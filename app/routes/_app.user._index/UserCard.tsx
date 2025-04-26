@@ -110,7 +110,7 @@ export default function UserCard({ user, checksCount }: Props) {
 								<InfoField
 									type="email"
 									disabled
-									label="E-mail"
+									label="Email"
 									name="email"
 									defaultValue={user.email || ""}
 								/>

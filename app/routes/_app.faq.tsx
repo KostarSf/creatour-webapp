@@ -204,12 +204,12 @@ function FeedbackDialog() {
 							</div>
 							<div className="grid gap-1.5">
 								<Label htmlFor="email" className="px-3">
-									E-mail
+									Email
 								</Label>
 								<Input
 									autoComplete="email"
 									inputMode="email"
-									placeholder="Ваш E-mail."
+									placeholder="Ваш Email."
 									id="email"
 									name="email"
 									defaultValue={user?.email}
@@ -223,9 +223,9 @@ function FeedbackDialog() {
 							</Label>
 							<Textarea
 								placeholder="Напишите Ваш комментарий здесь."
-								minLength={10}
-								id="message"
-								name="message"
+								minLength={5}
+								id="content"
+								name="content"
 								className="h-24"
 								required
 							/>

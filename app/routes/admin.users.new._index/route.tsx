@@ -77,7 +77,7 @@ export default function NewUser() {
 					/>
 				</label>
 				<label>
-					<p>E-mail</p>
+					<p>Email</p>
 					<input
 						type="email"
 						name="email"
