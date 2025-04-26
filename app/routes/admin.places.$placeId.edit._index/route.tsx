@@ -2,22 +2,31 @@ import { type FileUpload, parseFormData } from "@mjackson/form-data-parser";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { Form, Link, redirect, useActionData, useLoaderData } from "react-router";
 import { db } from "~/utils/db.server";
+import { dHash } from "~/utils/hamming-distance.server";
 import { badRequest } from "~/utils/request.server";
 import { getPlacesStorageKey, placesFileStorage } from "~/utils/storage.server";
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
 	let imageName = "";
+	let imageKey: string | undefined = undefined;
 
 	const uploadHandler = async (fileUpload: FileUpload) => {
 		if (fileUpload.type.startsWith("image/")) {
 			const storageKey = getPlacesStorageKey(params.placeId as string, fileUpload.name);
 			await placesFileStorage.set(storageKey, fileUpload);
 			imageName = storageKey;
+			imageKey = fileUpload.fieldName;
 			return placesFileStorage.get(storageKey);
 		}
 	};
 
 	const form = await parseFormData(request, uploadHandler);
+
+	let imageDhash: string | undefined = undefined;
+	if (imageKey) {
+		const image = form.get(imageKey) as File;
+		imageDhash = await dHash(await image.bytes());
+	}
 
 	const name = form.get("name");
 	const creatorId = form.get("creatorId");
@@ -90,6 +99,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 		data: {
 			...fields,
 			...(imageName !== "" && { image: imageName }),
+			...(imageDhash ? { imageDhash } : {}),
 			creatorId: creatorId !== "none" ? creatorId : null,
 			tags: {
 				set: [],

@@ -1,9 +1,10 @@
 import { unlink } from "node:fs/promises";
 import { type FileUpload, parseFormData } from "@mjackson/form-data-parser";
 import cuid2 from "@paralleldrive/cuid2";
-import type { ActionFunctionArgs } from "react-router";
-import { redirect } from "react-router";
+import { type ActionFunctionArgs, redirect } from "react-router";
+
 import { db } from "~/utils/db.server";
+import { dHash } from "~/utils/hamming-distance.server";
 import { badRequest } from "~/utils/request.server";
 import { mediaFileStorage } from "~/utils/storage.server";
 
@@ -11,17 +12,25 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	if (request.method === "POST") {
 		let mediaName = "";
 		let mediaType = "";
+		let imageKey: string | undefined = undefined;
 
 		const uploadHandler = async (fileUpload: FileUpload) => {
 			const ext = fileUpload.name.split(".").pop();
 			mediaType = ext === "mp4" || ext === "webm" ? "video" : "image";
 			const storageKey = `${cuid2.createId()}.${ext}`;
 			mediaName = storageKey;
+			imageKey = fileUpload.fieldName;
 			await mediaFileStorage.set(storageKey, fileUpload);
 			return mediaFileStorage.get(storageKey);
 		};
 
 		const form = await parseFormData(request, uploadHandler);
+
+		let imageDhash: string | undefined = undefined;
+		if (imageKey) {
+			const image = form.get(imageKey) as File;
+			imageDhash = await dHash(await image.bytes());
+		}
 
 		const redirectTo = form.get("redirectTo");
 		const parentType = form.get("parentType");
@@ -82,6 +91,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			data: {
 				type: mediaType,
 				url: `/media/${mediaName}`,
+				...(imageDhash ? { dhash: imageDhash } : {}),
 				name: name ?? null,
 				description: description ?? null,
 				places: {

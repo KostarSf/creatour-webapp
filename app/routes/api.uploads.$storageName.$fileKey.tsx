@@ -1,6 +1,8 @@
-import { type LoaderFunctionArgs, redirect } from "react-router";
-import { avatarsFileStorage, mediaFileStorage, productsFileStorage } from "~/utils/storage.server";
 import type { Route } from "./+types/api.uploads.$storageName.$fileKey";
+
+import { redirect } from "react-router";
+
+import { avatarsFileStorage, mediaFileStorage, productsFileStorage } from "~/utils/storage.server";
 
 export const loader = async ({ params }: Route.LoaderArgs) => {
 	if (params.storageName === "media") {

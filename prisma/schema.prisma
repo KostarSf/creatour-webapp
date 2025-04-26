@@ -87,6 +87,7 @@ model Product {
   short       String?
   description String?
   image       String?
+  imageDhash  String?
 
   comments    Comment[]
   route       RoutePoint[]
@@ -101,6 +102,8 @@ model Product {
   beginDate   DateTime?
   endDate     DateTime?
   assistant   String?
+
+  @@index([imageDhash])
 }
 
 model RoutePoint {
@@ -132,6 +135,7 @@ model Place {
   short       String?
   description String?
   image       String?
+  imageDhash  String?
 
   comments    Comment[]
   routes      RoutePoint[]
@@ -143,6 +147,8 @@ model Place {
   address     String?
   coordinates String?
   date        DateTime?
+
+  @@index([imageDhash])
 }
 
 model Tag {
@@ -178,6 +184,7 @@ model Media {
 
   type        String    // image, video
   url         String
+  dhash       String?
 
   name        String?
   description String?
@@ -186,6 +193,8 @@ model Media {
   comments    Comment[]
   places      Place[]
   products    Product[]
+
+  @@index([dhash])
 }
 
 model Feedback {

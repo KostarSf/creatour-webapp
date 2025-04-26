@@ -2,7 +2,7 @@ import { BinocularsIcon, LogOutIcon, MapPinHouseIcon, UserIcon } from "lucide-re
 import { Form, Link, href } from "react-router";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { Button } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -83,7 +83,11 @@ export function Header({ className }: { className?: string }) {
 							</DropdownMenuGroup>
 						</DropdownMenuContent>
 					</DropdownMenu>
-				) : null}
+				) : (
+					<Link to={href("/login")} className={buttonVariants({ variant: "ghost" })}>
+						Войти
+					</Link>
+				)}
 			</LayoutWrapper>
 		</header>
 	);

@@ -111,12 +111,11 @@ export function Footer({ hasNews, tags }: FooterProps) {
 							Оплата
 						</Link>
 						<Link
-							to="/object-recognizer/index.html"
+							to={href("/recognize")}
 							className={cn(
 								buttonVariants({ variant: "link" }),
 								"h-auto justify-start p-0 text-foreground",
 							)}
-							reloadDocument
 						>
 							Распознавание объекта / <br /> Поиск по фото
 						</Link>

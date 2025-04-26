@@ -2,20 +2,29 @@ import { type FileUpload, parseFormData } from "@mjackson/form-data-parser";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { Form, Link, redirect, useActionData, useLoaderData } from "react-router";
 import { db } from "~/utils/db.server";
+import { dHash } from "~/utils/hamming-distance.server";
 import { badRequest } from "~/utils/request.server";
 import { getProductsStorageKey, productsFileStorage } from "~/utils/storage.server";
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
 	let imageName = "";
+	let imageKey: string | undefined = undefined;
 
 	const uploadHandler = async (fileUpload: FileUpload) => {
 		const storageKey = getProductsStorageKey(params.productId as string, fileUpload.name);
 		await productsFileStorage.set(storageKey, fileUpload);
 		imageName = storageKey;
+		imageKey = fileUpload.fieldName;
 		return productsFileStorage.get(storageKey);
 	};
 
 	const form = await parseFormData(request, uploadHandler);
+
+	let imageDhash: string | undefined = undefined;
+	if (imageKey) {
+		const image = form.get(imageKey) as File;
+		imageDhash = await dHash(await image.bytes());
+	}
 
 	const name = form.get("name");
 	const type = form.get("type");
@@ -115,6 +124,7 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 				: null,
 			endDate: !Number.isNaN(new Date(endDate).getTime()) ? new Date(endDate).toISOString() : null,
 			...(imageName !== "" && { image: imageName }),
+			...(imageDhash ? { imageDhash } : {}),
 			tags: {
 				set: [],
 				...(tags.trim() !== "" && { connectOrCreate: splittedTags }),
