@@ -165,7 +165,7 @@ function ProductHeader({ product }: ProductHeaderProps) {
 				className="-z-10 absolute top-0 left-0 h-full w-full object-cover object-center"
 			/>
 			<div className={clsx("h-full bg-black/40 pb-5 md:pb-16", !product.image && "backdrop-blur-sm")}>
-				<LayoutWrapper className="flex h-full flex-col justify-end gap-4 px-5 pt-32">
+				<LayoutWrapper className="flex h-full max-w-[100rem] flex-col justify-end gap-4 px-5 pt-32">
 					<Header className="absolute top-0 left-0 w-full text-white" />
 					<div className="flex flex-wrap gap-x-3 gap-y-2">
 						{product.tags.map((tag) => (
