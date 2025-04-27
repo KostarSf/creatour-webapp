@@ -87,18 +87,8 @@ export default function ProductPage() {
 				<p className="mt-12 font-semibold text-xl leading-none">Адрес</p>
 				{coordinates ? (
 					<div className="mt-5 overflow-hidden rounded-xl bg-secondary">
-						<YMaps
-							query={{
-								apikey: "ea2f1a91-b606-4692-ae42-b82c4f60899e",
-							}}
-						>
-							<YMap
-								state={{
-									center: coordinates,
-									zoom: 15,
-								}}
-								height={"400px"}
-							>
+						<YMaps query={{ apikey: "ea2f1a91-b606-4692-ae42-b82c4f60899e" }}>
+							<YMap state={{ center: coordinates, zoom: 15 }} height={"400px"}>
 								<Placemark geometry={coordinates} />
 							</YMap>
 						</YMaps>

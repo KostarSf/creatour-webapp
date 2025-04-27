@@ -11,6 +11,10 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 	let imageKey: string | undefined = undefined;
 
 	const uploadHandler = async (fileUpload: FileUpload) => {
+		if (!fileUpload.name) {
+			return;
+		}
+
 		const storageKey = getProductsStorageKey(params.productId as string, fileUpload.name);
 		await productsFileStorage.set(storageKey, fileUpload);
 		imageName = storageKey;
