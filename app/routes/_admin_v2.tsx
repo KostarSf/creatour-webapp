@@ -14,7 +14,15 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 
 export default function AdminV2Layout() {
 	return (
-		<SidebarProvider>
+		<SidebarProvider
+			style={
+				{
+					"--text-base": "1.25rem",
+					"--text-sm": "1rem",
+					"--text-xs": "0.875rem",
+				} as React.CSSProperties
+			}
+		>
 			<AppSidebar variant="floating" collapsible="icon" className="fade-in animate-in" />
 			<SidebarInset className="fade-in animate-in overflow-hidden">
 				<GlobalPendingIndicator />

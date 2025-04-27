@@ -1,3 +1,4 @@
+import { LoaderCircleIcon } from "lucide-react";
 import type { MetaFunction } from "react-router";
 import {
 	type ActionFunctionArgs,
@@ -5,6 +6,7 @@ import {
 	type LoaderFunctionArgs,
 	redirect,
 	useActionData,
+	useNavigation,
 	useSearchParams,
 } from "react-router";
 import { Button } from "~/components/ui/button";
@@ -71,6 +73,9 @@ export default function LoginRoute() {
 	const actionData = useActionData<typeof action>();
 	const [searchParams] = useSearchParams();
 
+	const navigation = useNavigation();
+	const pending = !!navigation.formData;
+
 	return (
 		<>
 			<div className="my-12 text-center md:my-16 md:text-left">
@@ -104,8 +109,8 @@ export default function LoginRoute() {
 					<Label htmlFor="remember">Запомнить меня</Label>
 				</div>
 				<div className="mt-12 text-center md:text-left">
-					<Button type="submit" className="w-full md:w-48" size="lg">
-						Войти
+					<Button type="submit" className="w-full md:w-48" size="lg" disabled={pending}>
+						{pending ? <LoaderCircleIcon className="animate-spin" /> : "Войти "}
 					</Button>
 					{actionData?.formError ? (
 						<p className="mt-2 font-semibold text-red-700 text-sm" role="alert">

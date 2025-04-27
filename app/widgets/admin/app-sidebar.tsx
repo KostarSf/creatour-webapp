@@ -1,6 +1,5 @@
 import {
 	BinocularsIcon,
-	ChartNoAxesCombinedIcon,
 	ChevronUpIcon,
 	MapPinHouseIcon,
 	MessageSquareQuoteIcon,
@@ -69,11 +68,6 @@ const menu: AdministerMenuItemProps[] = [
 	// 	url: "#",
 	// 	icon: ChartNoAxesCombinedIcon,
 	// },
-	{
-		title: "Обратная связь",
-		url: href("/admin-v2/feedback"),
-		icon: MessageSquareQuoteIcon,
-	},
 ];
 
 function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -93,6 +87,13 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							{menu.map((item) => (
 								<AdministerMenuItem key={item.title} {...item} />
 							))}
+
+							<AdministerMenuItem
+								title="Обратная связь"
+								url={href("/admin-v2/feedback")}
+								icon={MessageSquareQuoteIcon}
+								className="font-medium text-lg text-primary"
+							/>
 						</SidebarMenu>
 					</SidebarGroupContent>
 				</SidebarGroup>
@@ -118,7 +119,7 @@ function LogoMenuItem() {
 				asChild
 			>
 				<Link to={href("/")}>
-					<span className="font-semibold font-serif text-base">Креатур</span>
+					<span className="font-semibold font-serif text-2xl text-primary">Креатур</span>
 				</Link>
 			</SidebarMenuButton>
 		</SidebarMenuItem>
@@ -130,9 +131,10 @@ interface AdministerMenuItemProps {
 	url: string;
 	icon: React.ExoticComponent;
 	action?: React.ReactNode;
+	className?: string;
 }
 
-function AdministerMenuItem({ title, url, icon: Icon, action }: AdministerMenuItemProps) {
+function AdministerMenuItem({ title, url, icon: Icon, action, className }: AdministerMenuItemProps) {
 	const location = useLocation();
 	const isActive = location.pathname.startsWith(url);
 
@@ -144,6 +146,7 @@ function AdministerMenuItem({ title, url, icon: Icon, action }: AdministerMenuIt
 				tooltip={title}
 				isActive={isActive}
 				onClick={() => setOpenMobile(false)}
+				className={className}
 				asChild
 			>
 				<Link to={url} prefetch="intent">

@@ -64,20 +64,18 @@ export default function LandingPage({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<>
-			<div className="flex min-h-screen items-stretch justify-center bg-center bg-cover bg-white md:bg-[url('/images/landing/landing_bg.webp')]">
+			<div className="relative flex min-h-screen items-stretch justify-center bg-center bg-cover bg-white md:bg-[url('/images/landing/landing_bg.webp')]">
 				<div className="flex max-w-[100rem] grow flex-col justify-between px-6 py-6 sm:px-12">
-					<div />
-					<div className="mt-32 flex flex-col items-center md:mt-0 md:items-start">
+					<div className="h-[20vh]" />
+					<div className="flex flex-col items-center md:mt-0 md:items-start">
 						<h1 className="text-center font-bold font-serif text-4xl text-blue-500 sm:text-5xl md:text-left md:text-6xl md:text-white md:drop-shadow-sm">
 							Открой для себя <br />
 							Креативный туризм
 						</h1>
-						<p className="mt-4 mb-12 text-center font-medium text-gray-600 text-xl md:text-left md:text-2xl md:text-white md:drop-shadow-sm">
+						<p className="mt-8 mb-12 text-center font-light text-gray-600 text-xl md:text-left md:text-2xl md:text-white md:drop-shadow-sm">
 							Отдыхай по новому с командой Креатура
 						</p>
 
-						{/** Если вход выполнен и это обычный пользователь, посылаем его в каталог */}
-						{/** Если это редактор, посылаем его в /users, где его перенаправит на нужный кабинет */}
 						<Link
 							to={user ? (user.role !== "user" ? "/user" : "/products") : "/register"}
 							className={cn(buttonVariants({ size: "lg" }), "max-w-96 text-base max-md:w-full")}
@@ -91,7 +89,7 @@ export default function LandingPage({ loaderData }: Route.ComponentProps) {
 						</Link>
 					</div>
 
-					<div className="mt-32 grid gap-2 md:mt-16">
+					<div className="mt-32 grid gap-2 md:mt-16 fosa">
 						<div className="flex xl:justify-end">
 							<Link
 								to={href("/products")}
@@ -106,7 +104,7 @@ export default function LandingPage({ loaderData }: Route.ComponentProps) {
 							</Link>
 						</div>
 
-						<div className="flex flex-col-reverse justify-between gap-4 xl:flex-row xl:items-end">
+						<div className="flex flex-col-reverse justify-between gap-4 md:mb-12 xl:flex-row xl:items-end">
 							<Socials className="my-12 md:my-0 md:text-white" />
 
 							<div className="flex flex-col flex-wrap items-start gap-2 md:flex-row">

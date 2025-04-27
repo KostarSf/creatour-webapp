@@ -204,7 +204,7 @@ function DataTable<TData>({
 				) : null}
 
 				<div className="flex items-center space-x-6 lg:space-x-8">
-					<div className="flex w-[120px] items-center justify-center font-medium text-sm">
+					<div className="flex w-[150px] items-center justify-center font-medium text-sm">
 						Страница {table.getState().pagination.pageIndex + 1} из {table.getPageCount()}
 					</div>
 					<div className="space-x-2">
@@ -318,7 +318,7 @@ export function DataTableToolbar<TData>({
 						onGlobalFilterValueChange?.(event.target.value);
 						resetPageHandle();
 					}}
-					className="h-8 w-[150px] lg:w-[250px]"
+					className="h-8 w-[150px] border-primary lg:w-[250px]"
 				/>
 				{filters?.map((filter) => {
 					const column = table.getColumn(String(filter.column));

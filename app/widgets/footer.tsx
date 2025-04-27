@@ -132,12 +132,12 @@ export function Footer({ hasNews, tags }: FooterProps) {
 				</div>
 				<Separator />
 				<div className="grid gap-y-3 sm:grid-cols-4">
-					<div className="sm:col-span-2">
+					<div>
 						<Link
 							to="/docs/privacy-policy.pdf"
 							className={cn(
 								buttonVariants({ variant: "link" }),
-								"h-auto justify-start p-0 text-foreground",
+								"h-auto justify-start whitespace-normal p-0 pr-2 text-foreground text-xs",
 							)}
 							target="_blank"
 						>
@@ -146,10 +146,22 @@ export function Footer({ hasNews, tags }: FooterProps) {
 					</div>
 					<div>
 						<Link
+							to="/docs/user-agreement.pdf"
+							className={cn(
+								buttonVariants({ variant: "link" }),
+								"h-auto justify-start whitespace-normal p-0 pr-2 text-foreground text-xs",
+							)}
+							target="_blank"
+						>
+							Пользовательское соглашение
+						</Link>
+					</div>
+					<div>
+						<Link
 							to="/docs/public-offer.pdf"
 							className={cn(
 								buttonVariants({ variant: "link" }),
-								"h-auto justify-start p-0 text-foreground",
+								"h-auto justify-start whitespace-normal p-0 pr-2 text-foreground text-xs",
 							)}
 							target="_blank"
 						>

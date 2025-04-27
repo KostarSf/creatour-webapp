@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -94,6 +94,8 @@
 
 @theme inline {
 	--font-serif: "Playfair Display", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+	--font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+			"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
@@ -151,17 +153,18 @@
 			height: 0;
 		}
 	}
---animate-progress: progress 1s infinite linear;
 
-@keyframes progress {
-	0% {
-		transform: translateX(-100%) scaleX(0.5);
-	}
+		--animate-progress: progress 1s infinite linear;
 
-	100% {
-		transform: translateX(100%) scaleX(0.5);
-	}
-}
+		@keyframes progress {
+			0% {
+				transform: translateX(-100%) scaleX(0.5);
+			}
+
+				100% {
+					transform: translateX(100%) scaleX(0.5);
+				}
+				}
 }
 
 @layer base {

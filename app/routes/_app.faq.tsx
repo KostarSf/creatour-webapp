@@ -24,17 +24,17 @@ export default function FAQPage() {
 	return (
 		<>
 			<div className="pointer-events-none absolute top-0 right-0 left-0 h-screen">
-				<img src="/images/figures.svg" className="h-full w-full object-cover blur-md" aria-hidden />
+				<img src="/images/figures.svg" className="h-full w-full object-cover" aria-hidden />
 			</div>
 			<div className="pointer-events-none mx-auto max-w-6xl px-5 pt-12 md:absolute md:top-0 md:right-0 md:left-0 md:h-screen md:p-0 md:px-10">
 				<div className="mx-auto flex h-full max-w-6xl flex-col items-stretch justify-center gap-12">
-					<div className="flex flex-col gap-12 md:flex-row md:items-center">
+					<div className="flex flex-col gap-6 md:flex-row md:items-center">
 						<div className="pointer-events-auto">
 							<p className="font-serif text-4xl/8 text-blue-500 lg:text-6xl/12">
 								Есть <br className="hidden md:inline" /> вопросы?
 							</p>
 						</div>
-						<div className="pointer-events-auto flex-1">
+						<div className="pointer-events-auto flex-1 rounded-2xl bg-white/90 shadow-white shadow-xl backdrop-blur-md md:p-4">
 							<FaqAccordion />
 						</div>
 					</div>
@@ -56,12 +56,12 @@ function FaqAccordion() {
 					<div className="space-y-3 pt-3 *:text-pretty md:pl-8">
 						<p>Посмотрите сохранённые пароли в настройках браузера.</p>
 						<p>
-							Нажать кнопку «Забыли пароль?» на сайте. Следуя инструкциям, можно восстановить
+							Нажмите кнопку «Забыли пароль?» на сайте. Следуя инструкциям, можно восстановить
 							пароль.
 						</p>
 						<p>
 							Если не удаётся восстановить пароль самостоятельно, рекомендуется обратиться по
-							горячей линию{" "}
+							горячей линии{" "}
 							<Link
 								to="tel:+77775554265"
 								className="whitespace-nowrap text-blue-500 hover:underline"
@@ -181,7 +181,7 @@ function FeedbackDialog() {
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-xl">
 				<DialogHeader>
-					<DialogTitle>Креатур</DialogTitle>
+					<DialogTitle className="mb-2 text-3xl leading-none">Креатур</DialogTitle>
 					<DialogDescription>
 						Здесь Вы можете задать интересующий вас вопрос или оставить предложение.
 					</DialogDescription>

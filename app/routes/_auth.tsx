@@ -45,19 +45,22 @@ export default function AuthLayout() {
 				</div>
 			</div>
 			<div className="hidden flex-1 bg-[url(/images/auth-bg.webp)] bg-center bg-cover md:block">
-				<div className="text-right md:px-12 md:py-12 lg:px-24 lg:py-16">
+				<div className="flex h-full flex-col items-end justify-between text-right md:px-12 md:py-12 lg:px-24 lg:py-16">
 					<Link
 						to={"/"}
 						className="font-bold font-serif text-5xl text-white transition-colors hover:text-blue-500"
 					>
 						Креатур
 					</Link>
-					<p className="mt-16 text-3xl text-white leading-tight tracking-widest">
+					<p className="pb-16 font-light text-4xl/relaxed text-white tracking-widest xl:text-5xl/relaxed">
 						Отдыхай <br />
 						креативно <br />
 						вместе с <br />
 						нами
 					</p>
+
+					<div className="xl:hidden" />
+					<div />
 				</div>
 			</div>
 		</div>

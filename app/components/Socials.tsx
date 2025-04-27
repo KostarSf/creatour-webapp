@@ -3,7 +3,7 @@ import { cn } from "~/lib/utils";
 export function Socials({ className }: { className?: string }) {
 	return (
 		<div className={cn("flex flex-col items-center md:items-start", className)}>
-			<p className="text-lg md:text-white md:drop-shadow-sm">Креатур в соцсетях</p>
+			<p className="font-light text-lg md:text-white md:drop-shadow-sm">Креатур в соцсетях</p>
 			<div className="mt-2 flex gap-6">
 				{/* biome-ignore lint/a11y/useValidAnchor: <explanation> */}
 				<a href="#" className="cursor-pointer">

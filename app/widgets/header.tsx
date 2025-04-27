@@ -19,10 +19,10 @@ export function Header({ className }: { className?: string }) {
 
 	return (
 		<header className={cn("pt-4 md:pt-6", className)}>
-			<LayoutWrapper className="z-10 mb-6 flex items-baseline justify-between px-5 md:mb-12">
+			<LayoutWrapper className="z-10 mb-6 flex max-w-[100rem] items-baseline justify-between px-5 md:mb-12">
 				<Link
 					to="/"
-					className="font-bold font-serif text-xl tracking-wider transition-colors hover:text-blue-500"
+					className="font-bold font-serif text-2xl tracking-wider transition-colors hover:text-blue-500 md:text-3xl"
 				>
 					Креатур
 				</Link>
@@ -90,7 +90,10 @@ export function Header({ className }: { className?: string }) {
 						</DropdownMenuContent>
 					</DropdownMenu>
 				) : (
-					<Link to={href("/login")} className={buttonVariants({ variant: "ghost" })}>
+					<Link
+						to={href("/login")}
+						className={cn(buttonVariants({ variant: "ghost" }), "md:text-lg")}
+					>
 						Войти
 					</Link>
 				)}

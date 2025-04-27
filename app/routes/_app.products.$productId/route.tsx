@@ -158,14 +158,14 @@ function ProductHeader({ product }: ProductHeaderProps) {
 	const canBuy = (!!user && user.role === "user") || false;
 
 	return (
-		<div className="relative h-[30vh] md:h-[800px]">
+		<div className="relative md:h-[800px]">
 			<img
 				src={product.image ? `/api/uploads/products/${product.image}` : "/images/no-image.webp"}
 				alt={product.name}
 				className="-z-10 absolute top-0 left-0 h-full w-full object-cover object-center"
 			/>
 			<div className={clsx("h-full bg-black/40 pb-5 md:pb-16", !product.image && "backdrop-blur-sm")}>
-				<LayoutWrapper className="flex h-full flex-col justify-end gap-4 px-5">
+				<LayoutWrapper className="flex h-full flex-col justify-end gap-4 px-5 pt-32">
 					<Header className="absolute top-0 left-0 w-full text-white" />
 					<div className="flex flex-wrap gap-x-3 gap-y-2">
 						{product.tags.map((tag) => (
@@ -181,7 +181,9 @@ function ProductHeader({ product }: ProductHeaderProps) {
 							</Link>
 						))}
 					</div>
-					<h1 className="font-medium font-serif text-4xl text-white md:text-6xl">{product.name}</h1>
+					<h1 className="font-medium font-serif text-3xl text-white md:text-5xl xl:text-6xl">
+						{product.name}
+					</h1>
 
 					{product.route.length === 0 ? (
 						<p className="text-white">{product.short}</p>

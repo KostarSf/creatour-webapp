@@ -339,12 +339,13 @@ function TagsChooser({ tags }: { tags: Tag[] }) {
 								key={tag.id}
 								to={{ search: tagLinkSearchParams(tag) }}
 								className={clsx(
-									"hover:text-primary",
-									currentTagsIds.includes(tag.id) && "text-primary underline",
+									currentTagsIds.includes(tag.id)
+										? "text-primary"
+										: "hover:text-muted-foreground",
 								)}
 								preventScrollReset
 							>
-								{tag.name}
+								#{tag.name}
 							</Link>
 						))}
 					</div>
@@ -368,7 +369,7 @@ function TagsChooser({ tags }: { tags: Tag[] }) {
 					className={buttonVariants({ variant: "secondary" })}
 					preventScrollReset
 				>
-					{tag.name}
+					#{tag.name}
 				</Link>
 			))}
 		</div>
@@ -396,20 +397,23 @@ function ProductsListHeader() {
 				className="size-full object-cover object-center"
 			/>
 
-			<div className="absolute inset-0 flex flex-col items-stretch justify-center bg-black/10 px-5 backdrop-blur-xs md:items-center">
-				<Form>
-					<p className="py-3 text-center text-lg/tight text-white">
+			<div className="absolute inset-0 flex flex-col items-stretch justify-center bg-black/10 px-5 backdrop-blur-xs md:items-center md:px-10">
+				<Form className="flex w-full flex-col items-center">
+					<p className="py-3 text-center font-light text-white text-xl">
 						Отдыхай по новому с командой Креатура
 					</p>
-					<div className="flex w-full rounded-full md:w-[600px]">
+					<div className="flex w-full justify-center rounded-full">
 						<Input
 							ref={queryFieldRef}
 							name="q"
-							className="h-10 flex-1 rounded-none rounded-l-full bg-background px-5"
+							className="h-10 w-full rounded-none rounded-l-full bg-background px-5 font-light md:h-12 md:max-w-[700px] md:px-8 md:text-lg lg:h-16 lg:px-12 lg:text-xl"
 							placeholder="Поиск турпродуктов..."
 							defaultValue={queryValue}
 						/>
-						<Button type="submit" className="rounded-none rounded-r-full">
+						<Button
+							type="submit"
+							className="h-10 rounded-none rounded-r-full px-5 font-light transition md:h-12 md:px-8 md:text-lg lg:h-16 lg:px-12 lg:text-xl"
+						>
 							Найти
 						</Button>
 					</div>
@@ -419,7 +423,7 @@ function ProductsListHeader() {
 			<Header className="absolute top-0 left-0 w-full text-white" />
 
 			<div className="absolute bottom-0 left-0 w-full">
-				<div className="mx-auto max-w-6xl px-10 pb-10 md:pb-5">
+				<div className="mx-auto max-w-[100rem] px-10 pb-10 md:pb-5">
 					<Socials className="text-white" />
 				</div>
 			</div>

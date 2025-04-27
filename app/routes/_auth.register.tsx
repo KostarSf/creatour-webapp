@@ -1,5 +1,14 @@
+import { LoaderCircleIcon } from "lucide-react";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
-import { type ActionFunctionArgs, Form, Link, redirect, useActionData, useSearchParams } from "react-router";
+import {
+	type ActionFunctionArgs,
+	Form,
+	Link,
+	redirect,
+	useActionData,
+	useNavigation,
+	useSearchParams,
+} from "react-router";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
@@ -114,6 +123,9 @@ export default function LoginRoute() {
 	const actionData = useActionData<typeof action>();
 	const [searchParams] = useSearchParams();
 
+	const navigation = useNavigation();
+	const pending = !!navigation.formData;
+
 	return (
 		<>
 			<div className="my-12 text-center md:my-16 md:text-left">
@@ -193,22 +205,40 @@ export default function LoginRoute() {
 						{actionData.fieldErrors.password}
 					</p>
 				) : null}
+				<div className="mt-4 flex items-center space-x-2 sm:w-80 lg:w-96">
+					<Checkbox id="confirm-check" required />
+					<Label htmlFor="confirm-check" className="inline">
+						Я ознакомлен с{" "}
+						<Link
+							to="/docs/user-agreement.pdf"
+							className="text-primary hover:underline"
+							target="_blank"
+						>
+							пользовательским соглашением
+						</Link>
+					</Label>
+				</div>
 				<div className="mt-2 flex items-center space-x-2 sm:w-80 lg:w-96">
 					<Checkbox id="confirm-check" required />
 					<Label htmlFor="confirm-check" className="inline">
-						Я даю свое согласие на{" "}
+						Я даю согласие на обработку персональных данных в соответствие с{" "}
 						<Link
 							to="/docs/privacy-policy.pdf"
 							className="text-primary hover:underline"
 							target="_blank"
 						>
-							обработку персональных данных
+							политикой конфиденциальности
 						</Link>
 					</Label>
 				</div>
 				<div className="mt-12 text-center md:text-left">
-					<Button type="submit" className="w-full md:w-auto" size="lg">
-						Зарегистрироваться
+					<Button
+						type="submit"
+						className="w-full transition md:w-auto"
+						size="lg"
+						disabled={pending}
+					>
+						{pending ? <LoaderCircleIcon className="animate-spin" /> : "Зарегистрироваться"}
 					</Button>
 					{actionData?.formError ? (
 						<p className="mt-2 font-semibold text-red-700 text-sm" role="alert">
