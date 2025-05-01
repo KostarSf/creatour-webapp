@@ -11,11 +11,23 @@ export async function getCurrentUser(userId: string): Promise<CurrentUser | null
 		omit: { passwordHash: true },
 	});
 
-	return user as CurrentUser | null;
+	if (!user) {
+		return null;
+	}
+
+	const { activateCode, activatedAt, recoverCode, ...filteredUser } = user;
+
+	return {
+		...filteredUser,
+		activated: !!activatedAt,
+		activateEmailSent: !!activateCode,
+	} as CurrentUser;
 }
 
-export type CurrentUser = Omit<User, "passwordHash"> & {
-		activeProducts: Pick<Product, "id">[];
-		favoriteProducts: Pick<Product, "id">[];
-		role: "user" | "creator" | "placeowner" | "admin";
-	};
+export type CurrentUser = Omit<User, "passwordHash" | "activateCode" | "activatedAt" | "recoverCode"> & {
+	activeProducts: Pick<Product, "id">[];
+	favoriteProducts: Pick<Product, "id">[];
+	role: "user" | "creator" | "placeowner" | "admin";
+	activated: boolean;
+	activateEmailSent: boolean;
+};

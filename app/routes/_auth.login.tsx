@@ -3,7 +3,9 @@ import type { MetaFunction } from "react-router";
 import {
 	type ActionFunctionArgs,
 	Form,
+	Link,
 	type LoaderFunctionArgs,
+	href,
 	redirect,
 	useActionData,
 	useNavigation,
@@ -104,6 +106,11 @@ export default function LoginRoute() {
 					defaultValue={actionData?.fields?.password}
 					required
 				/>
+				<div className="flex justify-end">
+					<Link to={href("/recover")} className="mt-2 text-primary text-sm/none hover:underline">
+						Забыли пароль?
+					</Link>
+				</div>
 				<div className="mt-2 flex items-center space-x-2 sm:w-80 lg:w-96">
 					<Checkbox id="remember" name="remember" defaultChecked={actionData?.fields?.remember} />
 					<Label htmlFor="remember">Запомнить меня</Label>

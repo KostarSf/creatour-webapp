@@ -8,7 +8,7 @@ import { requireRoleSession } from "~/utils/session.server";
 export const meta: MetaFunction = () => [{ title: "Продажи ваших турпродуктов | Креатур" }];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-	const user = await requireRoleSession(request, "creator", "/user");
+	const user = await requireRoleSession(request, ["admin", "creator"], "/user");
 
 	const checksList = await db.check.findMany({
 		where: {

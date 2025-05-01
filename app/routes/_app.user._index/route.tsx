@@ -1,9 +1,11 @@
 import type { ActionFunctionArgs } from "react-router";
 import { type LoaderFunctionArgs, data, href, replace, useLoaderData } from "react-router";
+import LayoutWrapper from "~/components/LayoutWrapper";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { getUserSessionPayload, logout, requireUserId } from "~/utils/session.server";
 import { useUser } from "~/utils/user";
+import { AccountConfirmationAlert } from "~/widgets/account-confitmation-alert";
 import type { Route } from "./+types/route";
 import NextEventBanner from "./NextEventBanner";
 import UserCard from "./UserCard";
@@ -11,6 +13,34 @@ import UserCard from "./UserCard";
 export const meta: Route.MetaFunction = ({ matches }) => [
 	{ title: `${matches[0].data.user?.username ?? ""} | Личный кабинет` },
 ];
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+	const user = await getUserSessionPayload(request);
+
+	if (!user) {
+		throw replace(href("/login"));
+	}
+
+	const checksCountPromise = db.check.count({ where: { buyerId: user.id } });
+	const nextEventPromise = db.product.findFirst({
+		where: {
+			active: true,
+			beginDate: { gte: new Date() },
+			buyers: {
+				some: {
+					id: user.id,
+				},
+			},
+		},
+		orderBy: {
+			beginDate: "asc",
+		},
+	});
+
+	const [checksCount, nextEvent] = await db.$transaction([checksCountPromise, nextEventPromise]);
+
+	return { checksCount, nextEvent };
+};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
@@ -47,34 +77,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	};
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-	const user = await getUserSessionPayload(request);
-
-	if (!user) {
-		throw replace(href("/login"));
-	}
-
-	const checksCountPromise = db.check.count({ where: { buyerId: user.id } });
-	const nextEventPromise = db.product.findFirst({
-		where: {
-			active: true,
-			beginDate: { gte: new Date() },
-			buyers: {
-				some: {
-					id: user.id,
-				},
-			},
-		},
-		orderBy: {
-			beginDate: "asc",
-		},
-	});
-
-	const [checksCount, nextEvent] = await db.$transaction([checksCountPromise, nextEventPromise]);
-
-	return { checksCount, nextEvent };
-};
-
 export default function UserPage() {
 	const { checksCount, nextEvent } = useLoaderData<typeof loader>();
 	const user = useUser();
@@ -84,6 +86,11 @@ export default function UserPage() {
 			{nextEvent && (
 				<NextEventBanner product={nextEvent} username={user.username} className="-mt-3 md:-mt-6" />
 			)}
+			{!user.activated ? (
+				<LayoutWrapper>
+					<AccountConfirmationAlert emailSent={user.activateEmailSent} />
+				</LayoutWrapper>
+			) : null}
 			<UserCard user={user} checksCount={checksCount} />
 		</div>
 	);

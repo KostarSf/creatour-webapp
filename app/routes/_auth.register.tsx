@@ -16,7 +16,7 @@ import { Label } from "~/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { createUserSession, getUserSessionPayload, register } from "~/utils/session.server";
+import { createUserSession, getUserSessionPayload, register, sendActivateLink } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => [
 	{ title: "Регистрация | Креатур" },
@@ -108,7 +108,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			formError: "Такой Email уже занят",
 		});
 	}
-	const user = await register({ username, email, password, role });
+
+	const code = String(Math.floor(100000 + Math.random() * 900000));
+	const user = await register({
+		username,
+		email: email.trim().toLowerCase(),
+		password,
+		role,
+		activateCode: code,
+	});
 	if (!user) {
 		return badRequest({
 			fieldErrors: null,
@@ -116,6 +124,19 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			formError: "Что-то пошло не так при создании пользователя.",
 		});
 	}
+
+	try {
+		await sendActivateLink(user.id, code, fields.email);
+	} catch (err) {
+		await db.user.delete({ where: { id: user.id } });
+
+		return badRequest({
+			fieldErrors: null,
+			fields,
+			formError: "Не удалось отправить код подтверждения на указанную почту",
+		});
+	}
+
 	return createUserSession(user, true, redirectTo);
 };
 

@@ -7,18 +7,39 @@ import ServiceUserCard from "~/components/ServiceUserCard";
 import { buttonVariants } from "~/components/ui/button";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { requireRoleSession, requireUserId } from "~/utils/session.server";
+import { logout, requireRoleSession, requireUserId } from "~/utils/session.server";
 import { useUser } from "~/utils/user";
+import { AccountConfirmationAlert } from "~/widgets/account-confitmation-alert";
 import type { Route } from "./+types/route";
 
 export const meta: Route.MetaFunction = ({ matches }) => [
 	{ title: `${matches[0].data.user?.username ?? ""} | Личный кабинет` },
 ];
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+	const user = await requireRoleSession(request, ["admin", "placeowner"], "/user");
+
+	const places = await db.place.findMany({
+		where: {
+			creatorId: user.id,
+		},
+		include: {
+			routes: {
+				include: {
+					product: true,
+				},
+			},
+		},
+		orderBy: { createdAt: "desc" },
+	});
+
+	return { places };
+};
+
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
 	const user = await db.user.findUnique({ where: { id: userId } });
-	if (!user || user.role !== "placeowner") {
+	if (!user || (user.role !== "placeowner" && user.role !== "admin")) {
 		return data(
 			{
 				error: "Некорректный пользователь",
@@ -87,32 +108,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	});
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-	const user = await requireRoleSession(request, "placeowner", "/user");
-
-	const places = await db.place.findMany({
-		where: {
-			creatorId: user.id,
-		},
-		include: {
-			routes: {
-				include: {
-					product: true,
-				},
-			},
-		},
-		orderBy: { createdAt: "desc" },
-	});
-
-	return { places };
-};
-
 export default function PlaceownerPage() {
 	const { places } = useLoaderData<typeof loader>();
 	const user = useUser();
 
 	return (
 		<>
+			{!user.activated ? (
+				<LayoutWrapper>
+					<AccountConfirmationAlert emailSent={user.activateEmailSent} />
+				</LayoutWrapper>
+			) : null}
 			<ServiceUserCard user={user} />
 			<div className="my-6 md:my-12">
 				<LayoutWrapper className="flex flex-wrap items-baseline justify-between gap-3 px-5">

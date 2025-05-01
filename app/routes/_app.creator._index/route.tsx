@@ -8,18 +8,42 @@ import ServiceUserCard from "~/components/ServiceUserCard";
 import { buttonVariants } from "~/components/ui/button";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { requireRoleSession, requireUserId } from "~/utils/session.server";
+import { logout, requireRoleSession, requireUserId } from "~/utils/session.server";
 import { useUser } from "~/utils/user";
+import { AccountConfirmationAlert } from "~/widgets/account-confitmation-alert";
 import type { Route } from "./+types/route";
 
 export const meta: Route.MetaFunction = ({ matches }) => [
 	{ title: `${matches[0].data.user?.username ?? ""} | Личный кабинет` },
 ];
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+	const user = await requireRoleSession(request, ["admin", "creator"], "/user");
+
+	const product = await db.product.findMany({
+		where: {
+			creatorId: user.id,
+		},
+		orderBy: { createdAt: "desc" },
+	});
+
+	const checks = await db.check.findMany({
+		where: {
+			product: {
+				creator: {
+					id: user.id,
+				},
+			},
+		},
+	});
+
+	return { product, checks };
+};
+
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
 	const user = await db.user.findUnique({ where: { id: userId } });
-	if (!user || user.role !== "creator") {
+	if (!user || (user.role !== "creator" && user.role !== "admin")) {
 		return data(
 			{
 				error: "Некорректный пользователь",
@@ -88,35 +112,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	});
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-	const user = await requireRoleSession(request, "creator", "/user");
-
-	const product = await db.product.findMany({
-		where: {
-			creatorId: user.id,
-		},
-		orderBy: { createdAt: "desc" },
-	});
-
-	const checks = await db.check.findMany({
-		where: {
-			product: {
-				creator: {
-					id: user.id,
-				},
-			},
-		},
-	});
-
-	return { product, checks };
-};
-
 export default function CreatorPage() {
 	const { product, checks } = useLoaderData<typeof loader>();
 	const user = useUser();
 
 	return (
 		<>
+			{!user.activated ? (
+				<LayoutWrapper>
+					<AccountConfirmationAlert emailSent={user.activateEmailSent} />
+				</LayoutWrapper>
+			) : null}
 			<ServiceUserCard user={user} />
 			<LayoutWrapper className="my-6">
 				<CardContainer className="flex flex-wrap justify-between gap-x-3">

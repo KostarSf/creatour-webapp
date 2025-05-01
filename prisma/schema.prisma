@@ -19,9 +19,13 @@ model User {
 
   username      String
   email         String    @unique
-  passwordHash  String
   role          String    @default("user")    // user, creator, placeowner, admin
   avatar        String?
+
+  passwordHash  String
+  activatedAt   DateTime?
+  activateCode  String?   // Код подтверждения регистрации
+  recoverCode   String?   // Код восстановления пароля
 
   city          String?
   phone         String?

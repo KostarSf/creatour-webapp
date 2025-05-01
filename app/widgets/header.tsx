@@ -53,7 +53,7 @@ export function Header({ className }: { className?: string }) {
 										<span>Кабинет пользователя</span>
 									</Link>
 								</DropdownMenuItem>
-								{user.role === "creator" && (
+								{(user.role === "creator" || user.role === "admin") && (
 									<DropdownMenuItem className="cursor-pointer" asChild>
 										<Link to={href("/creator")}>
 											<BinocularsIcon />
@@ -61,7 +61,7 @@ export function Header({ className }: { className?: string }) {
 										</Link>
 									</DropdownMenuItem>
 								)}
-								{user.role === "placeowner" && (
+								{(user.role === "placeowner" || user.role === "admin") && (
 									<DropdownMenuItem className="cursor-pointer" asChild>
 										<Link to={href("/placeowner")}>
 											<MapPinHouseIcon />
@@ -69,12 +69,14 @@ export function Header({ className }: { className?: string }) {
 										</Link>
 									</DropdownMenuItem>
 								)}
-								<DropdownMenuItem className="cursor-pointer" asChild>
-									<Link to={href("/admin-v2")}>
-										<ShieldIcon />
-										<span>Панель администрирования</span>
-									</Link>
-								</DropdownMenuItem>
+								{user.role === "admin" && (
+									<DropdownMenuItem className="cursor-pointer" asChild>
+										<Link to={href("/admin-v2")}>
+											<ShieldIcon />
+											<span>Панель администрирования</span>
+										</Link>
+									</DropdownMenuItem>
+								)}
 							</DropdownMenuGroup>
 							<DropdownMenuSeparator />
 							<DropdownMenuGroup>

@@ -1,4 +1,4 @@
-import { requireUserId } from "~/utils/session.server";
+import { requireRoleSession, requireUserId } from "~/utils/session.server";
 import type { Route } from "./+types/_admin_v2";
 
 import { Outlet } from "react-router";
@@ -8,7 +8,7 @@ import { AppSidebar } from "~/widgets/admin/app-sidebar";
 import { GlobalPendingIndicator } from "~/widgets/global-pending-indicator";
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
-	await requireUserId(request);
+	await requireRoleSession(request, "admin", "/");
 	return null;
 };
 
