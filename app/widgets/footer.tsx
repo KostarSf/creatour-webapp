@@ -44,7 +44,7 @@ export function Footer({ hasNews, tags }: FooterProps) {
 							</p>
 							<p>
 								<Link
-									to="mailto:hello@creatur.com"
+									to="mailto:creatour@kostarlab.ru"
 									className={cn(
 										buttonVariants({ variant: "link" }),
 										"h-auto justify-start p-0 text-foreground",

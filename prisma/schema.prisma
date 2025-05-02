@@ -23,7 +23,7 @@ model User {
   avatar        String?
 
   passwordHash  String
-  activatedAt   DateTime?
+  activatedAt   DateTime? // Дата активации аккаунта
   activateCode  String?   // Код подтверждения регистрации
   recoverCode   String?   // Код восстановления пароля
 
