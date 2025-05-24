@@ -188,9 +188,10 @@ export async function requireRoleSession(
 		redirectTo: string = new URL(request.url).pathname,
 	) {
 		const sessionPayload = await getUserSessionPayload(request);
+
 		if (
 			!sessionPayload ||
-			(typeof role === "string" ? sessionPayload.role !== role : role.includes(sessionPayload.role))
+			(typeof role === "string" ? sessionPayload.role !== role : !role.includes(sessionPayload.role))
 		) {
 			const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
 			throw redirect(`/login?${searchParams}`);

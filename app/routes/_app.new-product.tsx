@@ -3,6 +3,7 @@ import { forwardRef, useEffect } from "react";
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "react-router";
 import { data, redirect } from "react-router";
 import { Form, useActionData, useLoaderData } from "react-router";
+import { PRODUCT_TYPES_LIST } from "~/lib/product-types";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { requireRoleSession, requireUserId } from "~/utils/session.server";
@@ -68,7 +69,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-	await requireRoleSession(request, "creator");
+	await requireRoleSession(request, ["creator", "admin"]);
 	return {};
 };
 
@@ -88,10 +89,11 @@ export default function NewProductPage() {
 			<Form method="POST" className="py-6 md:py-12">
 				<div className="space-y-3">
 					<InputSelect label="Тип продукта" name="type" id="type" required>
-						<option value="excursion">Экскурсия</option>
-						<option value="tour">Тур</option>
-						<option value="quest">Мероприятие</option>
-						<option value="event">Событие</option>
+						{PRODUCT_TYPES_LIST.map((type) => (
+							<option key={type.key} value={type.key}>
+								{type.title}
+							</option>
+						))}
 					</InputSelect>
 					<InputField type="text" name="name" id="name" label="Название" required />
 					<InputField type="text" name="short" id="short" label="Краткое описание" />
