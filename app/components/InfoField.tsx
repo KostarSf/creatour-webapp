@@ -1,5 +1,5 @@
-import type { ComponentPropsWithRef } from "react";
-import { useId } from "react";
+import { type ComponentPropsWithRef, useId } from "react";
+
 import { cn } from "~/lib/utils";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";

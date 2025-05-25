@@ -1,6 +1,7 @@
 import { type FileUpload, parseFormData } from "@mjackson/form-data-parser";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { Form, Link, redirect, useActionData, useLoaderData } from "react-router";
+import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { dHash } from "~/utils/hamming-distance.server";
 import { badRequest } from "~/utils/request.server";
@@ -119,7 +120,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	if (!place) {
 		throw new Response("Место не найдено", { status: 404 });
 	}
-	const placeowners = await db.user.findMany({ where: { role: "placeowner" } });
+	const placeowners = await db.user.findMany({ where: { role: USER_ROLES.placeowner.key } });
 	const tags = place.tags.map((tag) => tag.name).join(", ");
 	return { place, placeowners, tags };
 };

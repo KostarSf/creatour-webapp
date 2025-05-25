@@ -3,14 +3,21 @@ import type { Route } from "./+types/_admin_v2.admin-v2.users";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import type { User } from "@prisma-app/client";
+import { PlusIcon } from "lucide-react";
+import { href } from "react-router";
+import { Button } from "~/components/ui/button";
+import { DialogTrigger } from "~/components/ui/dialog";
 import type { BreadcrumbHandle } from "~/hooks/use-breadcrumb";
+import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
+import { useUser } from "~/utils/user";
+import { EditDialog, EditDialogButton, type EditableField } from "~/widgets/admin/adit-dialog";
 import { DataTable, type DataTableFilter } from "~/widgets/admin/data-table";
 
 export const handle: BreadcrumbHandle = { breadcrumb: [{ label: "Разработчики турпродуктов" }] };
 
 export const loader = async () => {
-	const users = await db.user.findMany({ where: { role: "creator" } });
+	const users = await db.user.findMany({ where: { role: USER_ROLES.creator.key } });
 	return { users };
 };
 
@@ -30,9 +37,90 @@ const columns = [
 	columnHelper.accessor("address", { header: () => "Адрес" }),
 	columnHelper.accessor("inn", { header: () => "ИНН", enableGlobalFilter: true }),
 	columnHelper.accessor("legalName", { header: () => "Наименование", enableGlobalFilter: true }),
+	columnHelper.display({
+		id: "actions",
+		cell: ({ row }) => (
+			<div className="flex justify-end">
+				<UsersTableEditDialog user={row.original} />
+			</div>
+		),
+	}),
 ];
 
+function UsersTableEditDialog({ user }: { user: User }) {
+	const currentUser = useUser();
+
+	return (
+		<EditDialog
+			action={href("/api/update-user")}
+			title="Редактирование разработчика туров"
+			data={user}
+			fields={editableFields}
+			deleteCallback={
+				user.id !== currentUser.id
+					? (submit) => {
+							const formData = new FormData();
+							formData.set("userId", user.id);
+
+							submit(formData, { method: "POST", action: href("/api/delete-user") });
+						}
+					: undefined
+			}
+			deleteTitle={`Удалить пользователя ${user.username}?`}
+			deleteDescription="Пользователь будет удален из системы. Это действие необратимо"
+			searchParamsState={{ name: "edit", value: String(user.id) }}
+		>
+			<EditDialogButton />
+		</EditDialog>
+	);
+}
+
 const filters: DataTableFilter<User>[] = [{ column: "city", title: "Город" }];
+
+const editableFields: EditableField<User>[] = [
+	{
+		name: "id",
+		type: "hidden",
+		required: true,
+	},
+	{
+		name: "role",
+		type: "hidden",
+		defaultValue: USER_ROLES.creator.key,
+		required: true,
+	},
+	{
+		name: "username",
+		title: "Имя",
+		required: true,
+	},
+	{
+		name: "email",
+		title: "Email",
+		type: "email",
+		required: true,
+	},
+	{
+		name: "phone",
+		title: "Телефон",
+	},
+	{
+		name: "city",
+		title: "Город",
+	},
+	{
+		name: "address",
+		title: "Адрес",
+	},
+	{
+		name: "inn",
+		title: "ИНН",
+	},
+	{
+		name: "legalName",
+		title: "Наименование",
+	},
+];
 
 interface UsersTableProps {
 	data: User[];
@@ -49,6 +137,22 @@ function CreatorsTable({ data, className }: UsersTableProps) {
 			filters={filters}
 			searchLabel="Поиск разработчиков..."
 			noDataLabel="Разработчиков не найдено"
-		/>
+		>
+			<div className="flex justify-end">
+				<EditDialog
+					action={href("/api/create-user")}
+					title="Добавление разработчика туров"
+					saveTitle="Добавить"
+					fields={editableFields}
+				>
+					<DialogTrigger asChild>
+						<Button variant="default">
+							<PlusIcon />
+							<span>Новый разработчик туров</span>
+						</Button>
+					</DialogTrigger>
+				</EditDialog>
+			</div>
+		</DataTable>
 	);
 }

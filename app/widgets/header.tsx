@@ -11,6 +11,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { USER_ROLES } from "~/lib/user-roles";
 import { cn } from "~/lib/utils";
 import { useOptionalUser } from "~/utils/user";
 
@@ -53,7 +54,8 @@ export function Header({ className }: { className?: string }) {
 										<span>Кабинет пользователя</span>
 									</Link>
 								</DropdownMenuItem>
-								{(user.role === "creator" || user.role === "admin") && (
+								{(user.role === USER_ROLES.creator.key ||
+									user.role === USER_ROLES.admin.key) && (
 									<DropdownMenuItem className="cursor-pointer" asChild>
 										<Link to={href("/creator")}>
 											<BinocularsIcon />
@@ -61,7 +63,8 @@ export function Header({ className }: { className?: string }) {
 										</Link>
 									</DropdownMenuItem>
 								)}
-								{(user.role === "placeowner" || user.role === "admin") && (
+								{(user.role === USER_ROLES.placeowner.key ||
+									user.role === USER_ROLES.admin.key) && (
 									<DropdownMenuItem className="cursor-pointer" asChild>
 										<Link to={href("/placeowner")}>
 											<MapPinHouseIcon />
@@ -69,7 +72,7 @@ export function Header({ className }: { className?: string }) {
 										</Link>
 									</DropdownMenuItem>
 								)}
-								{user.role === "admin" && (
+								{USER_ROLES.admin.key && (
 									<DropdownMenuItem className="cursor-pointer" asChild>
 										<Link to={href("/admin-v2")}>
 											<ShieldIcon />

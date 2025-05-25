@@ -8,8 +8,10 @@ const PRODUCT_TYPES = {
 	exhibition: { key: "exhibition", title: "Выставка" },
 	tournament: { key: "tournament", title: "Турнир" },
 	lecture: { key: "lecture", title: "Лекция" },
-};
+} as const;
 
 const PRODUCT_TYPES_LIST = Object.values(PRODUCT_TYPES);
+
+export type ProductTypes = (typeof PRODUCT_TYPES)[keyof typeof PRODUCT_TYPES]["key"];
 
 export { PRODUCT_TYPES, PRODUCT_TYPES_LIST };

@@ -109,6 +109,33 @@ export async function sendRecoverLink(userId: string, code: string, email: strin
 	console.log(info);
 }
 
+export async function sendNewAccountSetPasswordLink(userId: string, code: string, email: string) {
+	const info = await transporter.sendMail({
+		from: `"${mailerConfig.MAILER_FROM_NAME}" <${mailerConfig.MAILER_FROM}>`,
+		to: email,
+		subject: "Добро пожаловать в Креатур!",
+		html: `<!DOCTYPE html>
+		<html lang="ru">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Добро пожаловать в Креатур!</title>
+		</head>
+		<body>
+			<h1>Добро пожаловать в Креатур!</h1>
+			<p>
+				Для вас создан аккаунт на сайте <b>Креатур</b>. Чтобы назначить пароль для вашего аккаунта, пожалуйста,
+				<a href="https://${siteDomain}${href("/reset-password")}?id=${userId}&code=${code}" target="_blank" rel="noreferrer">
+					перейдите по ссылке
+				</a>.
+			</p>
+		</body>
+		</html>`,
+	});
+
+	console.log(info);
+}
+
 export async function login({ email, password }: LoginForm): Promise<UserSessionPayload | null> {
 	const user = await db.user.findUnique({
 		where: { email },

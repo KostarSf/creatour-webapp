@@ -1,4 +1,6 @@
 import type { Product, User } from "@prisma-app/client";
+
+import type { UserRole } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 
 export async function getCurrentUser(userId: string): Promise<CurrentUser | null> {
@@ -24,10 +26,11 @@ export async function getCurrentUser(userId: string): Promise<CurrentUser | null
 	} as CurrentUser;
 }
 
-export type CurrentUser = Omit<User, "passwordHash" | "activateCode" | "activatedAt" | "recoverCode"> & {
+export interface CurrentUser
+	extends Omit<User, "passwordHash" | "activateCode" | "activatedAt" | "recoverCode"> {
 	activeProducts: Pick<Product, "id">[];
 	favoriteProducts: Pick<Product, "id">[];
-	role: "user" | "creator" | "placeowner" | "admin";
+	role: UserRole;
 	activated: boolean;
 	activateEmailSent: boolean;
-};
+}

@@ -1,6 +1,7 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { redirect } from "react-router";
 import { useActionData, useLoaderData } from "react-router";
+import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 
@@ -56,7 +57,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-	const placeowners = await db.user.findMany({ where: { role: "placeowner" } });
+	const placeowners = await db.user.findMany({ where: { role: USER_ROLES.placeowner.key } });
 	return { placeowners };
 };
 

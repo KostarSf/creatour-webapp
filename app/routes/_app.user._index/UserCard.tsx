@@ -6,6 +6,15 @@ import { InfoField } from "~/components/InfoField";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import { NoImageIcon } from "~/components/NoImageIcon";
 import { Button, buttonVariants } from "~/components/ui/button";
+import { Label } from "~/components/ui/label";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "~/components/ui/select";
 import type { CurrentUser } from "~/models/users";
 import type { UploadAvatarAction } from "../api.upload-avatar";
 
@@ -121,6 +130,36 @@ export default function UserCard({ user, checksCount }: Props) {
 									name="phone"
 									defaultValue={user.phone || ""}
 								/>
+								<InfoField
+									type="number"
+									min={1}
+									disabled={!changingInfo}
+									label="Возраст"
+									name="age"
+									defaultValue={user.age || ""}
+								/>
+								<InfoField
+									type="name"
+									disabled={!changingInfo}
+									label="ФИО"
+									name="name"
+									defaultValue={user.name || ""}
+								/>
+								<div className="grid space-y-1.5">
+									<Label htmlFor="sex">Пол</Label>
+									<Select name="sex" defaultValue={user.sex ?? "-"}>
+										<SelectTrigger id="sex" className="w-full">
+											<SelectValue placeholder="Выберите пол" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectGroup>
+												<SelectItem value="-">Пол не выбран</SelectItem>
+												<SelectItem value="male">Мужской</SelectItem>
+												<SelectItem value="female">Женский</SelectItem>
+											</SelectGroup>
+										</SelectContent>
+									</Select>
+								</div>
 							</div>
 						</div>
 					</fetcher.Form>

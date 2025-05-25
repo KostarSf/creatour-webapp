@@ -2,13 +2,14 @@ import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { useLoaderData } from "react-router";
 import type { CheckData } from "~/components/CheckTable";
 import CheckTable from "~/components/CheckTable";
+import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { requireRoleSession } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => [{ title: "Продажи ваших турпродуктов | Креатур" }];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-	const user = await requireRoleSession(request, ["admin", "creator"], "/user");
+	const user = await requireRoleSession(request, [USER_ROLES.admin.key, USER_ROLES.creator.key], "/user");
 
 	const checksList = await db.check.findMany({
 		where: {

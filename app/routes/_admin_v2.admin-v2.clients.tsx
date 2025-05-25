@@ -3,14 +3,21 @@ import type { Route } from "./+types/_admin_v2.admin-v2.users";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import type { User } from "@prisma-app/client";
+import { PlusIcon } from "lucide-react";
+import { href } from "react-router";
+import { Button } from "~/components/ui/button";
+import { DialogTrigger } from "~/components/ui/dialog";
 import type { BreadcrumbHandle } from "~/hooks/use-breadcrumb";
+import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
+import { useUser } from "~/utils/user";
+import { EditDialog, EditDialogButton, type EditableField } from "~/widgets/admin/adit-dialog";
 import { DataTable, type DataTableFilter } from "~/widgets/admin/data-table";
 
 export const handle: BreadcrumbHandle = { breadcrumb: [{ label: "Клиенты" }] };
 
 export const loader = async () => {
-	const users = await db.user.findMany({ where: { role: "user" } });
+	const users = await db.user.findMany({ where: { role: USER_ROLES.user.key } });
 	return { users };
 };
 
@@ -28,9 +35,99 @@ const columns = [
 	columnHelper.accessor("username", { header: () => "Логин", enableGlobalFilter: true }),
 	columnHelper.accessor("email", { header: () => "Email", enableGlobalFilter: true }),
 	columnHelper.accessor("phone", { header: () => "Телефон", enableGlobalFilter: true }),
+	columnHelper.accessor("age", { header: () => "Возраст" }),
+	columnHelper.accessor("sex", {
+		header: () => "Пол",
+		cell: (props) =>
+			({ male: "Мужской", female: "Женский" })[props.getValue() as "male" | "female"] ??
+			props.getValue(),
+	}),
+	columnHelper.display({
+		id: "actions",
+		cell: ({ row }) => (
+			<div className="flex justify-end">
+				<UsersTableEditDialog user={row.original} />
+			</div>
+		),
+	}),
 ];
 
-const filters: DataTableFilter<User>[] = [{ column: "role", title: "Роль" }];
+function UsersTableEditDialog({ user }: { user: User }) {
+	const currentUser = useUser();
+
+	return (
+		<EditDialog
+			action={href("/api/update-user")}
+			title="Редактирование клиента"
+			data={user}
+			fields={editableFields}
+			deleteCallback={
+				user.id !== currentUser.id
+					? (submit) => {
+							const formData = new FormData();
+							formData.set("userId", user.id);
+
+							submit(formData, { method: "POST", action: href("/api/delete-user") });
+						}
+					: undefined
+			}
+			deleteTitle={`Удалить пользователя ${user.username}?`}
+			deleteDescription="Пользователь будет удален из системы. Это действие необратимо"
+			searchParamsState={{ name: "edit", value: String(user.id) }}
+		>
+			<EditDialogButton />
+		</EditDialog>
+	);
+}
+
+const filters: DataTableFilter<User>[] = [
+	{ column: "role", title: "Роль" },
+	{ column: "sex", title: "Пол" },
+];
+
+const editableFields: EditableField<User>[] = [
+	{
+		name: "id",
+		type: "hidden",
+		required: true,
+	},
+	{ name: "role", type: "hidden", required: true, defaultValue: USER_ROLES.user.key },
+	{
+		name: "username",
+		title: "Имя",
+		required: true,
+	},
+	{
+		name: "email",
+		title: "Email",
+		type: "email",
+		required: true,
+	},
+	{
+		name: "phone",
+		title: "Телефон",
+	},
+	{
+		name: "city",
+		title: "Город",
+	},
+	{
+		name: "age",
+		title: "Возраст",
+		type: "number",
+		min: 1,
+	},
+	{
+		name: "sex",
+		title: "Пол",
+		type: "select",
+		values: [
+			{ value: "-", name: "Пол не указан" },
+			{ value: "male", name: "Мужской" },
+			{ value: "female", name: "Женский" },
+		],
+	},
+];
 
 interface UsersTableProps {
 	data: User[];
@@ -47,6 +144,22 @@ function ClientsTable({ data, className }: UsersTableProps) {
 			filters={filters}
 			searchLabel="Поиск клиентов..."
 			noDataLabel="Клиентов не найдено"
-		/>
+		>
+			<div className="flex justify-end">
+				<EditDialog
+					action={href("/api/create-user")}
+					title="Добавление клиента"
+					saveTitle="Добавить"
+					fields={editableFields}
+				>
+					<DialogTrigger asChild>
+						<Button variant="default">
+							<PlusIcon />
+							<span>Новый клиент</span>
+						</Button>
+					</DialogTrigger>
+				</EditDialog>
+			</div>
+		</DataTable>
 	);
 }

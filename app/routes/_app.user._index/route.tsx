@@ -53,9 +53,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	const intent = formData.get("intent");
 
 	if (intent === "change-info") {
-		const { city, phone } = Object.fromEntries(formData);
+		const { city, phone, name, age, sex } = Object.fromEntries(formData);
 
-		if (typeof city !== "string" || typeof phone !== "string") {
+		if (
+			typeof city !== "string" ||
+			typeof phone !== "string" ||
+			typeof name !== "string" ||
+			typeof age !== "string" ||
+			typeof sex !== "string"
+		) {
 			throw data({ error: "Указаны неверные значения" }, { status: 400 });
 		}
 
@@ -64,6 +70,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			data: {
 				city: city,
 				phone: phone,
+				name: name,
+				age: +age,
+				sex: sex === "-" ? null : sex,
 			},
 		});
 	} else {

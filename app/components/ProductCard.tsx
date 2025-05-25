@@ -2,6 +2,7 @@ import type { Place, Product, RoutePoint } from "@prisma-app/client";
 import clsx from "clsx";
 import type { ReactNode } from "react";
 import { Form, Link } from "react-router";
+import { USER_ROLES } from "~/lib/user-roles";
 import { useOptionalUser } from "~/utils/user";
 import { LikeProductButton } from "~/widgets/like-button";
 import CardDate from "./CardDate";
@@ -12,7 +13,7 @@ import { Card } from "./ui/card";
 export function ProductCard<TType extends CardType>({ type, object, className }: CardProps<TType>) {
 	const user = useOptionalUser();
 	const buyed = user ? user.activeProducts.findIndex((p) => p.id === object.id) !== -1 : false;
-	const canBuy = user ? user.role === "user" : false;
+	const canBuy = user ? user.role === USER_ROLES.user.key : false;
 
 	return (
 		<ProductCardBase

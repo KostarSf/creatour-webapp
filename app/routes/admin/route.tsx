@@ -2,13 +2,14 @@ import type { CSSProperties } from "react";
 import type { LoaderFunctionArgs } from "react-router";
 import { redirect } from "react-router";
 import { Link, NavLink, Outlet } from "react-router";
+import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { requireUserId } from "~/utils/session.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const userId = await requireUserId(request);
 	const user = await db.user.findUnique({ where: { id: userId } });
-	if (!user || user.role === "user") {
+	if (!user || user.role === USER_ROLES.user.key) {
 		return redirect("/products");
 	}
 	return new Response("Ok", { status: 200 });

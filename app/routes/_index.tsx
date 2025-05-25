@@ -2,6 +2,7 @@ import type { MetaFunction } from "react-router";
 import { Link, href, useLoaderData } from "react-router";
 import { Socials } from "~/components/Socials";
 import { buttonVariants } from "~/components/ui/button";
+import { USER_ROLES } from "~/lib/user-roles";
 import { cn } from "~/lib/utils";
 import { db } from "~/utils/db.server";
 import { useOptionalUser } from "~/utils/user";
@@ -77,12 +78,18 @@ export default function LandingPage({ loaderData }: Route.ComponentProps) {
 						</p>
 
 						<Link
-							to={user ? (user.role !== "user" ? "/user" : "/products") : "/register"}
+							to={
+								user
+									? user.role !== USER_ROLES.user.key
+										? "/user"
+										: "/products"
+									: "/register"
+							}
 							className={cn(buttonVariants({ size: "lg" }), "max-w-96 text-base max-md:w-full")}
 							prefetch="render"
 						>
 							{user
-								? user.role !== "user"
+								? user.role !== USER_ROLES.user.key
 									? "Личный кабинет"
 									: "К турпродуктам"
 								: "Регистрация"}

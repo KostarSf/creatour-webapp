@@ -27,6 +27,10 @@ model User {
   activateCode  String?   // Код подтверждения регистрации
   recoverCode   String?   // Код восстановления пароля
 
+  name          String?
+  sex           String?   // male, female
+  age           Int?
+
   city          String?
   phone         String?
   legalName     String?

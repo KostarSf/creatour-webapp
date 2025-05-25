@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { redirect } from "react-router";
 import { Form, Link, useActionData, useLoaderData } from "react-router";
+import { USER_ROLES_LIST } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 
@@ -136,10 +137,11 @@ export default function UserEditRoute() {
 						className="border"
 						defaultValue={actionData?.fields?.role || data.user.role}
 					>
-						<option value="user">Пользователь</option>
-						<option value="creator">Разработчик турпродукта</option>
-						<option value="placeowner">Владелец объекта</option>
-						<option value="admin">Администратор</option>
+						{USER_ROLES_LIST.map((role) => (
+							<option key={role.key} value={role.key}>
+								{role.title}
+							</option>
+						))}
 					</select>
 				</label>
 

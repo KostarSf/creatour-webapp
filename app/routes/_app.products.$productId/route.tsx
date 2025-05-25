@@ -11,6 +11,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import type { CustomHeaderHandle } from "~/lib/hooks/use-custom-header";
+import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { useOptionalUser } from "~/utils/user";
 import { Header } from "~/widgets/header";
@@ -155,7 +156,7 @@ function ProductHeader({ product }: ProductHeaderProps) {
 	const user = useOptionalUser();
 
 	const buyed = !!user && user.activeProducts.findIndex((p) => p.id === product.id) !== -1;
-	const canBuy = (!!user && user.role === "user") || false;
+	const canBuy = (!!user && user.role === USER_ROLES.user.key) || false;
 
 	return (
 		<div className="relative md:h-[800px]">

@@ -1,6 +1,7 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { redirect } from "react-router";
 import { Form, Link, useLoaderData } from "react-router";
+import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 
 export const action = async ({ params, request }: ActionFunctionArgs) => {
@@ -101,7 +102,8 @@ export default function UserRoute() {
 					<p>
 						Телефон: <br /> <b>{data.user.phone}</b>
 					</p>
-					{data.user.role === "creator" || data.user.role === "placeowner" ? (
+					{data.user.role === USER_ROLES.creator.key ||
+					data.user.role === USER_ROLES.placeowner.key ? (
 						<>
 							<p>
 								Юр. наименование: <br /> <b>{data.user.legalName}</b>
@@ -112,7 +114,7 @@ export default function UserRoute() {
 
 							<hr />
 
-							{data.user.role === "placeowner" ? (
+							{data.user.role === USER_ROLES.placeowner.key ? (
 								<p>
 									Владелец объектов: <br />
 									{data.user.createdPlaces.map((place) => (
@@ -127,7 +129,7 @@ export default function UserRoute() {
 									))}
 								</p>
 							) : null}
-							{data.user.role === "creator" ? (
+							{data.user.role === USER_ROLES.creator.key ? (
 								<p>
 									Разработчик турпродуктов: <br />
 									{data.user.createdProducts.map((product) => (

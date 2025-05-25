@@ -4,6 +4,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "react
 import { data, redirect } from "react-router";
 import { Form, useActionData, useLoaderData } from "react-router";
 import { PRODUCT_TYPES_LIST } from "~/lib/product-types";
+import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { requireRoleSession, requireUserId } from "~/utils/session.server";
@@ -14,7 +15,7 @@ export const meta: MetaFunction = () => [{ title: "Добавление ново
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
 	const user = await db.user.findUnique({ where: { id: userId } });
-	if (!user || user.role !== "creator") {
+	if (!user || user.role !== USER_ROLES.creator.key) {
 		return data(
 			{
 				error: "Некорректный пользователь",
@@ -69,7 +70,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-	await requireRoleSession(request, ["creator", "admin"]);
+	await requireRoleSession(request, [USER_ROLES.creator.key, USER_ROLES.admin.key]);
 	return {};
 };
 

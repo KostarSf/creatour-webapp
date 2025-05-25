@@ -6,6 +6,7 @@ import { badRequest } from "~/utils/request.server";
 import { createUserSession, login, register } from "~/utils/session.server";
 
 import { useState } from "react";
+import { USER_ROLES, USER_ROLES_LIST } from "~/lib/user-roles";
 
 export const meta: MetaFunction = () => [
 	{ title: "Креатур | Вход" },
@@ -52,7 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		loginType,
 		username,
 		password,
-		role: typeof role === "string" ? role : "user",
+		role: typeof role === "string" ? role : USER_ROLES.user.key,
 	};
 	const fieldErrors = {
 		username: validateUsername(username),
@@ -95,7 +96,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 				where: { id: user.id },
 				data: { role: fields.role },
 			});
-			return createUserSession(user.id, redirectTo);
+			return createUserSession(user, false, redirectTo);
 		}
 		default: {
 			return badRequest({
@@ -165,10 +166,11 @@ export default function Login() {
 								id="role-input"
 								defaultValue={actionData?.fields?.role}
 							>
-								<option value="user">Пользователь</option>
-								<option value="placeowner">Владелец ресурсов</option>
-								<option value="creator">Создатель турпродуктов</option>
-								<option value="admin">Администратор</option>
+								{USER_ROLES_LIST.map((role) => (
+									<option key={role.key} value={role.key}>
+										{role.title}
+									</option>
+								))}
 							</select>
 						</div>
 					) : null}

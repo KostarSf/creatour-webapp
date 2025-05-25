@@ -1,6 +1,7 @@
 import { type FileUpload, parseFormData } from "@mjackson/form-data-parser";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { Form, Link, redirect, useActionData, useLoaderData } from "react-router";
+import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { dHash } from "~/utils/hamming-distance.server";
 import { badRequest } from "~/utils/request.server";
@@ -147,7 +148,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 	if (!product) {
 		throw new Response("Турпродукт не найден", { status: 404 });
 	}
-	const creators = await db.user.findMany({ where: { role: "creator" } });
+	const creators = await db.user.findMany({ where: { role: USER_ROLES.creator.key } });
 	const tags = product.tags.map((tag) => tag.name).join(", ");
 	return {
 		product: {

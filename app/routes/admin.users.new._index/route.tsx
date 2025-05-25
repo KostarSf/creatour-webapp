@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import type { ActionFunctionArgs } from "react-router";
 import { redirect } from "react-router";
 import { useActionData } from "react-router";
+import { USER_ROLES_LIST } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 
@@ -99,10 +100,11 @@ export default function NewUser() {
 				<label>
 					<p>Тип аккаунта</p>
 					<select name="role" className="border" defaultValue={actionData?.fields?.role}>
-						<option value="user">Пользователь</option>
-						<option value="creator">Разработчик турпродукта</option>
-						<option value="placeowner">Владелец объекта</option>
-						<option value="admin">Администратор</option>
+						{USER_ROLES_LIST.map((role) => (
+							<option key={role.key} value={role.key}>
+								{role.title}
+							</option>
+						))}
 					</select>
 				</label>
 				<button type="submit" className="mt-8 block bg-blue-600 px-4 py-2 text-white">

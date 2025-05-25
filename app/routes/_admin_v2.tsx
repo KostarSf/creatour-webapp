@@ -3,12 +3,13 @@ import type { Route } from "./+types/_admin_v2";
 
 import { Outlet } from "react-router";
 import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
+import { USER_ROLES } from "~/lib/user-roles";
 import { AppHeader } from "~/widgets/admin/app-header";
 import { AppSidebar } from "~/widgets/admin/app-sidebar";
 import { GlobalPendingIndicator } from "~/widgets/global-pending-indicator";
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
-	await requireRoleSession(request, "admin", "/");
+	await requireRoleSession(request, USER_ROLES.admin.key, "/");
 	return null;
 };
 

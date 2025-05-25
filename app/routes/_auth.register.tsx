@@ -14,6 +14,7 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
+import { USER_ROLES, USER_ROLES_LIST } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { createUserSession, getUserSessionPayload, register, sendActivateLink } from "~/utils/session.server";
@@ -39,7 +40,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 function validateRole(role: unknown) {
-	if (role !== "user" && role !== "placeowner" && role !== "creator" && role !== "admin") {
+	if (typeof role !== "string" || !(USER_ROLES_LIST.map((role) => role.key) as string[]).includes(role)) {
 		return "Роль указана неверно";
 	}
 }
@@ -160,7 +161,7 @@ export default function LoginRoute() {
 				<Select
 					name="role"
 					required
-					defaultValue={actionData?.fields?.role ?? "user"}
+					defaultValue={actionData?.fields?.role ?? USER_ROLES.user.key}
 					aria-invalid={Boolean(actionData?.fieldErrors?.role)}
 					aria-errormessage={actionData?.fieldErrors?.role ? "role-error" : undefined}
 				>
@@ -168,9 +169,11 @@ export default function LoginRoute() {
 						<SelectValue placeholder="Выберите роль" />
 					</SelectTrigger>
 					<SelectContent>
-						<SelectItem value="user">Пользователь</SelectItem>
-						<SelectItem value="placeowner">Владелец ресурсов</SelectItem>
-						<SelectItem value="creator">Создатель турпродуктов</SelectItem>
+						{USER_ROLES_LIST.filter((role) => role.key !== USER_ROLES.admin.key).map((role) => (
+							<SelectItem key={role.key} value={role.key}>
+								{role.title}
+							</SelectItem>
+						))}
 					</SelectContent>
 				</Select>
 				{actionData?.fieldErrors?.role ? (

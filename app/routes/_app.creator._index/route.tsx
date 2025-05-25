@@ -6,6 +6,7 @@ import LayoutWrapper from "~/components/LayoutWrapper";
 import { ServiceProductCard } from "~/components/ProductCard";
 import ServiceUserCard from "~/components/ServiceUserCard";
 import { buttonVariants } from "~/components/ui/button";
+import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { logout, requireRoleSession, requireUserId } from "~/utils/session.server";
@@ -18,7 +19,7 @@ export const meta: Route.MetaFunction = ({ matches }) => [
 ];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-	const user = await requireRoleSession(request, ["admin", "creator"], "/user");
+	const user = await requireRoleSession(request, [USER_ROLES.admin.key, USER_ROLES.creator.key], "/user");
 
 	const product = await db.product.findMany({
 		where: {
@@ -43,7 +44,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
 	const userId = await requireUserId(request);
 	const user = await db.user.findUnique({ where: { id: userId } });
-	if (!user || (user.role !== "creator" && user.role !== "admin")) {
+	if (!user || (user.role !== USER_ROLES.creator.key && user.role !== USER_ROLES.admin.key)) {
 		return data(
 			{
 				error: "Некорректный пользователь",
