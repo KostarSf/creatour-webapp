@@ -55,13 +55,13 @@ model Rating {
   value     Int
 
   userId    String
-  user      User      @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   placeId   String?
-  place     Place?    @relation(fields: [placeId], references: [id])
+  place     Place?    @relation(fields: [placeId], references: [id], onDelete: Cascade)
 
   productId String?
-  product   Product?  @relation(fields: [productId], references: [id])
+  product   Product?  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Check {
@@ -69,9 +69,9 @@ model Check {
   createdAt   DateTime  @default(now())
 
   buyerId   String
-  buyer     User    @relation(fields: [buyerId], references: [id])
+  buyer     User    @relation(fields: [buyerId], references: [id], onDelete: Cascade)
   productId String
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   price Float
 }
@@ -87,7 +87,7 @@ model Product {
 
   crmId       String?
   creatorId   String
-  creator     User      @relation(fields: [creatorId], references: [id])
+  creator     User      @relation(fields: [creatorId], references: [id], onDelete: Cascade)
   buyers      User[]    @relation(name: "UserActiveProducts")
   favors      User[]    @relation(name: "UserFavoriteProducts")
 
@@ -120,10 +120,10 @@ model RoutePoint {
   updatedAt   DateTime  @updatedAt
 
   productId   String
-  product     Product @relation(fields: [productId], references: [id])
+  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   placeId     String
-  place       Place   @relation(fields: [placeId], references: [id])
+  place       Place   @relation(fields: [placeId], references: [id], onDelete: Cascade)
 
   order       Int
   date        DateTime
@@ -136,7 +136,7 @@ model Place {
 
   crmId       String?
   creatorId   String?
-  creator     User?     @relation(fields: [creatorId], references: [id])
+  creator     User?     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
   active      Boolean   @default(false)
 
   name        String
@@ -176,14 +176,14 @@ model Comment {
   updatedAt   DateTime  @updatedAt
 
   userId      String
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   text        String
   media       Media[]
 
   placeId       String?
-  parentPlace   Place?    @relation(fields: [placeId], references: [id])
+  parentPlace   Place?    @relation(fields: [placeId], references: [id], onDelete: Cascade)
   productId     String?
-  parentProduct Product?  @relation(fields: [productId], references: [id])
+  parentProduct Product?  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Media {
