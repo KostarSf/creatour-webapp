@@ -13,18 +13,30 @@ import {
 	useLoaderData,
 	useSearchParams,
 } from "react-router";
+import { Bar, BarChart, Pie, PieChart, XAxis, YAxis } from "recharts";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import { ProductCard } from "~/components/ProductCard";
 import { Socials } from "~/components/Socials";
 import { Badge } from "~/components/ui/badge";
 import { Button, buttonVariants } from "~/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import {
+	type ChartConfig,
+	ChartContainer,
+	ChartLegend,
+	ChartLegendContent,
+	ChartTooltip,
+	ChartTooltipContent,
+} from "~/components/ui/chart";
 import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
+import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import type { CustomHeaderHandle } from "~/lib/hooks/use-custom-header";
+import { USER_ROLES, type UserRole } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { getUserId, requireUserId } from "~/utils/session.server";
-import { useOptionalUser } from "~/utils/user";
+import { useOptionalUser, useUser } from "~/utils/user";
 import { Header } from "~/widgets/header";
 import type { Route } from "./+types/route";
 
@@ -201,7 +213,8 @@ export default function ProductsCatalog() {
 
 	const favorites = searchParams.get("type") === "favorites";
 	const news = Boolean(searchParams.get("news"));
-	const events = !favorites && !news;
+	const stats = Boolean(searchParams.get("stats"));
+	const events = !favorites && !news && !stats;
 
 	const nextPageParams = new URLSearchParams(searchParams);
 	nextPageParams.set("page", String(nextPage ?? "1"));
@@ -232,6 +245,16 @@ export default function ProductsCatalog() {
 							Новинки
 						</Link>
 					) : null}
+					{user &&
+					([USER_ROLES.admin.key, USER_ROLES.creator.key] as UserRole[]).includes(user.role) ? (
+						<Link
+							to={`${href("/products")}?stats=true`}
+							className={clsx("font-medium text-xl transition", !stats && "opacity-40")}
+							preventScrollReset
+						>
+							Статистика
+						</Link>
+					) : null}
 					{user ? (
 						<Link
 							to=".?type=favorites"
@@ -249,56 +272,64 @@ export default function ProductsCatalog() {
 					) : null}
 				</div>
 			</LayoutWrapper>
-			{tags.length ? (
-				<LayoutWrapper className="my-6 flex flex-wrap justify-between gap-x-3 px-5 md:my-12">
-					<TagsChooser tags={tags} />
-					{count > 0 ? (
-						<p className="py-2 text-muted-foreground">{`Нашлось ${count} ${pluralizeProducts(count)}`}</p>
+			{!stats ? (
+				<>
+					{tags.length ? (
+						<LayoutWrapper className="my-6 flex flex-wrap justify-between gap-x-3 px-5 md:my-12">
+							<TagsChooser tags={tags} />
+							{count > 0 ? (
+								<p className="py-2 text-muted-foreground">{`Нашлось ${count} ${pluralizeProducts(count)}`}</p>
+							) : null}
+						</LayoutWrapper>
 					) : null}
+					<LayoutWrapper className="my-6 md:my-12">
+						{products.length === 0 ? (
+							<>
+								<p className="mt-24 text-center text-slate-400 text-xl">
+									{favorites
+										? "Похоже, у вас пока нет избранных продуктов!"
+										: "Каталог пока что пуст! Зайдите позже"}
+								</p>
+								{favorites ? (
+									<div className="mt-5 grid place-items-center">
+										<Link to={href("/products")} className={buttonVariants()}>
+											К покупкам
+										</Link>
+									</div>
+								) : null}
+							</>
+						) : (
+							<div className="mt-6 space-y-6 md:mt-12">
+								{products.map((product) => (
+									<ProductCard
+										key={product.id}
+										type="product"
+										object={product}
+										className="max-md:rounded-none max-md:border-0"
+									/>
+								))}
+								{nextPage ? (
+									<div className="mt-16 grid place-items-center">
+										<Link
+											to={{ search: `?${nextPageParams}` }}
+											className={buttonVariants({ variant: "default", size: "lg" })}
+											replace
+											preventScrollReset
+											prefetch="viewport"
+										>
+											Показать больше
+										</Link>
+									</div>
+								) : null}
+							</div>
+						)}
+					</LayoutWrapper>
+				</>
+			) : (
+				<LayoutWrapper className="my-6 md:my-12">
+					<CreatorStats />
 				</LayoutWrapper>
-			) : null}
-			<LayoutWrapper className="my-6 md:my-12">
-				{products.length === 0 ? (
-					<>
-						<p className="mt-24 text-center text-slate-400 text-xl">
-							{favorites
-								? "Похоже, у вас пока нет избранных продуктов!"
-								: "Каталог пока что пуст! Зайдите позже"}
-						</p>
-						{favorites ? (
-							<div className="mt-5 grid place-items-center">
-								<Link to={href("/products")} className={buttonVariants()}>
-									К покупкам
-								</Link>
-							</div>
-						) : null}
-					</>
-				) : (
-					<div className="mt-6 space-y-6 md:mt-12">
-						{products.map((product) => (
-							<ProductCard
-								key={product.id}
-								type="product"
-								object={product}
-								className="max-md:rounded-none max-md:border-0"
-							/>
-						))}
-						{nextPage ? (
-							<div className="mt-16 grid place-items-center">
-								<Link
-									to={{ search: `?${nextPageParams}` }}
-									className={buttonVariants({ variant: "default", size: "lg" })}
-									replace
-									preventScrollReset
-									prefetch="viewport"
-								>
-									Показать больше
-								</Link>
-							</div>
-						) : null}
-					</div>
-				)}
-			</LayoutWrapper>
+			)}
 		</>
 	);
 }
@@ -454,4 +485,193 @@ const productTitles = ["мероприятие", "мероприятия", "ме
 const cases = [2, 0, 1, 1, 1, 2];
 function pluralizeProducts(number: number) {
 	return productTitles[number % 100 > 4 && number % 100 < 20 ? 2 : cases[Math.min(number % 10, 5)]];
+}
+
+function CreatorStats() {
+	const user = useUser();
+
+	return (
+		<div>
+			<h2 className="font-serif text-3xl">Добрый день, {user.name || user.username || user.email}</h2>
+			<div className="mt-4 grid gap-3 xl:grid-cols-4">
+				<div className="grid grid-cols-2 gap-3 xl:grid-cols-1 xl:grid-rows-2">
+					<Card>
+						<CardContent>
+							<p className="text-center font-serif text-2xl sm:text-5xl">245 000</p>
+							<p className="mt-2 text-center text-sm uppercase sm:text-lg">рублей</p>
+							<p className="text-center font-serif uppercase sm:text-3xl/none">заработано</p>
+						</CardContent>
+					</Card>
+					<Card>
+						<CardContent>
+							<p className="text-center font-serif text-2xl sm:text-5xl">15</p>
+							<p className="mt-2 text-center text-sm uppercase sm:text-lg">новых позиций</p>
+							<p className="text-center font-serif uppercase sm:text-3xl/none">в марте</p>
+						</CardContent>
+					</Card>
+				</div>
+				<AgeChartComponent className="xl:col-span-3" />
+			</div>
+
+			<div className="mt-8 grid gap-3 xl:grid-cols-3">
+				<GenderChartComponent />
+				<div className="grid grid-rows-3 gap-3">
+					<Card className="row-span-2 justify-center">
+						<CardContent>
+							<p className="text-center font-serif text-2xl sm:text-5xl">118</p>
+							<p className="mt-2 text-center text-sm uppercase sm:text-lg">пользователей</p>
+							<p className="text-center font-serif uppercase sm:text-3xl/none">
+								добавили в избранное
+							</p>
+						</CardContent>
+					</Card>
+					<Card className="justify-center">
+						<CardContent className="flex items-center justify-center gap-2">
+							<p className="text-center font-serif text-2xl sm:text-5xl">16</p>
+							<div>
+								<p className="mt-2 text-center text-sm uppercase sm:text-lg">пользователей</p>
+								<p className="text-center font-serif uppercase sm:text-3xl/none">
+									добавили в избранное
+								</p>
+							</div>
+						</CardContent>
+					</Card>
+				</div>
+				<div className="grid grid-rows-2 gap-3">
+					<Card className="justify-center">
+						<CardContent>
+							<p className="text-center font-serif text-2xl sm:text-5xl">179</p>
+							<p className="mt-2 text-center text-sm uppercase sm:text-lg">пользователей</p>
+							<p className="text-center font-serif uppercase sm:text-3xl/none">постоянные</p>
+						</CardContent>
+					</Card>
+					<Card className="justify-center">
+						<CardContent>
+							<p className="text-center font-serif text-2xl sm:text-5xl">24</p>
+							<p className="mt-2 text-center text-sm uppercase sm:text-lg">новых отзыва</p>
+							<p className="text-center font-serif uppercase sm:text-3xl/none">в марте</p>
+						</CardContent>
+					</Card>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+const chartData = [
+	{ age: "sector1", visitors: 60, fill: "var(--color-primary)" },
+	{ age: "sector2", visitors: 140, fill: "var(--color-primary)" },
+	{ age: "sector3", visitors: 200, fill: "var(--chart-2)" },
+	{ age: "sector4", visitors: 170, fill: "var(--color-primary)" },
+	{ age: "sector5", visitors: 90, fill: "var(--color-primary)" },
+	{ age: "sector6", visitors: 50, fill: "var(--color-primary)" },
+	{ age: "sector7", visitors: 30, fill: "var(--color-primary)" },
+];
+
+const chartConfig = {
+	visitors: {
+		label: "Кол-во покупателей",
+	},
+	sector1: {
+		label: "14-17",
+	},
+	sector2: {
+		label: "18-24",
+	},
+	sector3: {
+		label: "25-35",
+	},
+	sector4: {
+		label: "36-44",
+	},
+	sector5: {
+		label: "45-54",
+	},
+	sector6: {
+		label: "55-64",
+	},
+	sector7: {
+		label: "65+",
+	},
+} satisfies ChartConfig;
+
+function AgeChartComponent({ className }: { className?: string }) {
+	return (
+		<Card className={className}>
+			<CardHeader className="relative">
+				<CardTitle>Возрастной диапазон</CardTitle>
+
+				<Tabs defaultValue="all" className="absolute top-0 right-6">
+					<TabsList>
+						<TabsTrigger value="all">Все</TabsTrigger>
+						<TabsTrigger value="female">Женщины</TabsTrigger>
+						<TabsTrigger value="male">Мужчины</TabsTrigger>
+					</TabsList>
+				</Tabs>
+			</CardHeader>
+			<CardContent>
+				<ChartContainer config={chartConfig} className="h-56 w-full">
+					<BarChart
+						accessibilityLayer
+						data={chartData}
+						layout="vertical"
+						margin={{
+							left: 0,
+						}}
+					>
+						<YAxis
+							dataKey="age"
+							type="category"
+							tickLine={false}
+							tickMargin={10}
+							axisLine={false}
+							tickFormatter={(value) => chartConfig[value as keyof typeof chartConfig]?.label}
+						/>
+						<XAxis dataKey="visitors" type="number" hide />
+						<ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+						<Bar dataKey="visitors" layout="vertical" radius={5} />
+					</BarChart>
+				</ChartContainer>
+			</CardContent>
+		</Card>
+	);
+}
+
+const genderChartData = [
+	{ gender: "male", visitors: 27, fill: "var(--color-primary)" },
+	{ gender: "female", visitors: 73, fill: "var(--chart-2)" },
+];
+
+const genderChartConfig = {
+	visitors: {
+		label: "Процент",
+	},
+	male: {
+		label: "Мужчины",
+	},
+	female: {
+		label: "Женщины",
+	},
+} satisfies ChartConfig;
+
+function GenderChartComponent({ className }: { className?: string }) {
+	return (
+		<Card className={className}>
+			<CardHeader>
+				<CardTitle>Пол</CardTitle>
+			</CardHeader>
+			<CardContent className="flex-1 pb-0">
+				<ChartContainer config={genderChartConfig} className="mx-auto aspect-square max-h-[300px]">
+					<PieChart>
+						<ChartTooltip content={<ChartTooltipContent nameKey="visitors" hideLabel />} />
+						<Pie data={genderChartData} dataKey="visitors" />
+						<ChartLegend
+							content={<ChartLegendContent nameKey="gender" />}
+							className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
+						/>
+					</PieChart>
+				</ChartContainer>
+			</CardContent>
+		</Card>
+	);
 }
