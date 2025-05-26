@@ -39,7 +39,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		const description = form.get("description");
 
 		if (
-			typeof redirectTo !== "string" ||
 			typeof parentType !== "string" ||
 			typeof parentId !== "string" ||
 			typeof name !== "string" ||
@@ -113,7 +112,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			},
 		});
 
-		return redirect(redirectTo);
+		return typeof redirectTo === "string" ? redirect(redirectTo) : null;
 	}
 	if (request.method === "DELETE") {
 		const form = await request.formData();
@@ -121,7 +120,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		const redirectTo = form.get("redirectTo");
 		const id = form.get("id");
 
-		if (typeof redirectTo !== "string" || typeof id !== "string") {
+		if (typeof id !== "string") {
 			return badRequest({
 				fieldErrors: null,
 				fields: null,
@@ -146,6 +145,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 		]);
 		await db.media.delete({ where: { id } });
 
-		return redirect(redirectTo);
+		return typeof redirectTo === "string" ? redirect(redirectTo) : null;
 	}
 };

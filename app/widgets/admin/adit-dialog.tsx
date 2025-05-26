@@ -71,6 +71,14 @@ export interface EditableSelectValue<TData, TKey extends keyof TData> {
 	value: NonNullable<TData[TKey]>;
 }
 
+export interface CustomEditableField<TData> {
+	type: "custom";
+	disabled?: boolean;
+	defaultValue?: string | undefined;
+	required?: boolean;
+	component: (data: TData | undefined) => React.ReactNode;
+}
+
 export interface SelectResourceEditableField<TResource = unknown>
 	extends React.ComponentProps<typeof Select> {
 	type: "select-resource";
@@ -88,15 +96,17 @@ interface CheckboxEditableField extends Omit<React.ComponentProps<typeof Checkbo
 }
 
 export type EditableField<TData = unknown, TKey extends keyof TData = keyof TData> = (
-	| InputEditableField
-	| TextareaEditableField
-	| SelectEditableField<TData, TKey>
-	| CheckboxEditableField
-	| SelectResourceEditableField
-) & {
-	name: TKey | (string & {});
-	title?: string;
-};
+		| CustomEditableField<TData>
+		| InputEditableField
+		| TextareaEditableField
+		| SelectEditableField<TData, TKey>
+		| CheckboxEditableField
+		| SelectResourceEditableField
+	) & {
+		name: TKey | (string & {});
+		title?: string;
+		transformValue?: (date: TData | undefined) => unknown;
+	};
 
 interface EditDialogProps<TData> extends PropsWithChildren {
 	data?: TData;
@@ -173,13 +183,15 @@ function EditDialog<TData>({
 					>
 						<div className="grid gap-4 py-4">
 							{fields.map((initialField) => {
-								const field: EditableField<TData, keyof TData> = {
+								const { transformValue, ...field }: EditableField<TData, keyof TData> = {
 									...initialField,
 									disabled: interactionsDisabled ? true : initialField.disabled,
 								};
 
 								const name = String(field.name);
-								const defaultValue = data?.[field.name as keyof TData] ?? field.defaultValue;
+								const defaultValue = transformValue
+									? transformValue(data)
+									: (data?.[field.name as keyof TData] ?? field.defaultValue);
 								const error = fetcher.data?.errors?.[field.name] as ErrorMessage;
 
 								if (field.type === "hidden") {
@@ -212,7 +224,9 @@ function EditDialog<TData>({
 												<span className="text-destructive">*</span>
 											) : undefined}
 										</Label>
-										{field.type === "textarea" ? (
+										{field.type === "custom" ? (
+											(field as CustomEditableField<TData>).component(data)
+										) : field.type === "textarea" ? (
 											<Textarea
 												{...(field as TextareaEditableField)}
 												aria-invalid={!!error}

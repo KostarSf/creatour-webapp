@@ -1,8 +1,10 @@
+import type { Route } from "./+types/api.delete-user";
+
 import { data } from "react-router";
+
 import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { requireRoleSession } from "~/utils/session.server";
-import type { Route } from "./+types/api.delete-user";
 
 export const action = async ({ request }: Route.ActionArgs) => {
 	const session = await requireRoleSession(request, USER_ROLES.admin.key);

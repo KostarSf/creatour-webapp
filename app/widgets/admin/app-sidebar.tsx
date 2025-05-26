@@ -1,5 +1,6 @@
 import {
 	BinocularsIcon,
+	ChartNoAxesCombinedIcon,
 	ChevronUpIcon,
 	MapPinHouseIcon,
 	MessageSquareQuoteIcon,
@@ -63,11 +64,11 @@ const menu: AdministerMenuItemProps[] = [
 		url: href("/admin-v2/users"),
 		icon: Users2Icon,
 	},
-	// {
-	// 	title: "Статистика",
-	// 	url: "#",
-	// 	icon: ChartNoAxesCombinedIcon,
-	// },
+	{
+		title: "Статистика",
+		url: href("/admin-v2/statistics"),
+		icon: ChartNoAxesCombinedIcon,
+	},
 ];
 
 function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

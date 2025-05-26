@@ -16,3 +16,9 @@ export function validateSearchParams<A extends ZodRawShape, T extends ZodObject<
 	}
 	return (data ?? null) as z.infer<T> | null;
 }
+
+export function getLocalDate(date: Date) {
+	const localDate = new Date(date);
+	localDate.setMinutes(localDate.getMinutes() - localDate.getTimezoneOffset());
+	return localDate.toISOString().slice(0, 16);
+}
