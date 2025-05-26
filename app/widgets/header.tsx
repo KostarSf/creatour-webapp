@@ -72,7 +72,7 @@ export function Header({ className }: { className?: string }) {
 										</Link>
 									</DropdownMenuItem>
 								)}
-								{USER_ROLES.admin.key && (
+								{user.role === USER_ROLES.admin.key && (
 									<DropdownMenuItem className="cursor-pointer" asChild>
 										<Link to={href("/admin-v2")}>
 											<ShieldIcon />
