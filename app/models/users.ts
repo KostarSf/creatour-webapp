@@ -1,4 +1,4 @@
-import type { Product, User } from "@prisma-app/client";
+import type { Product, Rating, User } from "@prisma-app/client";
 
 import type { UserRole } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
@@ -9,6 +9,7 @@ export async function getCurrentUser(userId: string): Promise<CurrentUser | null
 		include: {
 			activeProducts: { select: { id: true } },
 			favoriteProducts: { select: { id: true } },
+			ratings: { select: { id: true, productId: true, value: true } },
 		},
 		omit: { passwordHash: true },
 	});
@@ -26,11 +27,11 @@ export async function getCurrentUser(userId: string): Promise<CurrentUser | null
 	} as CurrentUser;
 }
 
-export interface CurrentUser
-	extends Omit<User, "passwordHash" | "activateCode" | "activatedAt" | "recoverCode"> {
-	activeProducts: Pick<Product, "id">[];
-	favoriteProducts: Pick<Product, "id">[];
-	role: UserRole;
-	activated: boolean;
-	activateEmailSent: boolean;
-}
+export interface CurrentUser extends Omit<User, "passwordHash" | "activateCode" | "activatedAt" | "recoverCode"> {
+		activeProducts: Pick<Product, "id">[];
+		favoriteProducts: Pick<Product, "id">[];
+		ratings: Pick<Rating, "id" | "productId" | "value">[];
+		role: UserRole;
+		activated: boolean;
+		activateEmailSent: boolean;
+	}

@@ -7,15 +7,26 @@ import CommentItem from "~/components/CommentItem";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import RatingBar from "~/components/RatingBar";
 import { Button, buttonVariants } from "~/components/ui/button";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import type { CustomHeaderHandle } from "~/lib/hooks/use-custom-header";
 import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { useOptionalUser } from "~/utils/user";
 import { Header } from "~/widgets/header";
 import { LikeProductButton } from "~/widgets/like-button";
+import { ProductRating } from "~/widgets/product-rating";
 import type { Route } from "./+types/route";
 
 export const meta: Route.MetaFunction = ({ data }) => [{ title: `${data?.product.name ?? ""} | Креатур` }];
@@ -71,7 +82,7 @@ export default function ProductPage() {
 			<ProductHeader product={product} />
 
 			<LayoutWrapper className="px-5 pt-6 md:pt-12">
-				<div className="flex flex-wrap items-start justify-between gap-y-3">
+				<div className="flex flex-wrap items-start justify-between gap-x-2 gap-y-3">
 					<div className="flex flex-wrap items-baseline gap-3">
 						<p className="not-last:border-r-2 pr-3 font-semibold text-xl leading-none">
 							О мероприятии
@@ -80,7 +91,9 @@ export default function ProductPage() {
 							<p className="font-serif text-lg leading-none">{formatDate(product.beginDate)}</p>
 						) : null}
 					</div>
-					<RatingBar ratings={product.rating} />
+					<div className="flex flex-1 justify-end">
+						<ProductRating rating={product.rating} productId={product.id} className="py-0.5" />
+					</div>
 				</div>
 
 				<p className="mt-5 whitespace-pre-line">{product.description}</p>
@@ -100,7 +113,7 @@ export default function ProductPage() {
 				<p className="mt-12 font-semibold font-serif text-xl">Галерея изображений</p>
 			</LayoutWrapper>
 
-			<div className="-mx-6 md:-mx-12 my-6 md:my-12">
+			<div className="-mx-6 my-6 md:mx-0 md:my-12">
 				<div className="flex snap-x scroll-p-6 gap-6 overflow-x-auto px-6">
 					{product.image && <AlbumImage link={`/api/uploads/products/${product.image}`} />}
 					{product.media.map((image) => (
