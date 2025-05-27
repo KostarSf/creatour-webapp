@@ -152,7 +152,7 @@ function EditProductDialogHeader({ product }: { product: Product }) {
 			>
 				{product.image ? (
 					<img
-						src={`/api/uploads/products/${product.image}`}
+						src={`/api/uploads/products/${product.image}?w=600&f=avif`}
 						alt={product.name}
 						className="max-h-48 w-full object-cover"
 					/>
@@ -175,7 +175,7 @@ function ProductMediaTab({ product }: { product: ProductWithRelations }) {
 						<div key={media.id} className="flex gap-2">
 							{media.type === "image" ? (
 								<img
-									src={`/api/uploads${media.url}`}
+									src={`/api/uploads${media.url}?w=600&f=avif`}
 									alt={media.name || "media"}
 									className="w-64 rounded-md"
 								/>

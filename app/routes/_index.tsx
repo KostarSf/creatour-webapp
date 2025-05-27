@@ -235,7 +235,7 @@ function PreviewCard({ link, image, displayId, name }: PreviewCardProps) {
 			to={link}
 			className={"relative aspect-14/9 w-full overflow-hidden rounded-md md:h-44 md:w-auto"}
 		>
-			<img src={image} alt="" className="h-full w-full" />
+			<img src={`${image}?w=600&f=avif`} alt="" className="h-full w-full" />
 			<div className="absolute inset-0 flex flex-col justify-between p-3">
 				<p className="font-bold font-serif text-2xl text-white ">{displayId}</p>
 				<p className="text-lg/tight text-white">

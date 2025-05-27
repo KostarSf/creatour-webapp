@@ -119,11 +119,15 @@ export default function ProductPage() {
 						<p className="mt-24 font-semibold font-serif text-xl">Места мероприятия</p>
 						<div className="my-3">
 							{product.route.map((point) => (
-								<div key={point.id} className="flex items-center gap-3">
+								<Link
+									key={point.id}
+									to={href("/places/:placeId", { placeId: point.place.id })}
+									className="flex items-center gap-3"
+								>
 									<div className="h-12 w-16 overflow-hidden rounded-lg bg-slate-300">
 										{point.place.image && (
 											<img
-												src={`/api/uploads/places/${point.place.image}`}
+												src={`/api/uploads/places/${point.place.image}?w=200&f=avif`}
 												className="aspect-square w-24 rounded-md object-cover"
 												alt={point.place.image}
 											/>
@@ -136,7 +140,7 @@ export default function ProductPage() {
 										</p>
 										<p className="text-slate-600">{point.place.short}</p>
 									</div>
-								</div>
+								</Link>
 							))}
 						</div>
 					</>
@@ -161,7 +165,11 @@ function ProductHeader({ product }: ProductHeaderProps) {
 	return (
 		<div className="relative md:h-[800px]">
 			<img
-				src={product.image ? `/api/uploads/products/${product.image}` : "/images/no-image.webp"}
+				src={
+					product.image
+						? `/api/uploads/products/${product.image}?w=2000&f=avif`
+						: "/images/no-image.webp"
+				}
 				alt={product.name}
 				className="-z-10 absolute top-0 left-0 h-full w-full object-cover object-center"
 			/>
@@ -266,7 +274,7 @@ function AlbumImage({
 }) {
 	return (
 		<div className="relative aspect-square w-[95%] shrink-0 snap-center overflow-hidden rounded-lg md:aspect-4/3 md:h-[50vh] md:w-auto">
-			<img src={link} alt={link} className="h-full w-full object-cover" />
+			<img src={`${link}?w=1000&f=avif`} alt={link} className="h-full w-full object-cover" />
 			{community && (
 				<p className="absolute top-0 left-0 m-1 rounded-sm bg-white p-2 px-3 py-1 font-medium">
 					Коммьюнити

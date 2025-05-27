@@ -59,7 +59,7 @@ export default function ServiceUserCard({ user }: { user: CurrentUser }) {
 								<div className="pointer-events-none absolute inset-0 grid place-items-center">
 									{user.avatar ? (
 										<img
-											src={user.avatar}
+											src={`${user.avatar}?w=200&f=avif`}
 											alt="avatar"
 											className="h-full w-full object-cover"
 										/>

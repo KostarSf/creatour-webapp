@@ -66,7 +66,7 @@ function PlaceBlock({ place }: { place: Place }) {
 	return (
 		<article className="relative sm:grid sm:grid-cols-5">
 			<img
-				src={`/api/uploads/places/${place.image}`}
+				src={`/api/uploads/places/${place.image}?w=1200&f=avif`}
 				alt={place.name}
 				className="sm:-z-10 w-full bg-muted object-cover sm:absolute sm:top-2 sm:left-0 sm:h-full md:left-2 md:rounded-xl"
 			/>

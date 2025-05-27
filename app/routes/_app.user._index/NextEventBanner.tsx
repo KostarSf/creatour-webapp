@@ -18,7 +18,7 @@ export default function NextEventBanner({ product, username, className }: Props)
 		>
 			<div className="-mx-6 md:-mx-16 lg:-mx-32 relative h-full">
 				<img
-					src={`/images/products/${product.image}` || undefined}
+					src={`/images/products/${product.image}?w=2000&f=avif` || undefined}
 					alt={product.image || "изображение отсутствует"}
 					className="h-full w-full object-cover object-center"
 				/>

@@ -96,7 +96,7 @@ const CommentSection = ({ name, parent }: CommentSectionProps) => {
 				<div className="grid h-48 w-full shrink-0 place-items-center overflow-hidden rounded-md bg-slate-200 text-slate-50 md:h-24 md:w-36">
 					{parent.image ? (
 						<img
-							src={`/images/${name}s/${parent.image}`}
+							src={`/images/${name}s/${parent.image}?w=600&f=avif`}
 							alt={parent.name}
 							className="h-full w-full object-cover object-center"
 						/>

@@ -17,7 +17,7 @@ export default function CommentItem({ comment, rating, className }: CommentItemP
 			<div className="mt-1 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-slate-300">
 				{comment.user.avatar && (
 					<img
-						src={comment.user.avatar}
+						src={`${comment.user.avatar}?w=200&f=avif`}
 						alt=""
 						className="h-full w-full object-cover object-center"
 					/>
@@ -42,7 +42,7 @@ export default function CommentItem({ comment, rating, className }: CommentItemP
 				<div className="flex flex-wrap gap-2">
 					{comment.media.map((image) => (
 						<img
-							src={`/api/uploads${image.url}`}
+							src={`/api/uploads${image.url}?w=200&f=avif`}
 							alt={image.name ?? image.url}
 							key={image.id}
 							className="mt-2 h-24 w-24 rounded-sm object-cover"

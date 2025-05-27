@@ -2,50 +2,68 @@ import type { Route } from "./+types/api.uploads.$storageName.$fileKey";
 
 import { redirect } from "react-router";
 
+import sharp from "sharp";
 import { avatarsFileStorage, mediaFileStorage, productsFileStorage } from "~/utils/storage.server";
+import { getThumbnailStorageKey, thumbnailsFileStorage } from "~/utils/storage.server";
 
-export const loader = async ({ params }: Route.LoaderArgs) => {
-	if (params.storageName === "media") {
-		const file = await mediaFileStorage.get(params.fileKey as string);
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
+	const url = new URL(request.url);
+	const w = url.searchParams.get("w") ? Number(url.searchParams.get("w")) : undefined;
+	const f = url.searchParams.get("f") || undefined;
+	const q = url.searchParams.get("q") ? Number(url.searchParams.get("q")) : undefined;
 
-		if (file) {
-			return new Response(file.stream(), {
+	let fileStorage:
+		| typeof mediaFileStorage
+		| typeof productsFileStorage
+		| typeof avatarsFileStorage
+		| undefined;
+	if (params.storageName === "media") fileStorage = mediaFileStorage;
+	else if (params.storageName === "products") fileStorage = productsFileStorage;
+	else if (params.storageName === "avatars") fileStorage = avatarsFileStorage;
+
+	if (fileStorage) {
+		const file = await fileStorage.get(params.fileKey as string);
+		if (!file) return new Response("Not found", { status: 404 });
+
+		const isImage = file.type.startsWith("image/");
+		if (isImage && (w || f || q)) {
+			const thumbKey = getThumbnailStorageKey(params.fileKey as string, { w, f, q });
+			const thumb = await thumbnailsFileStorage.get(thumbKey);
+			if (thumb) {
+				return new Response(thumb.stream(), {
+					headers: {
+						"Content-Type": thumb.type,
+						"Cache-Control": "public, max-age=60",
+					},
+				});
+			}
+
+			// Generate thumbnail
+			let transformer = sharp(Buffer.from(await file.arrayBuffer()));
+			if (w) transformer = transformer.resize({ width: w });
+			let format = f || file.type.split("/")[1];
+			if (["jpeg", "jpg", "webp", "avif"].includes(format)) {
+				if (format === "jpg") format = "jpeg";
+				transformer = transformer.toFormat(format as keyof sharp.FormatEnum, { quality: q || 80 });
+			}
+			const outputBuffer = await transformer.toBuffer();
+			const mimeType = `image/${format}`;
+			const thumbFile = new File([outputBuffer], thumbKey, { type: mimeType });
+			await thumbnailsFileStorage.set(thumbKey, thumbFile);
+			return new Response(outputBuffer, {
 				headers: {
-					"Content-Type": file.type,
-					"Content-Disposition": `attachment; filename=${file.name}`,
+					"Content-Type": mimeType,
+					"Cache-Control": "public, max-age=60",
 				},
 			});
 		}
-	}
 
-	if (params.storageName === "products") {
-		const file = await productsFileStorage.get(params.fileKey as string);
-
-		if (file) {
-			return new Response(file.stream(), {
-				headers: {
-					"Content-Type": file.type,
-					"Content-Disposition": `attachment; filename=${file.name}`,
-				},
-			});
-		}
-	}
-
-	if (params.storageName === "avatars") {
-		const file = await avatarsFileStorage.get(params.fileKey as string);
-
-		if (file) {
-			return new Response(file.stream(), {
-				headers: {
-					"Content-Type": file.type,
-					"Content-Disposition": `attachment; filename=${file.name}`,
-				},
-			});
-		}
-	}
-
-	if (params.storageName === "media") {
-		return redirect(`/media/${params.fileKey}`);
+		return new Response(file.stream(), {
+			headers: {
+				"Content-Type": file.type,
+				"Cache-Control": "public, max-age=60",
+			},
+		});
 	}
 
 	return redirect(`/images/${params.storageName}/${params.fileKey}`);

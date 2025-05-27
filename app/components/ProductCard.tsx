@@ -183,7 +183,7 @@ function ProductCardBase<TType extends CardType>({
 							<img
 								src={
 									object.image
-										? `/api/uploads/${type}s/${object.image}`
+										? `/api/uploads/${type}s/${object.image}?w=600&f=avif`
 										: "/images/no-image.webp"
 								}
 								alt={object.name}
@@ -193,7 +193,11 @@ function ProductCardBase<TType extends CardType>({
 					</div>
 					<div className="absolute inset-0 lg:hidden">
 						<img
-							src={object.image ? `/images/${type}s/${object.image}` : "/images/no-image.webp"}
+							src={
+								object.image
+									? `/api/uploads/${type}s/${object.image}?w=600&f=avif`
+									: "/images/no-image.webp"
+							}
 							alt={object.name}
 							className="h-full w-full object-cover object-center"
 						/>
