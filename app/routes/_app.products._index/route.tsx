@@ -326,7 +326,7 @@ export default function ProductsCatalog() {
 					</LayoutWrapper>
 				</>
 			) : (
-				<LayoutWrapper className="my-6 md:my-12">
+				<LayoutWrapper className="my-6 px-5 md:my-12">
 					<CreatorStats />
 				</LayoutWrapper>
 			)}
@@ -515,7 +515,7 @@ function CreatorStats() {
 
 			<div className="mt-8 grid gap-3 xl:grid-cols-3">
 				<GenderChartComponent />
-				<div className="grid grid-rows-3 gap-3">
+				<div className="grid grid-rows-4 gap-3">
 					<Card className="row-span-2 justify-center">
 						<CardContent>
 							<p className="text-center font-serif text-2xl sm:text-5xl">118</p>
@@ -532,6 +532,16 @@ function CreatorStats() {
 								<p className="mt-2 text-center text-sm uppercase sm:text-lg">пользователей</p>
 								<p className="text-center font-serif uppercase sm:text-3xl/none">
 									добавили в избранное
+								</p>
+							</div>
+						</CardContent>
+					</Card>
+					<Card className="justify-center">
+						<CardContent className="flex items-center justify-center gap-2">
+							<p className="text-center font-serif text-2xl sm:text-5xl">16</p>
+							<div>
+								<p className="text-center font-serif uppercase sm:text-3xl/none">
+									городов-участников
 								</p>
 							</div>
 						</CardContent>
@@ -601,16 +611,16 @@ function AgeChartComponent({ className }: { className?: string }) {
 			<CardHeader className="relative">
 				<CardTitle>Возрастной диапазон</CardTitle>
 
-				<Tabs defaultValue="all" className="absolute top-0 right-6">
-					<TabsList>
+				<Tabs defaultValue="all" className="top-0 right-6 sm:absolute">
+					<TabsList className="w-full">
 						<TabsTrigger value="all">Все</TabsTrigger>
 						<TabsTrigger value="female">Женщины</TabsTrigger>
 						<TabsTrigger value="male">Мужчины</TabsTrigger>
 					</TabsList>
 				</Tabs>
 			</CardHeader>
-			<CardContent>
-				<ChartContainer config={chartConfig} className="h-56 w-full">
+			<CardContent className="relative mr-6 ml-3 h-56 px-0">
+				<ChartContainer config={chartConfig} className="absolute inset-0 h-56 w-full">
 					<BarChart
 						accessibilityLayer
 						data={chartData}
@@ -660,7 +670,7 @@ function GenderChartComponent({ className }: { className?: string }) {
 			<CardHeader>
 				<CardTitle>Пол</CardTitle>
 			</CardHeader>
-			<CardContent className="flex-1 pb-0">
+			<CardContent className="flex flex-1 items-center pb-0">
 				<ChartContainer config={genderChartConfig} className="mx-auto aspect-square max-h-[300px]">
 					<PieChart>
 						<ChartTooltip content={<ChartTooltipContent nameKey="visitors" hideLabel />} />
