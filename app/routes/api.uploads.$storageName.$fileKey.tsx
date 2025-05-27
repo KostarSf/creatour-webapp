@@ -23,7 +23,12 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 
 	if (fileStorage) {
 		const file = await fileStorage.get(params.fileKey as string);
-		if (!file) return new Response("Not found", { status: 404 });
+		if (!file) {
+			if (params.storageName === "media") {
+				return redirect(`/media/${params.fileKey}`);
+			}
+			return redirect(`/images/${params.storageName}/${params.fileKey}`);
+		}
 
 		const isImage = file.type.startsWith("image/");
 		if (isImage && (w || f || q)) {
