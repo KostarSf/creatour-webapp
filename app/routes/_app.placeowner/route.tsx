@@ -4,13 +4,15 @@ import { Link, data, href, useLoaderData } from "react-router";
 import LayoutWrapper from "~/components/LayoutWrapper";
 import { ServiceProductCard } from "~/components/ProductCard";
 import ServiceUserCard from "~/components/ServiceUserCard";
-import { buttonVariants } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
+import { DialogTrigger } from "~/components/ui/dialog";
 import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
 import { logout, requireRoleSession, requireUserId } from "~/utils/session.server";
 import { useUser } from "~/utils/user";
 import { AccountConfirmationAlert } from "~/widgets/account-confitmation-alert";
+import { CreatePlaceDialog, PlaceDialogContext } from "~/widgets/admin/edit-place-dialog";
 import type { Route } from "./+types/route";
 
 export const meta: Route.MetaFunction = ({ matches }) => [
@@ -30,6 +32,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 					product: true,
 				},
 			},
+			media: true,
+			tags: true,
 		},
 		orderBy: { createdAt: "desc" },
 	});
@@ -114,7 +118,7 @@ export default function PlaceownerPage() {
 	const user = useUser();
 
 	return (
-		<>
+		<PlaceDialogContext value={{ placeowners: [user], ownerRequired: true }}>
 			{!user.activated ? (
 				<LayoutWrapper>
 					<AccountConfirmationAlert emailSent={user.activateEmailSent} />
@@ -124,9 +128,11 @@ export default function PlaceownerPage() {
 			<div className="my-6 md:my-12">
 				<LayoutWrapper className="flex flex-wrap items-baseline justify-between gap-3 px-5">
 					<p className="text-xl">Ваши объекты</p>
-					<Link to={href("/new-place")} className={buttonVariants({ variant: "default" })}>
-						Новый объект
-					</Link>
+					<CreatePlaceDialog>
+						<DialogTrigger asChild>
+							<Button type="button">Новый объект</Button>
+						</DialogTrigger>
+					</CreatePlaceDialog>
 				</LayoutWrapper>
 				{places.length === 0 ? (
 					<p className="mt-24 text-center text-slate-400 text-xl">У вас пока нет объектов</p>
@@ -143,6 +149,6 @@ export default function PlaceownerPage() {
 					</LayoutWrapper>
 				)}
 			</div>
-		</>
+		</PlaceDialogContext>
 	);
 }

@@ -3,7 +3,12 @@ import type { Route } from "./+types/api.uploads.$storageName.$fileKey";
 import { redirect } from "react-router";
 
 import sharp from "sharp";
-import { avatarsFileStorage, mediaFileStorage, productsFileStorage } from "~/utils/storage.server";
+import {
+	avatarsFileStorage,
+	mediaFileStorage,
+	placesFileStorage,
+	productsFileStorage,
+} from "~/utils/storage.server";
 import { getThumbnailStorageKey, thumbnailsFileStorage } from "~/utils/storage.server";
 
 export const loader = async ({ params, request }: Route.LoaderArgs) => {
@@ -15,11 +20,13 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	let fileStorage:
 		| typeof mediaFileStorage
 		| typeof productsFileStorage
+		| typeof placesFileStorage
 		| typeof avatarsFileStorage
 		| undefined;
 	if (params.storageName === "media") fileStorage = mediaFileStorage;
 	else if (params.storageName === "products") fileStorage = productsFileStorage;
 	else if (params.storageName === "avatars") fileStorage = avatarsFileStorage;
+	else if (params.storageName === "places") fileStorage = placesFileStorage;
 
 	if (fileStorage) {
 		const file = await fileStorage.get(params.fileKey as string);

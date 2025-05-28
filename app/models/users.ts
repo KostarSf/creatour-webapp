@@ -27,11 +27,13 @@ export async function getCurrentUser(userId: string): Promise<CurrentUser | null
 	} as CurrentUser;
 }
 
-export interface CurrentUser extends Omit<User, "passwordHash" | "activateCode" | "activatedAt" | "recoverCode"> {
-		activeProducts: Pick<Product, "id">[];
-		favoriteProducts: Pick<Product, "id">[];
-		ratings: Pick<Rating, "id" | "productId" | "value">[];
-		role: UserRole;
-		activated: boolean;
-		activateEmailSent: boolean;
-	}
+export type LiteUser = Omit<User, "passwordHash" | "activateCode" | "activatedAt" | "recoverCode">;
+
+export interface CurrentUser extends LiteUser {
+	activeProducts: Pick<Product, "id">[];
+	favoriteProducts: Pick<Product, "id">[];
+	ratings: Pick<Rating, "id" | "productId" | "value">[];
+	role: UserRole;
+	activated: boolean;
+	activateEmailSent: boolean;
+}

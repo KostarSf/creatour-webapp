@@ -4,11 +4,14 @@ import type { ReactNode } from "react";
 import { Form, Link } from "react-router";
 import { USER_ROLES } from "~/lib/user-roles";
 import { useOptionalUser } from "~/utils/user";
+import { EditPlaceDialog } from "~/widgets/admin/edit-place-dialog";
+import { EditProductDialog } from "~/widgets/admin/edit-product-dialog";
 import { LikeProductButton } from "~/widgets/like-button";
 import CardDate from "./CardDate";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Button, buttonVariants } from "./ui/button";
 import { Card } from "./ui/card";
+import { DialogTrigger } from "./ui/dialog";
 
 export function ProductCard<TType extends CardType>({ type, object, className }: CardProps<TType>) {
 	const user = useOptionalUser();
@@ -30,7 +33,7 @@ export function ProductCard<TType extends CardType>({ type, object, className }:
 									if (
 										!confirm(
 											object.price > 0
-												? `Приобрести за ${object.price} ₽?`
+												? `Приобрести за ${object.price.toLocaleString("ru")} ₽?`
 												: "Записаться бесплатно?",
 										)
 									) {
@@ -117,15 +120,32 @@ export function ServiceProductCard<TType extends CardType>({
 					) : (
 						<div />
 					)}
-					<Link
-						to={`/admin/${type}s/${object.id}/edit`}
-						className={buttonVariants({ variant: "outline" })}
-					>
-						Изменить
-					</Link>
+					{type === "product" ? (
+						<EditProductDialog product={object}>
+							<DialogTrigger asChild>
+								<Button type="button" variant="outline">
+									Изменить
+								</Button>
+							</DialogTrigger>
+						</EditProductDialog>
+					) : (
+						<EditPlaceDialog place={object}>
+							<DialogTrigger asChild>
+								<Button type="button" variant="outline">
+									Изменить
+								</Button>
+							</DialogTrigger>
+						</EditPlaceDialog>
+					)}
 				</>
 			}
-			topLeftText={type === "product" ? (object.price === 0 ? "Бесплатно" : `${object.price} ₽`) : ""}
+			topLeftText={
+				type === "product"
+					? object.price === 0
+						? "Бесплатно"
+						: `${object.price.toLocaleString("ru")} ₽`
+					: ""
+			}
 			type={type}
 			object={object}
 		>

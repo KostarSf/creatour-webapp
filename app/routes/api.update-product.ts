@@ -44,7 +44,7 @@ const updateProductSchema = z
 	.refine((product) => product.beginDate.valueOf() <= product.endDate.valueOf());
 
 export const action = async ({ request }: Route.ActionArgs) => {
-	await requireRoleSession(request, USER_ROLES.admin.key);
+	await requireRoleSession(request, [USER_ROLES.admin.key, USER_ROLES.creator.key]);
 
 	const formData = await request.formData();
 	const result = updateProductSchema.safeParse(Object.fromEntries(formData));

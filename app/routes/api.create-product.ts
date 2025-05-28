@@ -1,14 +1,12 @@
 import type { Route } from "./+types/api.create-product";
 
 import { data } from "react-router";
-
 import z from "zod";
-import { PRODUCT_TYPES_LIST } from "~/lib/product-types";
 
-import { USER_ROLES, USER_ROLES_LIST } from "~/lib/user-roles";
+import { PRODUCT_TYPES_LIST } from "~/lib/product-types";
+import { USER_ROLES } from "~/lib/user-roles";
 import { db } from "~/utils/db.server";
-import { requireRoleSession, sendNewAccountSetPasswordLink } from "~/utils/session.server";
-import { getProductsStorageKey } from "~/utils/storage.server";
+import { requireRoleSession } from "~/utils/session.server";
 
 const updateProductSchema = z
 	.object({
@@ -37,7 +35,7 @@ const updateProductSchema = z
 	.refine((product) => product.beginDate.valueOf() <= product.endDate.valueOf());
 
 export const action = async ({ request }: Route.ActionArgs) => {
-	await requireRoleSession(request, USER_ROLES.admin.key);
+	await requireRoleSession(request, [USER_ROLES.admin.key, USER_ROLES.creator.key]);
 
 	const formData = await request.formData();
 	const result = updateProductSchema.safeParse(Object.fromEntries(formData));

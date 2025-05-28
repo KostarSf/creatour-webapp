@@ -2,6 +2,7 @@ import {
 	BinocularsIcon,
 	ChartNoAxesCombinedIcon,
 	ChevronUpIcon,
+	LandPlotIcon,
 	MapPinHouseIcon,
 	MessageSquareQuoteIcon,
 	TentIcon,
@@ -58,6 +59,11 @@ const menu: AdministerMenuItemProps[] = [
 		title: "Турпродукты",
 		url: href("/admin-v2/products"),
 		icon: TentIcon,
+	},
+	{
+		title: "Объекты",
+		url: href("/admin-v2/places"),
+		icon: LandPlotIcon,
 	},
 	{
 		title: "Пользователи",

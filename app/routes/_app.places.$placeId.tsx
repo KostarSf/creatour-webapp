@@ -53,7 +53,7 @@ export default function PlacePage({ loaderData }: Route.ComponentProps) {
 						alt=""
 						className="rotate-180 opacity-30 invert"
 					/>
-					Распознать другой объект
+					Распознать объект по фото
 				</Link>
 			</div>
 
@@ -71,7 +71,9 @@ function PlaceBlock({ place }: { place: Place }) {
 				className="sm:-z-10 w-full bg-muted object-cover sm:absolute sm:top-2 sm:left-0 sm:h-full md:left-2 md:rounded-xl"
 			/>
 			<ScrollArea className="sm:col-span-3 sm:ml-2 sm:h-[500px] sm:rounded-xl sm:bg-white/60 sm:backdrop-blur-xl md:ml-0 lg:col-span-2">
-				<div className="whitespace-pre-line p-5 pr-10 pb-20">{place.description}</div>
+				<div className="whitespace-pre-line p-5 pr-10 pb-20">
+					{place.description || <span className="italic">Описания пока нет</span>}
+				</div>
 			</ScrollArea>
 		</article>
 	);
