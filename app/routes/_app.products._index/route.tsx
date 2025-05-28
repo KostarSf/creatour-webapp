@@ -91,7 +91,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 			: {}),
 	};
 
-	const [products, count, tags, newsCount] = await db.$transaction([
+	const [products, count, tags, newsCount, users] = await db.$transaction([
 		db.product.findMany({
 			where: where,
 			take: size * page,
@@ -117,11 +117,12 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 			orderBy: { name: "asc" },
 		}),
 		db.product.count({ where: { active: true, createdAt: { gt: newsMinDate } } }),
+		db.user.findMany({ where: { role: USER_ROLES.user.key }, select: { id: true, sex: true } }),
 	]);
 
 	const nextPage = page * size < count ? page + 1 : null;
 
-	return { products, nextPage, tags, count, hasNews: newsCount > 0 };
+	return { products, nextPage, tags, count, users, hasNews: newsCount > 0 };
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -269,6 +270,18 @@ export default function ProductsCatalog() {
 								{user.favoriteProducts.length}
 							</Badge>
 						</Link>
+					) : null}
+					{user ? (
+						<div className="flex flex-1 justify-end">
+							<Link
+								to={href("/user")}
+								className={clsx(
+									"flex items-center gap-2 font-medium text-xl opacity-40 transition hover:opacity-100",
+								)}
+							>
+								Профиль
+							</Link>
+						</div>
 					) : null}
 				</div>
 			</LayoutWrapper>
@@ -431,7 +444,7 @@ function ProductsListHeader() {
 			<div className="absolute inset-0 flex flex-col items-stretch justify-center bg-black/10 px-5 backdrop-blur-xs md:items-center md:px-10">
 				<Form className="flex w-full flex-col items-center">
 					<p className="py-3 text-center font-light text-white text-xl">
-						Отдыхай по новому с командой Креатура
+						Отдыхай по-новому с командой Креатура
 					</p>
 					<div className="flex w-full justify-center rounded-full">
 						<Input
@@ -654,7 +667,7 @@ const genderChartData = [
 
 const genderChartConfig = {
 	visitors: {
-		label: "Процент",
+		label: "Кол-во",
 	},
 	male: {
 		label: "Мужчины",
@@ -662,19 +675,43 @@ const genderChartConfig = {
 	female: {
 		label: "Женщины",
 	},
+	none: {
+		label: "Не указано",
+	},
 } satisfies ChartConfig;
 
 function GenderChartComponent({ className }: { className?: string }) {
+	const { users } = useLoaderData<typeof loader>();
+
+	let male = 0;
+	let female = 0;
+	let none = 0;
+	for (const user of users) {
+		if (user.sex === "male") male += 1;
+		if (user.sex === "female") female += 1;
+		if (!user.sex) none += 1;
+	}
+
 	return (
 		<Card className={className}>
 			<CardHeader>
 				<CardTitle>Пол</CardTitle>
 			</CardHeader>
 			<CardContent className="flex flex-1 items-center pb-0">
-				<ChartContainer config={genderChartConfig} className="mx-auto aspect-square max-h-[300px]">
+				<ChartContainer
+					config={genderChartConfig}
+					className="mx-auto aspect-square max-h-[300px] flex-1"
+				>
 					<PieChart>
 						<ChartTooltip content={<ChartTooltipContent nameKey="visitors" hideLabel />} />
-						<Pie data={genderChartData} dataKey="visitors" />
+						<Pie
+							data={[
+								{ gender: "male", visitors: male, fill: "var(--color-primary)" },
+								{ gender: "female", visitors: female, fill: "var(--chart-2)" },
+								{ gender: "none", visitors: none, fill: "var(--color-secondary)" },
+							]}
+							dataKey="visitors"
+						/>
 						<ChartLegend
 							content={<ChartLegendContent nameKey="gender" />}
 							className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"

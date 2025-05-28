@@ -45,7 +45,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	const password = formData.get("password");
 
 	const remember = Boolean(formData.get("remember"));
-	const redirectTo = formData.get("redirectTo")?.toString() || "/user";
+	const redirectTo = formData.get("redirectTo")?.toString() || href("/products");
 
 	if (typeof email !== "string" || typeof password !== "string") {
 		return badRequest({

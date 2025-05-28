@@ -74,7 +74,7 @@ export default function LandingPage({ loaderData }: Route.ComponentProps) {
 							Креативный туризм
 						</h1>
 						<p className="mt-8 mb-12 text-center font-light text-gray-600 text-xl md:text-left md:text-2xl md:text-white md:drop-shadow-sm">
-							Отдыхай по новому с командой Креатура
+							Отдыхай по-новому с командой Креатура
 						</p>
 
 						<Link

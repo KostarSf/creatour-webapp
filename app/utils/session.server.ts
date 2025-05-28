@@ -251,6 +251,9 @@ export async function getCurrentUserFromRequst(request: Request): Promise<Curren
 
 	try {
 		const user = await getCurrentUser(userId);
+		if (userId && !user) {
+			throw logout(request);
+		}
 		return user;
 	} catch {
 		throw logout(request);
