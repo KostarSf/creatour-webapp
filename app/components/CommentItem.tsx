@@ -12,6 +12,8 @@ interface CommentItemProps {
 }
 
 export default function CommentItem({ comment, rating, className }: CommentItemProps) {
+	const userRating = rating.find((rating) => rating.userId === comment.userId);
+
 	return (
 		<div className={cn("flex items-start gap-4", className)}>
 			<div className="mt-1 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-slate-300">
@@ -35,9 +37,7 @@ export default function CommentItem({ comment, rating, className }: CommentItemP
 						})}
 					</p>
 				</div>
-				<div>
-					<RatingBar ratings={rating.filter((rating) => rating.userId === comment.userId)} />
-				</div>
+				<div>{userRating ? <RatingBar ratings={[userRating]} /> : null}</div>
 				<p>{comment.text}</p>
 				<div className="flex flex-wrap gap-2">
 					{comment.media.map((image) => (

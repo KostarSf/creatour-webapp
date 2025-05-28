@@ -165,7 +165,7 @@ export default function LoginRoute() {
 					aria-invalid={Boolean(actionData?.fieldErrors?.role)}
 					aria-errormessage={actionData?.fieldErrors?.role ? "role-error" : undefined}
 				>
-					<SelectTrigger className="sm:w-80 lg:w-96">
+					<SelectTrigger className="w-full sm:w-80 lg:w-96">
 						<SelectValue placeholder="Выберите роль" />
 					</SelectTrigger>
 					<SelectContent>
@@ -230,8 +230,8 @@ export default function LoginRoute() {
 					</p>
 				) : null}
 				<div className="mt-4 flex items-center space-x-2 sm:w-80 lg:w-96">
-					<Checkbox id="confirm-check" required />
-					<Label htmlFor="confirm-check" className="inline">
+					<Checkbox id="confirm-1-check" required />
+					<Label htmlFor="confirm-1-check" className="inline">
 						Я ознакомлен с{" "}
 						<Link
 							to="/docs/user-agreement.pdf"
@@ -243,8 +243,8 @@ export default function LoginRoute() {
 					</Label>
 				</div>
 				<div className="mt-2 flex items-center space-x-2 sm:w-80 lg:w-96">
-					<Checkbox id="confirm-check" required />
-					<Label htmlFor="confirm-check" className="inline">
+					<Checkbox id="confirm-2-check" required />
+					<Label htmlFor="confirm-2-check" className="inline">
 						Я даю согласие на обработку персональных данных в соответствие с{" "}
 						<Link
 							to="/docs/privacy-policy.pdf"

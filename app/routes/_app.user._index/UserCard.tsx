@@ -147,7 +147,11 @@ export default function UserCard({ user, checksCount }: Props) {
 								/>
 								<div className="grid space-y-1.5">
 									<Label htmlFor="sex">Пол</Label>
-									<Select name="sex" defaultValue={user.sex ?? "-"}>
+									<Select
+										name="sex"
+										defaultValue={user.sex ?? "-"}
+										disabled={!changingInfo}
+									>
 										<SelectTrigger id="sex" className="w-full">
 											<SelectValue placeholder="Выберите пол" />
 										</SelectTrigger>

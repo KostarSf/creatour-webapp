@@ -15,7 +15,7 @@ export default function RatingBar({ ratings, className, ...props }: RatingBarPro
 	);
 
 	return (
-		<span {...props} className={cn("flex flex-row-reverse items-center gap-2", className)}>
+		<span {...props} className={cn("flex items-center gap-2", className)}>
 			{Array.from(Array(5)).map((_, index) => (
 				<StarIcon
 					// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
