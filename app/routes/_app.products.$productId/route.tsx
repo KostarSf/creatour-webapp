@@ -265,7 +265,7 @@ function ProductHeader({ product }: ProductHeaderProps) {
 										}}
 										className={buttonVariants({ variant: "default" })}
 									>
-										Войдите чтобы приобрести!
+										Войдите, чтобы приобрести!
 									</Link>
 								) : null}
 							</div>
